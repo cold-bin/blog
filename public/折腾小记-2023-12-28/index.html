@@ -28,7 +28,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/blog.coldbin.top\/%E6%8A%98%E8%85%BE%E5%B0%8F%E8%AE%B0-2023-12-28\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  426 ,
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  424 ,
         "url": "https:\/\/blog.coldbin.top\/%E6%8A%98%E8%85%BE%E5%B0%8F%E8%AE%B0-2023-12-28\/","datePublished": "2023-12-28T19:17:08+08:00","dateModified": "2023-12-28T19:17:08+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
             "@type": "Organization",
             "name": "阿冰","logo": {
@@ -118,18 +118,13 @@
     </div><main class="main">
                 <div class="container"><article class="page single"><h1 class="single-title animate__animated animate__flipInX">折腾小记 2023 12 28</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin/" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%8A%98%E8%85%BE%E6%97%A5%E8%AE%B0/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>折腾日记</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-12-28">2023-12-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;426 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-12-28">2023-12-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;424 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;One minute&nbsp;</div>
         </div><div class="content" id="content"><p>使用github action构建自动交付与持续集成，algolia构建全文搜索引擎</p>
 <p>原先博客是使用的<code>lunr</code>作为搜索实现，但是只能搜索英文，对于中文不能很好的检索，于是便使用了<code>algolia</code>全文搜索引擎。</p>
-<div class="details admonition abstract open">
-        <div class="details-summary admonition-title">
-            <i class="icon fas fa-list-ul fa-fw" aria-hidden="true"></i>信息<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
-        </div>
-        <div class="details-content">
-            <div class="admonition-content">Algolia 是一个托管搜索引擎，提供全文、数字和分面搜索，能够通过第一次击键提供实时结果。Algolia 强大的 API 可让您在网站和移动应用程序中快速、无缝地实施搜索。我们的搜索 API 每月为数千家公司提供数十亿次查询，在世界任何地方在 100 毫秒内提供相关结果。</div>
-        </div>
-    </div>
+<blockquote>
+<p>Algolia 是一个托管搜索引擎，提供全文、数字和分面搜索，能够通过第一次击键提供实时结果。Algolia 强大的 API 可让您在网站和移动应用程序中快速、无缝地实施搜索。我们的搜索 API 每月为数千家公司提供数十亿次查询，在世界任何地方在 100 毫秒内提供相关结果。</p>
+</blockquote>
 <p>在本站点所使用主题<code>LoveIt</code>已经集成了<code>algolia</code>，原作者认为配置<code>algolia</code>的索引文件比较麻烦，于是便自己想实现一个，最初是使用的官方的<code>algolia cli</code>，但是会出现<code>bufio.Reader: token is too long</code>的源码错误。于是乎，在网上冲浪看到了使用github action自动上传索引文件的项目，便采用之。</p>
 <p>最后，workflows依然会出现一点问题，主要是我的索引文件比较大，但不影响使用，能传送成功。</p></div><div class="post-footer" id="post-footer">
     <div class="post-info">
