@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Cs144 Lab - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Cs144 Lab" />
+<meta property="og:description" content="cs144 lab的思路与实现" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/cs144-lab/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-07-31T19:13:59+08:00" />
+<meta property="article:modified_time" content="2023-07-31T19:13:59+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="Cs144 Lab"/>
+<meta name="twitter:description" content="cs144 lab的思路与实现"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/cs144-lab/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" /><link rel="next" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Cs144 Lab",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/cs144-lab\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "cs144","wordcount":  2136 ,
+        "url": "https:\/\/blog.coldbin.top\/cs144-lab\/","datePublished": "2023-07-31T19:13:59+08:00","dateModified": "2023-07-31T19:13:59+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Cs144 Lab</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>计算机网络</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-07-31">2023-07-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2136 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#lab0">lab0</a>
+      <ul>
+        <li><a href="#reference-link">reference link</a></li>
+        <li><a href="#implementation">implementation</a>
+          <ul>
+            <li><a href="#set-up-gnulinux-on-your-computer">Set up GNU/Linux on your computer</a></li>
+            <li><a href="#networking-by-hand">Networking by hand</a></li>
+            <li><a href="#listening-and-connecting">Listening and connecting</a></li>
+            <li><a href="#writing-a-network-program">Writing a network program</a>
+              <ul>
+                <li><a href="#part-1">part 1</a></li>
+                <li><a href="#part2">part2</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#lab1">lab1</a>
+      <ul>
+        <li><a href="#reference-link-1">reference link</a></li>
+        <li><a href="#implementation-1">implementation</a>
+          <ul>
+            <li><a href="#具体实现">具体实现</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#lab2">lab2</a>
+      <ul>
+        <li><a href="#reference-link-2">reference link</a></li>
+        <li><a href="#implementation-2">implementation</a>
+          <ul>
+            <li><a href="#wrap与unwrap"><code>wrap</code>与<code>unwrap</code></a></li>
+            <li><a href="#tcp-receiver">TCP Receiver</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#lab3">lab3</a>
+      <ul>
+        <li><a href="#reference-link-3">reference link</a></li>
+        <li><a href="#implementation-3">implementation</a></li>
+      </ul>
+    </li>
+    <li><a href="#lab4">lab4</a>
+      <ul>
+        <li><a href="#reference-link-4">reference link</a></li>
+        <li><a href="#implementation-4">implementation</a></li>
+      </ul>
+    </li>
+    <li><a href="#lab5">lab5</a>
+      <ul>
+        <li><a href="#reference-link-5">reference link</a></li>
+        <li><a href="#implementation-5">implementation</a></li>
+      </ul>
+    </li>
+    <li><a href="#lab6">lab6</a>
+      <ul>
+        <li><a href="#how-to-do">how to do</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>cs144 lab的思路与实现</p>
+<h1 id="lab0">lab0</h1>
+<h2 id="reference-link">reference link</h2>
+<ul>
+<li><a href="https://cs144.github.io/assignments/check0.pdf" target="_blank" rel="noopener noreffer ">lab0实验手册</a></li>
+</ul>
+<h2 id="implementation">implementation</h2>
+<h3 id="set-up-gnulinux-on-your-computer">Set up GNU/Linux on your computer</h3>
+<p>简单地安装<code>CS144 VirtualBox</code>和c++环境，以方便后续地测试。</p>
+<h3 id="networking-by-hand">Networking by hand</h3>
+<p>接下来就是使用简单地<code>telnet</code>来构造HTTP请求和SMTP请求，并得到对应的响应。 （亲手写出一部分报文</p>
+<h3 id="listening-and-connecting">Listening and connecting</h3>
+<p>通过<code>netcat</code>建立一个全双工通信的服务端，感受<code>netcat</code>的使用。 （类似于即时通讯服务</p>
+<h3 id="writing-a-network-program">Writing a network program</h3>
+<blockquote>
+<p>by using an OS stream socket</p>
+</blockquote>
+<h4 id="part-1">part 1</h4>
+<p>lab0的最后一项任务就是使用原生的tcp socket来编写http报文结构，从而在socket的基础上发起一次http请求 详见<code>lab0/minow/apps/webget.cc</code>代码实现。</p>
+<h4 id="part2">part2</h4>
+<p>part2实现可靠字节流，使用一个普通string来存储字节流</p>
+<hr>
+<h1 id="lab1">lab1</h1>
+<h2 id="reference-link-1">reference link</h2>
+<ul>
+<li><a href="https://cs144.github.io/assignments/check1.pdf" target="_blank" rel="noopener noreffer ">lab1实验手册</a></li>
+<li><a href="https://hangx-ma.github.io/2023/05/14/cs144-lab1.html" target="_blank" rel="noopener noreffer ">博客</a></li>
+</ul>
+<h2 id="implementation-1">implementation</h2>
+<p>在tcp/ip协议栈中，数据传输的可靠性不是网络来承担的，而是交由端系统来承担的。网络中的有序字节流从一端发送到另一端，跨越了诸多网络的路由器 ，期间难免出现字节流传输的乱序、重复、重叠等。而lab1就是需要在这样不可靠字节流中去建立可靠的字节流。</p>
+<h3 id="具体实现">具体实现</h3>
+<p>这里参考了上面的博客
+<a href="https://github.com/cold-bin/cs144-lab/blob/main/static/img-unassembled.png" target="_blank" rel="noopener noreffer "><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://github.com/cold-bin/cs144-lab/raw/main/static/img-unassembled.png"
+        data-srcset="https://github.com/cold-bin/cs144-lab/raw/main/static/img-unassembled.png, https://github.com/cold-bin/cs144-lab/raw/main/static/img-unassembled.png 1.5x, https://github.com/cold-bin/cs144-lab/raw/main/static/img-unassembled.png 2x"
+        data-sizes="auto"
+        alt="https://github.com/cold-bin/cs144-lab/raw/main/static/img-unassembled.png"
+        title="Memory usage limitation of Reassembler and ByteStream" /></a></p>
+<h1 id="lab2">lab2</h1>
+<h2 id="reference-link-2">reference link</h2>
+<ul>
+<li><a href="https://cs144.github.io/assignments/check2.pdf" target="_blank" rel="noopener noreffer ">lab2实验手册</a></li>
+</ul>
+<h2 id="implementation-2">implementation</h2>
+<h3 id="wrap与unwrap"><code>wrap</code>与<code>unwrap</code></h3>
+<p><a href="https://github.com/cold-bin/cs144-lab/blob/main/static/img-seqno.png" target="_blank" rel="noopener noreffer "><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://github.com/cold-bin/cs144-lab/raw/main/static/img-seqno.png"
+        data-srcset="https://github.com/cold-bin/cs144-lab/raw/main/static/img-seqno.png, https://github.com/cold-bin/cs144-lab/raw/main/static/img-seqno.png 1.5x, https://github.com/cold-bin/cs144-lab/raw/main/static/img-seqno.png 2x"
+        data-sizes="auto"
+        alt="https://github.com/cold-bin/cs144-lab/raw/main/static/img-seqno.png"
+        title="seqno" /></a></p>
+<ul>
+<li>
+<p><code>wrap</code>是将<code>absolute seqno</code>转化为<code>seqno</code>
+由于<code>absolute seqno</code>是非循环序号，<code>seqno</code>是循环序号，所以需要取模转化。（当然也可以直接截断。</p>
+</li>
+<li>
+<p><code>unwrap</code>是将<code>seqno</code>转化为<code>absolute seqno</code></p>
+<blockquote>
+<p><code>checkpoint</code>其实就是<code>first_unassembled_index</code></p>
+</blockquote>
+<p>这里的处理比较麻烦。我最开始的想法是，循环找出最小的<code>checkpoint - (seqno+x * 2^32)</code>，也就是离得最近的<code>x</code>。 但是复杂度比较高，看了大佬的博客，利用位运算，可以将<code>O(x)</code>的时间复杂度降低为O(1).
+官方让我们找到离<code>checkpoint</code>最近的<code>absolute seqno</code>，因为给出<code>seqno</code>，会有多个<code>absolute seqno</code>与之对应，</p>
+</li>
+</ul>
+<h3 id="tcp-receiver">TCP Receiver</h3>
+<blockquote>
+<p>参考上面<code>seqno</code>、<code>absolute seqno</code>与<code>stream index</code>的对应关系图</p>
+</blockquote>
+<ul>
+<li><code>receive</code>时，直接在<code>reassembler</code>中插入<code>absolute seqno</code>，显然不是期待的<code>stream_index</code>；</li>
+<li><code>send</code>时，需要考虑到<code>available_capacity</code>不能超过<code>UINT_MAX</code>以及<code>close</code>时，发送的fin报文也要占据一个序号</li>
+</ul>
+<h1 id="lab3">lab3</h1>
+<h2 id="reference-link-3">reference link</h2>
+<ul>
+<li><a href="https://cs144.github.io/assignments/check3.pdf" target="_blank" rel="noopener noreffer ">lab3实验手册</a></li>
+<li><a href="https://hangx-ma.github.io/2023/05/24/cs144-lab3.html" target="_blank" rel="noopener noreffer ">博客</a></li>
+</ul>
+<h2 id="implementation-3">implementation</h2>
+<blockquote>
+<p>这里参考了博客实现</p>
+</blockquote>
+<ul>
+<li>实现ARQ重传机制</li>
+</ul>
+<h1 id="lab4">lab4</h1>
+<h2 id="reference-link-4">reference link</h2>
+<ul>
+<li><a href="https://cs144.github.io/assignments/check4.pdf" target="_blank" rel="noopener noreffer ">lab4实验手册</a></li>
+<li><a href="https://hangx-ma.github.io/2023/05/27/cs144-lab4.html" target="_blank" rel="noopener noreffer ">博客</a></li>
+</ul>
+<h2 id="implementation-4">implementation</h2>
+<p>Lab4 要求实现网络接口部分， 打通网络数据报 （Internet datagrams） 和链路层的以太网帧（link-layer Ethernet frames） 之间的桥梁。
+也就是，实现ip数据报转化为mac帧。ip数据报在转化为mac帧时，最重要的就是要知道目的mac地址，而mac地址我们可以通过arp协议来学习到。 所以，这里就牵扯到了arp协议的实现：</p>
+<ul>
+<li>目的ip地址与mac地址的缓存映射。最多保存30s；</li>
+<li>端系统可以组装ip报文和arp请求与响应报文，也能解析之；</li>
+<li>不论是arp请求还是arp响应，端系统拿到过后都可以学习到对等端的ip的其mac地址的映射关系</li>
+<li>而且，我们并不能任性发送arp请求，我们只能等待相同的arp请求发出去5秒后没有收到arp响应才再次发送，这是为了防止频繁地arp广播导致链路阻塞</li>
+<li>端系统在接收报文时，收到ip数据报自然不用说，该怎么处理就怎么处理，但是收到arp报文时，需要进一步处理：
+<ul>
+<li>如果是arp请求报文 那么我们在校验合法性通过后，还需要学习arp请求的来源ip地址和来源mac地址的映射关系，并且构造arp响应，返回自己的ip与mac地址的映射关系，以供arp请求方学习</li>
+<li>如果是arp响应报文 那么我们在校验合法性通过后，再从arp响应报文中学习到目的ip地址和目的mac地址的映射关系。除了mac地址学习外，我们还需要将arp请求等待列表清空</li>
+</ul>
+</li>
+<li>总之，我们通过arp协议拿到了目的mac地址过后，剩下的事情就非常简单了（将ip数据报组装成mac帧，以方便发送到数据链路上</li>
+</ul>
+<blockquote>
+<p>实验手册给的实现已经很详细了，翻译成代码即可。</p>
+</blockquote>
+<p><a href="https://github.com/cold-bin/cs144-lab/blob/main/static/img-lab4-network-interface.png" target="_blank" rel="noopener noreffer "><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://github.com/cold-bin/cs144-lab/raw/main/static/img-lab4-network-interface.png"
+        data-srcset="https://github.com/cold-bin/cs144-lab/raw/main/static/img-lab4-network-interface.png, https://github.com/cold-bin/cs144-lab/raw/main/static/img-lab4-network-interface.png 1.5x, https://github.com/cold-bin/cs144-lab/raw/main/static/img-lab4-network-interface.png 2x"
+        data-sizes="auto"
+        alt="https://github.com/cold-bin/cs144-lab/raw/main/static/img-lab4-network-interface.png"
+        title="img.png" /></a></p>
+<h1 id="lab5">lab5</h1>
+<h2 id="reference-link-5">reference link</h2>
+<ul>
+<li><a href="https://cs144.github.io/assignments/check5.pdf" target="_blank" rel="noopener noreffer ">lab5实验手册</a></li>
+<li><a href="https://hangx-ma.github.io/2023/05/30/cs144-lab5.html" target="_blank" rel="noopener noreffer ">博客</a></li>
+</ul>
+<h2 id="implementation-5">implementation</h2>
+<p>lab5的要求是在lab4实现的网络接口上，实现<code>ip router</code>.路由器有多个网络接口，可以在其中任何一个接口上接收 Internet 数据报。 路由器的工作是根据路由表转发它获得的数据报：路由表是一个规则列表，告诉路由器对于任何给定的数据报:</p>
+<ul>
+<li>在哪个<code>network interface</code>发出去</li>
+<li>确定<code>next hop</code></li>
+</ul>
+<blockquote>
+<p>实验手册的<code>Q &amp; A</code>中对<code>route table</code>的数据结构要求很低，允许实现O(N)时间复杂度。所以，这里直接使用<code>std:list&lt;type&gt;</code>。</p>
+</blockquote>
+<p>lab5的要求其实很简单了。我们只需要实现路由最长前缀匹配即可，并不需要实现动态路由的一些协议（RIP、OSPF、BGP 或 SDN 控制器） 当然除了这些，我们还需要注意：</p>
+<ul>
+<li>每次路由转发ip数据报时，ttl需要减一，直至ttl等于0时，路由器会自动丢弃它</li>
+<li>如果路由表里没有找到<code>next hop</code>，也会丢弃ip数据报</li>
+<li>如果路由的数据报缓存已满，也会丢弃掉（lab5里并没有说</li>
+</ul>
+<h1 id="lab6">lab6</h1>
+<blockquote>
+<p>no code</p>
+</blockquote>
+<p>使用以前的所有实现的lab来创建一个真实的网络，其中包括网络堆栈（主机和路由器），与另一台主机上实现的网络堆栈进行通信。</p>
+<h2 id="how-to-do">how to do</h2>
+<ul>
+<li><a href="https://cs144.github.io/assignments/check6.pdf" target="_blank" rel="noopener noreffer ">lab6实验手册</a></li>
+</ul></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-07-31</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/cs144-lab/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/cs144-lab/" data-title="Cs144 Lab"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/cs144-lab/" data-title="Cs144 Lab"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/cs144/">cs144</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" class="prev" rel="prev" title="计算机网络之网络安全"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>计算机网络之网络安全</a>
+            <a href="/mit6.824%E4%B9%8Blab1/" class="next" rel="next" title="Mit6.824之lab1">Mit6.824之lab1<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-07-31T19:13:59+08:00","owner":"cold-bin","repo":"blog-comment","title":"Cs144 Lab"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

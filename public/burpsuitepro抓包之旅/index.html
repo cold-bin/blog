@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>BurpsuitePro抓包之旅 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="BurpsuitePro抓包之旅" />
+<meta property="og:description" content="burpsuitepro的模块 Proxy 提供一个直观、友好的用户界面，它的代理服务器包含非常详细的拦截规则，并能准确分析 HTTP 消息的结构与内容。 Spide 爬行蜘" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/burpsuitepro%E6%8A%93%E5%8C%85%E4%B9%8B%E6%97%85/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-10-05T17:34:18+08:00" />
+<meta property="article:modified_time" content="2022-10-05T17:34:18+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="BurpsuitePro抓包之旅"/>
+<meta name="twitter:description" content="burpsuitepro的模块 Proxy 提供一个直观、友好的用户界面，它的代理服务器包含非常详细的拦截规则，并能准确分析 HTTP 消息的结构与内容。 Spide 爬行蜘"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/burpsuitepro%E6%8A%93%E5%8C%85%E4%B9%8B%E6%97%85/" /><link rel="prev" href="https://blog.coldbin.top/sync.pool%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" /><link rel="next" href="https://blog.coldbin.top/mysql%E4%BA%8B%E5%8A%A1%E7%AF%87/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "BurpsuitePro抓包之旅",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/burpsuitepro%E6%8A%93%E5%8C%85%E4%B9%8B%E6%97%85\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  1425 ,
+        "url": "https:\/\/blog.coldbin.top\/burpsuitepro%E6%8A%93%E5%8C%85%E4%B9%8B%E6%97%85\/","datePublished": "2022-10-05T17:34:18+08:00","dateModified": "2022-10-05T17:34:18+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">BurpsuitePro抓包之旅</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%9D%82/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>杂</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-05">2022-10-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1425 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#burpsuitepro的模块">burpsuitepro的模块</a></li>
+        <li><a href="#google浏览器网页抓包">google浏览器网页抓包</a>
+          <ul>
+            <li><a href="#下载证书">下载证书</a></li>
+            <li><a href="#安装证书">安装证书</a></li>
+            <li><a href="#抓包">抓包</a>
+              <ul>
+                <li><a href="#挂代理">挂代理</a></li>
+                <li><a href="#打开拦截">打开拦截</a></li>
+                <li><a href="#选项解释">选项解释</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#微信小程序抓包">微信小程序抓包</a></li>
+        <li><a href="#app抓包">APP抓包</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="burpsuitepro的模块">burpsuitepro的模块</h2>
+<p><strong>Proxy</strong></p>
+<p>提供一个直观、友好的用户界面，它的代理服务器<strong>包含非常详细的拦截规则</strong>，并能<strong>准确分析 HTTP 消息的结构与内容</strong>。</p>
+<p><strong>Spide</strong></p>
+<p>爬行蜘蛛工具，可以用来<strong>抓取目标网站</strong>，以显示网站的内容，基本结构，和其他功能。</p>
+<p><strong>Scanner</strong></p>
+<p>Web 应用程序的<strong>安全漏洞进行自动发现工具</strong>。它被设计<strong>用于渗透测试</strong>，并密切与您现有的技术和方法，以适应执行手动和半自动化的 Web 应用程序渗透测试。这个对于抓包分析来说用处不大。</p>
+<p><strong>Repeater</strong></p>
+<p>可让您<strong>手动重新发送单个HTTP请求</strong>以查看服务器回应。这个对于重新构造请求头和请求体比较方便。</p>
+<p><strong>Intruder</strong></p>
+<p>是burp套件的优势,它提供一组特别有用的功能。它可以<strong>自动实施各种定制攻击</strong>，包括资源枚举、数据提取、模糊测试等常见漏洞等。在各种有效的扫描工具中，它能够以最细化、最简单的方式访问它生产的请求与响应，允许组合利用个人智能与该工具的控制优点。</p>
+<p><strong>Sequencer</strong></p>
+<p>对会话令牌，会话标识符或其他出于安全原因需要随机产生的键值的可预测性进行分析。</p>
+<p><strong>Comparer</strong></p>
+<p>是一个简单的工具，执行比较数据之间的任何两个项目（一个可视化的“差异”）。在攻击一个Web 应用程序的情况下，这一要求通常会出现当你想快速识别两个应用程序的响应之间的差异（例如，入侵者攻击的过程中收到的两种反应之间之间，或登录失败的反应使用有效的和无效的用户名）之间，或两个应用程序请求（例如，确定不同的行为引起不同的请求参数）。</p>
+<p><strong>Decoder</strong></p>
+<p>使用各种编码绕过服务器端输入过滤，smart decode 自动识别编码格式。</p>
+<h2 id="google浏览器网页抓包">google浏览器网页抓包</h2>
+<h3 id="下载证书">下载证书</h3>
+<p>burpsuitepro默认的证书地址在<code>120.0.0.1:8080</code>端口，当然也可以更改。这样在本地就可以访问<code>127.0.0.1:8080</code>地址获取CA证书了。如果发生端口冲突，可以手动修改burpsuitepro的代理地址端口，这样只需要在对应代理端口访问即可。然后点击 <strong>CA Certificate</strong>即可下载证书<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061136901.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061136901.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061136901.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061136901.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061136901.png"
+        title="image-20221006113634706" /></p>
+<h3 id="安装证书">安装证书</h3>
+<p>设置&mdash;&gt;隐私设置和安全性&mdash;&gt;更多&mdash;&gt;管理证书</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061125310.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061125310.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061125310.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061125310.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061125310.png"
+        title="b737fc74c5a1698bd8745ef1a2320a14.png" /></p>
+<p><strong>导入证书</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126216.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126216.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126216.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126216.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126216.png"
+        title="7c4d257c0186e489d33d37a15c01ced0.png" /></p>
+<p>下一步到浏览本地证书位置。选所有文件，不然可能你找不到你的证书!! 选择证书后打开进入下一步。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126793.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126793.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126793.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126793.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126793.png"
+        title="0e1b1951d7488b6a596593b4f9452e3f.png" /></p>
+<p>按下图位置设置进入下一步，完成。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126621.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126621.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126621.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126621.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126621.png"
+        title="a548a0ffefcd751bd8cc76f61d7cd946.png" /></p>
+<p><strong>最后设置证书信任</strong></p>
+<p>按图示操作找到刚才安装的证书。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126828.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126828.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126828.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126828.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126828.png"
+        title="ba7853dac1e9af6f9546f951f38607ce.png" /></p>
+<p>选中证书点高级</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126607.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126607.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126607.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126607.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126607.png"
+        title="8ac0a0cdb877d6d64c65037a1acf48d0.png" /></p>
+<p>按下图勾选，确认。最后重启浏览器即可。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126046.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126046.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126046.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126046.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061126046.png"
+        title="0673ec779b4a47d586f06047e79e8f7b.png" /></p>
+<h3 id="抓包">抓包</h3>
+<h4 id="挂代理">挂代理</h4>
+<p>需要使用google浏览器抓包时，需要将burpsuitepro的proxy端口地址开个代理。可以全局代理，也建议局部代理，这里推荐一款好用的插件 SwitchyOmega ,它可以定制代理规则，将浏览器的请求转发到对应地址上。这里我们需要将burpsuitepro监听的端口地址，使用代理进行转发，这样浏览器发出的请求就会被转到代理地址，就可以收到请求报文信息。</p>
+<h4 id="打开拦截">打开拦截</h4>
+<p>proxy-&gt;intercept&ndash;&gt;intercept is off=&gt;intercept is on</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061146506.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061146506.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061146506.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061146506.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061146506.png"
+        title="image-20221006114647653" /></p>
+<p>打开代理和拦截后，那么对满足代理规则的网址的请求都会拦截并解析。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061158626.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061158626.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061158626.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061158626.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210061158626.png"
+        title="image-20221006115823412" /></p>
+<h4 id="选项解释">选项解释</h4>
+<p>这里说说，Forward Drop Action intercept is off/on 这几个选项</p>
+<p><strong>Forward</strong></p>
+<p>拦截并编辑请求之后，发送请求到服务器或浏览器</p>
+<p><strong>Drop</strong></p>
+<p>不想要发送本次请求，可以点击<strong>Drop</strong>放弃这个拦截请求</p>
+<p><strong>intercept is off/on</strong></p>
+<p>关闭/开启所有拦截.如果时 on ，表示请求和响应将被拦截或自动转发根据配置的拦截规则配置的代理选项。如果显示 off 则显示拦截之后的所有信息将自动转发。相当于没有对这个请求做任何事情。</p>
+<p><strong>Action</strong></p>
+<p>对当前拦截的请求做一些操作，如<strong>Repeater</strong>可以篡改请求之后再发送请求。</p>
+<h2 id="微信小程序抓包">微信小程序抓包</h2>
+<p>由于目前微信升级了。最新版本的微信小程序应用使用代理，请求却无法走代理。目前好像不能抓包。微信小程序的请求不走代理端口地址。</p>
+<h2 id="app抓包">APP抓包</h2>
+<p>todo</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-10-05</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/burpsuitepro%E6%8A%93%E5%8C%85%E4%B9%8B%E6%97%85/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/burpsuitepro%E6%8A%93%E5%8C%85%E4%B9%8B%E6%97%85/" data-title="BurpsuitePro抓包之旅"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/burpsuitepro%E6%8A%93%E5%8C%85%E4%B9%8B%E6%97%85/" data-title="BurpsuitePro抓包之旅"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/sync.pool%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="Sync.Pool的使用及源码分析"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Sync.Pool的使用及源码分析</a>
+            <a href="/mysql%E4%BA%8B%E5%8A%A1%E7%AF%87/" class="next" rel="next" title="MySQL事务篇">MySQL事务篇<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2022-10-05T17:34:18+08:00","owner":"cold-bin","repo":"blog-comment","title":"BurpsuitePro抓包之旅"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

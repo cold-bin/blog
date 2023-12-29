@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Go语言设计与实现之调度器 - 阿冰的小屋</title><meta name="Description" content="本文将介绍go语言是如何调度协程的"><meta property="og:title" content="Go语言设计与实现之调度器" />
+<meta property="og:description" content="本文将介绍go语言是如何调度协程的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-29T15:09:26+08:00" />
+<meta property="article:modified_time" content="2023-10-29T15:09:26+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="Go语言设计与实现之调度器"/>
+<meta name="twitter:description" content="本文将介绍go语言是如何调度协程的"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8/" /><link rel="prev" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" /><link rel="next" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Go语言设计与实现之调度器",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "go语言底层原理","wordcount":  1291 ,
+        "url": "https:\/\/blog.coldbin.top\/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8\/","datePublished": "2023-10-29T15:09:26+08:00","dateModified": "2023-10-29T15:09:26+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": "本文将介绍go语言是如何调度协程的"
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Go语言设计与实现之调度器</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/golang/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>golang</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-10-29">2023-10-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1291 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#go线程调度器">go线程调度器</a>
+      <ul>
+        <li><a href="#抢占式调度器">抢占式调度器</a></li>
+        <li><a href="#数据结构">数据结构</a>
+          <ul>
+            <li><a href="#g">G</a></li>
+            <li><a href="#m">M</a></li>
+            <li><a href="#p">P</a></li>
+          </ul>
+        </li>
+        <li><a href="#如何调度">如何调度</a>
+          <ul>
+            <li><a href="#创建g时">创建G时</a></li>
+            <li><a href="#运行时调度循环">运行时调度循环</a></li>
+          </ul>
+        </li>
+        <li><a href="#调度时机">调度时机</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="go线程调度器">go线程调度器</h1>
+<h2 id="抢占式调度器">抢占式调度器</h2>
+<p>go语言调度器的发展历程经过好几个版本，目前的实现是<strong>基于信号的抢占式调度器</strong>。go语言是在用户空间实现的协程调度器，相比于依赖于操作系统线程调度器，go的多个协程绑定到一个内核线程上去，内存开销很小，可以创建很多协程；并且没有用户态和内核态切换的成本。</p>
+<p>但是go调度器并没有彻底解决STW问题。</p>
+<h2 id="数据结构">数据结构</h2>
+<p>go调度器主要由三个主要部分组成：G，M，P</p>
+<h3 id="g">G</h3>
+<p>G指的是调度器中执行的任务，也就是goroutine，部分结构如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">g</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">stack</span>       <span class="nx">stack</span> <span class="c1">// 标识当前goroutine栈内存范围
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">stackguard0</span> <span class="kt">uintptr</span>
+</span></span><span class="line"><span class="cl">         
+</span></span><span class="line"><span class="cl">         <span class="nx">preempt</span>       <span class="kt">bool</span> <span class="c1">// 抢占信号
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">preemptStop</span>   <span class="kt">bool</span> <span class="c1">// 抢占时将状态修改成 `_Gpreempted`
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">preemptShrink</span> <span class="kt">bool</span> <span class="c1">// 在同步安全点收缩栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    
+</span></span><span class="line"><span class="cl">         <span class="nx">_panic</span>       <span class="o">*</span><span class="nx">_panic</span> <span class="c1">// 最内侧的 panic 结构体
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">_defer</span>       <span class="o">*</span><span class="nx">_defer</span> <span class="c1">// 最内侧的延迟函数结构体
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    
+</span></span><span class="line"><span class="cl">         <span class="nx">m</span>              <span class="o">*</span><span class="nx">m</span> <span class="c1">// 当前G占用的线程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">sched</span>          <span class="nx">gobuf</span> <span class="c1">// 存储G的调度数据：其实就是保存上下文
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">atomicstatus</span>   <span class="kt">uint32</span> <span class="c1">// G的状态
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">goid</span>           <span class="kt">int64</span> <span class="c1">// 唯一标识G
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>         
+</span></span><span class="line"><span class="cl">         <span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">gobuf</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">sp</span>   <span class="kt">uintptr</span> <span class="c1">// 栈指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">pc</span>   <span class="kt">uintptr</span> <span class="c1">// 程序计数器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">g</span>    <span class="nx">guintptr</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ret</span>  <span class="nx">sys</span><span class="p">.</span><span class="nx">Uintreg</span> <span class="c1">// 系统调用返回值
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="m">M</h3>
+<p>M指的是操作系统的线程，调度器最多可以创建10000个线程，但同时可以运行的线程只能有<code>gomaxprocs</code>个。（<code>runtime.GOMAXPROCS</code>可以设置，默认设置是线程数等于cpu核数，其实也是P的个数）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">m</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">g0</span>   <span class="o">*</span><span class="nx">g</span> <span class="c1">// 负责调度P的goroutine：参与大内存分配、CGO函数执行等
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">curg</span> <span class="o">*</span><span class="nx">g</span> <span class="c1">// 获得线程执行权的goroutine
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">p</span>             <span class="nx">puintptr</span> <span class="c1">// 正在运行代码的处理器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">nextp</span>         <span class="nx">puintptr</span> <span class="c1">// 暂存的处理器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">oldp</span>          <span class="nx">puintptr</span> <span class="c1">// 执行系统调用前的处理器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    
+</span></span><span class="line"><span class="cl">         <span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="p">P</h3>
+<p>P是协程和线程的中间层，负责将协程映射到某个线程执行（提供给线程上下文环境），同时负责调度本地队列里的协程。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">p</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">m</span>           <span class="nx">muintptr</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">runqhead</span> <span class="kt">uint32</span> <span class="c1">// 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">runqtail</span> <span class="kt">uint32</span> <span class="c1">// 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">runq</span>     <span class="p">[</span><span class="mi">256</span><span class="p">]</span><span class="nx">guintptr</span> <span class="c1">// 等待运行队列，最多256个
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">runnext</span> <span class="nx">guintptr</span> <span class="c1">// 下一个需要被执行的G
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="如何调度">如何调度</h2>
+<h3 id="创建g时">创建G时</h3>
+<ol>
+<li>创建好G时，如果允许G作为下一个处理器要执行的G，则直接设置<code>g.runnext</code>属性为G</li>
+<li>如果不允许，则将G放入处理器的本地运行队列；</li>
+<li>如果本地运行队列已满，则将一部分G和新加入的G放入全局的运行队列</li>
+</ol>
+<h3 id="运行时调度循环">运行时调度循环</h3>
+<ul>
+<li>
+<p><a href="https://draveness.me/golang/tree/runtime.schedule" target="_blank" rel="noopener noreffer "><code>runtime.schedule</code></a> 函数会从下面几个地方查找待执行的 Goroutine：</p>
+<ol>
+<li>为了保证公平，当全局运行队列中有待执行的 Goroutine 时，通过 <code>schedtick</code> 保证有一定几率会从全局的运行队列中查找对应的 Goroutine；</li>
+<li>从处理器本地的运行队列中查找待执行的 Goroutine；</li>
+<li>如果前两种方法都没有找到 Goroutine，会通过 <a href="https://draveness.me/golang/tree/runtime.findrunnable" target="_blank" rel="noopener noreffer "><code>runtime.findrunnable</code></a> 进行阻塞地查找 Goroutine；</li>
+</ol>
+</li>
+<li>
+<p><a href="https://draveness.me/golang/tree/runtime.findrunnable" target="_blank" rel="noopener noreffer "><code>runtime.findrunnable</code></a> 的实现非常复杂，这个 300 多行的函数通过以下的过程获取可运行的 Goroutine：</p>
+<ol>
+<li>从本地运行队列、全局运行队列中查找；</li>
+<li>从网络轮询器中查找是否有 Goroutine 等待运行；</li>
+<li>通过 <a href="https://draveness.me/golang/tree/runtime.runqsteal" target="_blank" rel="noopener noreffer "><code>runtime.runqsteal</code></a> 尝试从其他随机的处理器中窃取待运行的 Goroutine，该函数还可能窃取处理器的计时器；</li>
+</ol>
+</li>
+</ul>
+<p>因为函数的实现过于复杂，上述的执行过程是经过简化的，总而言之，当前函数一定会返回一个可执行的 Goroutine，如果当前不存在就会阻塞等待。</p>
+<ul>
+<li>P获取到Goroutine之后，调度到当前线程上执行，执行完毕后，会执行一些清理工作，然后又进入下一轮调度，形成调度循环。</li>
+</ul>
+<h2 id="调度时机">调度时机</h2>
+<ul>
+<li>主动挂起 — <a href="https://draveness.me/golang/tree/runtime.gopark" target="_blank" rel="noopener noreffer "><code>runtime.gopark</code></a> -&gt; <a href="https://draveness.me/golang/tree/runtime.park_m" target="_blank" rel="noopener noreffer "><code>runtime.park_m</code></a></li>
+<li>系统调用 — <a href="https://draveness.me/golang/tree/runtime.exitsyscall" target="_blank" rel="noopener noreffer "><code>runtime.exitsyscall</code></a> -&gt; <a href="https://draveness.me/golang/tree/runtime.exitsyscall0" target="_blank" rel="noopener noreffer "><code>runtime.exitsyscall0</code></a></li>
+<li>协作式调度 — <a href="https://draveness.me/golang/tree/runtime.Gosched" target="_blank" rel="noopener noreffer "><code>runtime.Gosched</code></a> -&gt; <a href="https://draveness.me/golang/tree/runtime.gosched_m" target="_blank" rel="noopener noreffer "><code>runtime.gosched_m</code></a> -&gt; <a href="https://draveness.me/golang/tree/runtime.goschedImpl" target="_blank" rel="noopener noreffer "><code>runtime.goschedImpl</code></a></li>
+<li>系统监控 — <a href="https://draveness.me/golang/tree/runtime.sysmon" target="_blank" rel="noopener noreffer "><code>runtime.sysmon</code></a> -&gt; <a href="https://draveness.me/golang/tree/runtime.retake" target="_blank" rel="noopener noreffer "><code>runtime.retake</code></a> -&gt; <a href="https://draveness.me/golang/tree/runtime.preemptone" target="_blank" rel="noopener noreffer "><code>runtime.preemptone</code></a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-10-29</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8/" data-title="Go语言设计与实现之调度器"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8/" data-title="Go语言设计与实现之调度器"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/go%E8%AF%AD%E8%A8%80%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">go语言底层原理</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="prev" rel="prev" title="Go语言设计与实现之基础数据结构"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Go语言设计与实现之基础数据结构</a>
+            <a href="/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8/" class="next" rel="next" title="Go语言设计与实现之内存分配器">Go语言设计与实现之内存分配器<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-10-29T15:09:26+08:00","owner":"cold-bin","repo":"blog-comment","title":"Go语言设计与实现之调度器"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

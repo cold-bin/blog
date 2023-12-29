@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Go设计模式之设计原则 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Go设计模式之设计原则" />
+<meta property="og:description" content="设计原则 SOLID原则 SRP、OCP、LSP、ISP、DIP KISS原则 YAGNI原则 DRY原则 LOD原则 SRP 单一职责原则（Single Responsibility Pr" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-08-28T08:35:47+08:00" />
+<meta property="article:modified_time" content="2023-08-28T08:35:47+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="Go设计模式之设计原则"/>
+<meta name="twitter:description" content="设计原则 SOLID原则 SRP、OCP、LSP、ISP、DIP KISS原则 YAGNI原则 DRY原则 LOD原则 SRP 单一职责原则（Single Responsibility Pr"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" /><link rel="prev" href="https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8Boop/" /><link rel="next" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Go设计模式之设计原则",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  2121 ,
+        "url": "https:\/\/blog.coldbin.top\/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99\/","datePublished": "2023-08-28T08:35:47+08:00","dateModified": "2023-08-28T08:35:47+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Go设计模式之设计原则</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>设计模式</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-08-28">2023-08-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2121 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#设计原则">设计原则</a>
+      <ul>
+        <li><a href="#srp">SRP</a></li>
+        <li><a href="#ocp">OCP</a></li>
+        <li><a href="#lsp">LSP</a></li>
+        <li><a href="#isp">ISP</a></li>
+        <li><a href="#dip">DIP</a>
+          <ul>
+            <li><a href="#ioc">IOC</a></li>
+            <li><a href="#di">DI</a></li>
+          </ul>
+        </li>
+        <li><a href="#kiss">KISS</a></li>
+        <li><a href="#yagni">YAGNI</a></li>
+        <li><a href="#dry">DRY</a></li>
+        <li><a href="#lod">LOD</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><hr>
+<h1 id="设计原则">设计原则</h1>
+<ul>
+<li>
+<p>SOLID原则</p>
+<p>SRP、OCP、LSP、ISP、DIP</p>
+</li>
+<li>
+<p>KISS原则</p>
+</li>
+<li>
+<p>YAGNI原则</p>
+</li>
+<li>
+<p>DRY原则</p>
+</li>
+<li>
+<p>LOD原则</p>
+</li>
+</ul>
+<h2 id="srp">SRP</h2>
+<p>单一职责原则（Single Responsibility Principle）：一个模块或类只负责完成一个功能。不要设计大而全的类。</p>
+<p><strong>是否越单一越好？</strong></p>
+<blockquote>
+<p>越单一的模块，会使得代码内聚性变低。我们要做到高内聚，低耦合。</p>
+</blockquote>
+<p><strong>如何判断模块设计的是否满足SRP原则？</strong></p>
+<blockquote>
+<p>以业务而定。</p>
+</blockquote>
+<h2 id="ocp">OCP</h2>
+<p>开闭原则（Open / Closed Principle）：通过在已有代码的基础上扩展代码（添加新的模块、类、方法、属性等），而非修改代码（修改已有的模块、类、方法、属性等）。</p>
+<p><strong>如何理解开闭原则？</strong></p>
+<blockquote>
+<p>扩展和修改的定义是相对于作用对象而言的。</p>
+<ul>
+<li>添加一个方法或属性在类的层面就是修改类，但是在方法或属性层面就是扩展了属性或方法。换言之，同样的代码改动，在不同对象粒度上，会有不同看法。</li>
+<li>OCP并非完全排斥修改，而是将修改对代码可维护性的影响降至最低</li>
+</ul>
+</blockquote>
+<p><strong>怎么做到开闭原则？</strong></p>
+<blockquote>
+<p>提前了解项目需求，预测短期内可能出现的业务变更，组件变更等，在这些地方预留扩展点。怎么留扩展点？运用一些设计模式技巧、基于接口而非实现编程、依赖注入、多态等</p>
+</blockquote>
+<h2 id="lsp">LSP</h2>
+<p>里氏替换原则（Liskov Subsititution Principle）：子类对象能够替换程序中对父类对象出现的任何地方，并且保证原来程序的逻辑行为不变及正确不被破坏。</p>
+<p><strong>哪些子类设计违反LSP</strong></p>
+<blockquote>
+<ul>
+<li>子类违背父类声明要实现的功能</li>
+<li>子类违背父类对输入、输出和异常的要求</li>
+<li>子类违背父类注释中所罗列的任何特殊声明</li>
+</ul>
+<p>简而言之，子类对父类方法重构的实际输入输出、功能需求不能发生变化。</p>
+</blockquote>
+<p><strong>LSP和多态有什么区别？</strong></p>
+<blockquote>
+<p>LSP是设计原则，多态是编程方法。LSP指导子类如何设计，以让子类可以替换父类出现的任何位置。</p>
+</blockquote>
+<h2 id="isp">ISP</h2>
+<p>接口隔离原则（Interface Segregation Principle）：客户端不应该强迫依赖它不需要的接口。</p>
+<p>三种理解：</p>
+<ul>
+<li>
+<p>一组API集合</p>
+<p>某组API只被某个客户端使用，那就没有必要将这组API暴露给其他客户端，将它隔离出来</p>
+</li>
+<li>
+<p>一个API或函数</p>
+<p>类似于单一职责原则，函数或API功能单一，不应该包含其他功能或业务。</p>
+</li>
+<li>
+<p>OOP里的接口</p>
+<p>语法上的接口，应该尽可能使得接口里面的方法少，只包含必要的方法</p>
+</li>
+</ul>
+<h2 id="dip">DIP</h2>
+<p>依赖反转原则（Dependency Inversion Principle）：高层模块不要依赖低层模块，高层模块和低层模块应该通过抽象来相互依赖。抽象不要依赖具体实现细节，具体实现以来抽象。</p>
+<h3 id="ioc">IOC</h3>
+<p>控制反转（Inversion Of Control）：通过框架约束程序执行流程。</p>
+<h3 id="di">DI</h3>
+<p>依赖注入（Dependency Injection）：是一种实现IOC的且用于解决依赖性问题的设计模式，我们不在内部创建对象并使用它，而是将依赖对象直接注入来使用，这样我们就只依赖依赖注入的对象。</p>
+<blockquote>
+<p>下面是摘自<a href="https://juejin.cn/post/7148011939279405087" target="_blank" rel="noopener noreffer ">飞书技术</a>。</p>
+</blockquote>
+<p><strong>依赖注入前</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// dal/user.go
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="o">*</span><span class="nx">UserDal</span><span class="p">)</span> <span class="nf">Create</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">data</span> <span class="o">*</span><span class="nx">UserCreateParams</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">db</span> <span class="o">:=</span> <span class="nx">mysql</span><span class="p">.</span><span class="nf">GetDB</span><span class="p">().</span><span class="nf">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{})</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">user</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Username</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Username</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Password</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">db</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">).</span><span class="nx">Error</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// service/user.go
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="o">*</span><span class="nx">UserService</span><span class="p">)</span> <span class="nf">Register</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">data</span> <span class="o">*</span><span class="nx">schema</span><span class="p">.</span><span class="nx">RegisterReq</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">schema</span><span class="p">.</span><span class="nx">RegisterRes</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="nx">params</span> <span class="o">:=</span> <span class="nx">dal</span><span class="p">.</span><span class="nx">UserCreateParams</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Username</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Username</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Password</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="nx">err</span> <span class="o">:=</span> <span class="nx">dal</span><span class="p">.</span><span class="nf">GetUserDal</span><span class="p">().</span><span class="nf">Create</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="nx">registerRes</span> <span class="o">:=</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">RegisterRes</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Msg</span><span class="p">:</span> <span class="s">&#34;register success&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="k">return</span> <span class="o">&amp;</span><span class="nx">registerRes</span><span class="p">,</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在这段代码里，层级依赖关系为 service -&gt; dal -&gt; db，上游层级通过 <code>Getxxx</code>实例化依赖。但在实际生产中，我们的依赖链比较少是垂直依赖关系，更多的是横向依赖。即我们一个方法中，可能要多次调用<code>Getxxx</code>的方法，这样使得我们代码极不简洁。</p>
+<p>不仅如此，我们的依赖都是写死的，即依赖者的代码中写死了被依赖者的生成关系。当被依赖者的生成方式改变，我们也需要改变依赖者的函数，这极大的增加了修改代码量以及出错风险。</p>
+<p>接下来我们用<code>依赖注入</code>的方式对代码进行改造：</p>
+<p><strong>依赖注入后</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// dal/user.go
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">UserDal</span> <span class="kd">struct</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">DB</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">NewUserDal</span><span class="p">(</span><span class="nx">db</span> <span class="o">*</span><span class="nx">gorm</span><span class="p">.</span><span class="nx">DB</span><span class="p">)</span> <span class="o">*</span><span class="nx">UserDal</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">UserDal</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">DB</span><span class="p">:</span> <span class="nx">db</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="o">*</span><span class="nx">UserDal</span><span class="p">)</span> <span class="nf">Create</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">data</span> <span class="o">*</span><span class="nx">UserCreateParams</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">db</span> <span class="o">:=</span> <span class="nx">u</span><span class="p">.</span><span class="nx">DB</span><span class="p">.</span><span class="nf">Model</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{})</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">user</span> <span class="o">:=</span> <span class="nx">entity</span><span class="p">.</span><span class="nx">User</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Username</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Username</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Password</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">db</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">user</span><span class="p">).</span><span class="nx">Error</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// service/user.go
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">UserService</span> <span class="kd">struct</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">UserDal</span> <span class="o">*</span><span class="nx">dal</span><span class="p">.</span><span class="nx">UserDal</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">NewUserService</span><span class="p">(</span><span class="nx">userDal</span> <span class="nx">dal</span><span class="p">.</span><span class="nx">UserDal</span><span class="p">)</span> <span class="o">*</span><span class="nx">UserService</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="o">&amp;</span><span class="nx">UserService</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">UserDal</span><span class="p">:</span> <span class="nx">userDal</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">u</span> <span class="o">*</span><span class="nx">UserService</span><span class="p">)</span> <span class="nf">Register</span><span class="p">(</span><span class="nx">ctx</span> <span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span> <span class="nx">data</span> <span class="o">*</span><span class="nx">schema</span><span class="p">.</span><span class="nx">RegisterReq</span><span class="p">)</span> <span class="p">(</span><span class="o">*</span><span class="nx">schema</span><span class="p">.</span><span class="nx">RegisterRes</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="nx">params</span> <span class="o">:=</span> <span class="nx">dal</span><span class="p">.</span><span class="nx">UserCreateParams</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Username</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Username</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Password</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">Password</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="nx">err</span> <span class="o">:=</span> <span class="nx">u</span><span class="p">.</span><span class="nx">UserDal</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="nx">err</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="nx">registerRes</span> <span class="o">:=</span> <span class="nx">schema</span><span class="p">.</span><span class="nx">RegisterRes</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">Msg</span><span class="p">:</span> <span class="s">&#34;register success&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="k">return</span> <span class="o">&amp;</span><span class="nx">registerRes</span><span class="p">,</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// main.go 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">db</span> <span class="o">:=</span> <span class="nx">mysql</span><span class="p">.</span><span class="nf">GetDB</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nx">userDal</span> <span class="o">:=</span> <span class="nx">dal</span><span class="p">.</span><span class="nf">NewUserDal</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">userService</span> <span class="o">:=</span> <span class="nx">dal</span><span class="p">.</span><span class="nf">NewUserService</span><span class="p">(</span><span class="nx">userDal</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上编码情况中，我们通过将 db 实例对象注入到 dal 中，再将 dal 实例对象注入到 service 中，实现了层级间的依赖注入。解耦了部分依赖关系。</p>
+<p>在系统简单、代码量少的情况下上面的实现方式确实没什么问题。但是项目庞大到一定程度，结构之间的关系变得非常复杂时，手动创建每个依赖，然后层层组装起来的方式就会变得异常繁琐，并且容易出错。这个时候勇士 <a href="https://github.com/google/wire" target="_blank" rel="noopener noreffer ">wire</a> 出现了！</p>
+<h2 id="kiss">KISS</h2>
+<p>尽量保持简单（Keep It Simple and Stupid）</p>
+<p><strong>如何写出满足KISS原则的代码？</strong></p>
+<blockquote>
+<ul>
+<li>注重代码可读性</li>
+<li>不要重复造轮子（生产开发</li>
+<li>不要过度优化</li>
+</ul>
+</blockquote>
+<h2 id="yagni">YAGNI</h2>
+<p>你不会需要它（You Aren&rsquo;t Gonna Need It）：核心就是不要过度设计，把一些目前没必要使用的模块也引入</p>
+<h2 id="dry">DRY</h2>
+<p>不要重复自己（Don&rsquo;t repeat yourself）：</p>
+<ul>
+<li>实现逻辑重复，但功能逻辑不重复，并不违反DRY原则</li>
+<li>实现逻辑不重复，但功能逻辑重复，违反DRY原则</li>
+<li>代码执行重复也算违背DRY原则</li>
+</ul>
+<p><strong>如何提高代码复用性？</strong></p>
+<blockquote>
+<ul>
+<li>减少代码耦合</li>
+<li>满足单一职责原则</li>
+<li>模块化</li>
+<li>业务与非业务逻辑分离</li>
+<li>通用代码下沉</li>
+<li>抽象、多态和封装</li>
+<li>使用合适的设计模式</li>
+</ul>
+</blockquote>
+<h2 id="lod">LOD</h2>
+<p>迪米特法则（Law Of Demeter）：每个模块只应该了解哪些与它关系密切模块的优先知识。</p>
+<p><strong>如何理解高内聚、松耦合？</strong></p>
+<blockquote>
+<p>高内聚就是指把功能相近或为一体的放到同一个模块实现，松耦合就是减少模块之间不必要的依赖。</p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-08-28</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" data-title="Go设计模式之设计原则"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" data-title="Go设计模式之设计原则"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8Boop/" class="prev" rel="prev" title="Go设计模式之OOP"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Go设计模式之OOP</a>
+            <a href="/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" class="next" rel="next" title="Go语言设计模式之单例模式">Go语言设计模式之单例模式<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-08-28T08:35:47+08:00","owner":"cold-bin","repo":"blog-comment","title":"Go设计模式之设计原则"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

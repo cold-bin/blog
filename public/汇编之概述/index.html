@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>汇编之概述 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="汇编之概述" />
+<meta property="og:description" content="汇编基础术语 什么是汇编语言？汇编语言就是直接工作硬件之上的编程语言。 机器语言 机器语言就是机器指令的集合。电子计算机的机器指令是一串二进制数字" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-11-29T15:43:09+08:00" />
+<meta property="article:modified_time" content="2022-11-29T15:43:09+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="汇编之概述"/>
+<meta name="twitter:description" content="汇编基础术语 什么是汇编语言？汇编语言就是直接工作硬件之上的编程语言。 机器语言 机器语言就是机器指令的集合。电子计算机的机器指令是一串二进制数字"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><link rel="prev" href="https://blog.coldbin.top/%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E4%B9%8B%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/" /><link rel="next" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%AF%84%E5%AD%98%E5%99%A8/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "汇编之概述",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A6%82%E8%BF%B0\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  2239 ,
+        "url": "https:\/\/blog.coldbin.top\/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A6%82%E8%BF%B0\/","datePublished": "2022-11-29T15:43:09+08:00","dateModified": "2022-11-29T15:43:09+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编之概述</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%B1%87%E7%BC%96/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>汇编</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-11-29">2022-11-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2239 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#汇编基础术语">汇编基础术语</a>
+          <ul>
+            <li><a href="#机器语言">机器语言</a></li>
+            <li><a href="#汇编语言">汇编语言</a></li>
+            <li><a href="#存储器">存储器</a></li>
+            <li><a href="#指令和数据">指令和数据</a></li>
+            <li><a href="#存储单元">存储单元</a></li>
+            <li><a href="#cpu对存储器的读写">CPU对存储器的读写</a></li>
+            <li><a href="#地址总线">地址总线</a></li>
+            <li><a href="#数据总线">数据总线</a></li>
+            <li><a href="#控制总线">控制总线</a></li>
+            <li><a href="#主板">主板</a></li>
+            <li><a href="#接口卡">接口卡</a></li>
+            <li><a href="#各类存储器芯片">各类存储器芯片</a></li>
+            <li><a href="#cpu的内存地址空间">CPU的内存地址空间</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="汇编基础术语">汇编基础术语</h2>
+<p>什么是汇编语言？汇编语言就是直接工作硬件之上的编程语言。</p>
+<h3 id="机器语言">机器语言</h3>
+<p>机器语言就是机器指令的集合。电子计算机的机器指令是一串二进制数字，而且不同的微处理器有不同的机器指令集，也就是机器语言。</p>
+<p>早期的程序都是编写一大段01的二进制代码，也就是机器语言，显然不利于人工的记忆和操作。为了解决机器语言的晦涩难记的问题，人们想出了汇编语言。</p>
+<h3 id="汇编语言">汇编语言</h3>
+<p>汇编语言的主体是汇编指令。汇编指令和机器指令的差别在于指令的表示方法上。当然，汇编语言是人来设计的，机器是看不懂的，需要经过汇编语言的编译器，将汇编代码翻译成机器指令集，然后机器才可以执行代码。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20221129200848.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20221129200848.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20221129200848.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20221129200848.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20221129200848.png"
+        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20221129200848.png" /></p>
+<p><strong>汇编语言的组成：</strong></p>
+<ul>
+<li>汇编指令：机器码的助记符，有对应的机器码（核心）</li>
+<li>伪指令：没有对应的机器码，由编译器执行，计算机并不执行</li>
+<li>其他符号：如+、-、*、/等，有编译器识别，没有对应的机器码</li>
+</ul>
+<h3 id="存储器">存储器</h3>
+<p>CPU是计算机的核心部件，它控制整个计算机的运作并进行计算。要想让一个CPU工作，就必须向它提供指令和数据。指令和数据就放在存储器里，当然也指内存。CPU是与内存打交道，磁盘不能直接与CPU进行数据交换，中间需要存取速度更快的内存。</p>
+<h3 id="指令和数据">指令和数据</h3>
+<p>在内存或磁盘上，指令和数据没有任何区别，都是二进制信息。CPU在工作的时候将有些信息看成指令，有些看成数据。</p>
+<h3 id="存储单元">存储单元</h3>
+<p>存储器被划分为若干个存储单元，每个存储单元从0开始顺序编号，例如一个存储器有128个存储单元，编号从0~127.</p>
+<p>一般一个存储单元就是一个字节</p>
+<h3 id="cpu对存储器的读写">CPU对存储器的读写</h3>
+<p>存储器被划分为多个存储单元，存储单元从零开始顺序编号，这些编号可以看作是存储单元在存储器的地址。</p>
+<p>CPU要从内存中读写数据，首先要指定存储单元的地址，然后需要明确进行何种操作。</p>
+<p>也就是说，CPU对数据进行读写时，必须和外部器件进行3类信息的交互</p>
+<ul>
+<li>存储单元的地址信息（地址信息）</li>
+<li>器件的选择，读或写的命令（控制信息）</li>
+<li>读或写的数据（数据信息）</li>
+</ul>
+<p>那么，CPU通过什么将地址、数据和控制信息传到存储器的呢？——总线。</p>
+<p>总线从物理上来讲，就是一根根导线的集合。根据传送信息的不同，总线从逻辑上又分为3类：地址总线、控制总线、数据总线。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20221129205642312.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20221129205642312.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20221129205642312.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20221129205642312.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20221129205642312.png"
+        title="image-20221129205642312" /></p>
+<p>CPU读数据：</p>
+<ol>
+<li>CPU通过地址线将地址信息3发出</li>
+<li>CPU通过控制线发出内存读命令，选中存储器芯片并通知它，将要从中读取数据</li>
+<li>存储器将3号单元里的数据8通过数据线送入CPU</li>
+</ol>
+<p>CPU写数据：</p>
+<ol>
+<li>CPU通过地址线将地址信息3发出</li>
+<li>CPU通过控制线发出内存写命令，选中存储器芯片并通知它，将要从中写入数据</li>
+<li>CPU通过数据线将数据26送入内存的3号单元中</li>
+</ol>
+<h3 id="地址总线">地址总线</h3>
+<p>CPU通过地址总线来指定存储单元，由此可推知，地址总线上能传递多少种不同的信息，CPU就可以对多少个存储单元进行寻址，假设一个CPU有10根地址总线，那么其寻址空间为0 ~1023，即2^10个存储单元。即地址总线的宽度决定了CPU的寻址范围。</p>
+<h3 id="数据总线">数据总线</h3>
+<p>CPU和其它器件之间的数据传递是通过数据总线进行传递的，数据总线的宽度决定了CPU和其它器件间数据传送速度。8根数据总线一次可以传送一个8位二进制数据，因为每一根总线只能传递一个高电平或低电平来代表0或1，即1根总线一次只能传递一位。</p>
+<h3 id="控制总线">控制总线</h3>
+<p>CPU对外部器件的控制是通过控制总线完成的，有多少根控制总线就意味着CPU对外部器件有多少种控制。即控制总线的宽度对外部器件的控制能力。</p>
+<h3 id="主板">主板</h3>
+<p>每台PC都有一个主板，每个主板上都存在一些核心器件：CPU，存储器，外围芯片组，扩展卡槽等。扩展卡槽上一般有RAM内存条和各类接口卡。这些器件通过总线相连。</p>
+<h3 id="接口卡">接口卡</h3>
+<p>CPU对于诸如：显示器，音箱，打印机这样的外设不能直接控制，直接控制这些设备工作的是插在扩展插槽上的接口卡，由于扩展插槽通过总线和CPU相连，所以接口卡也通过总线和CPU相连。之后CPU通过总线向接口卡发送命令，接口卡在根据CPU的命令控制外设进行工作。（例：比如一个音箱通过USB插槽连接到了电脑，而该插槽通过总线和CPU相连，此时当要播放声音时会将数据指令等通过数据总线发送到卡槽，即音箱内的接口卡也会收到，之后控制音箱工作）</p>
+<h3 id="各类存储器芯片">各类存储器芯片</h3>
+<p>存储器从读写属性上可以分为随机存储器（RAM）和只读存储器(ROM)，其中随机存储器（RAM）可读可写但必须带电存储，关机后存储内容会丢失。只读存储器只能读取，不能写入，关机后其内容不会丢失。</p>
+<p>而从功能和连接方式看又可以分为以下3类：</p>
+<ul>
+<li>随机存储器（内存）：用于存放供CPU使用的绝大部分程序和数据</li>
+<li>装有BIOS的ROM：BIOS（基本输入/输出系统）是由主板和各类接口卡厂商提供的软件系统，可以通过BIOS使用硬件设备进行最基本的输入输出。在主板和某写接口卡上插有存储相应BIOS的ROM，如：主板上的ROM中存储着主板的BIOS（通常即系统BIOS），显卡上的ROM存储着显卡的BIOS，网卡上装有网卡的BIOS。</li>
+<li>接口卡上的RAM：有的接口卡需要对大批量的输入输出数据进行进行暂存，因此需要RAM。最典型的就是显卡上的RAM,一般称为显存。显卡随时将显存中的数据输出到显示器上。</li>
+</ul>
+<h3 id="cpu的内存地址空间">CPU的内存地址空间</h3>
+<p>假设一个CPU的地址总线宽度为10，那么其寻址范围为1024个内存单元，而这1024个内存单元就构成了这个CPU的内存地址空间。</p>
+<p>各类物理上独立的器件都是通过总线与CPU相连的，CPU操作它们时也是将它们当作内存来看待的，每个物理存储器占用CPU的内存地址空间中的一部分，当CPU在某个物理器件对应的地址空间中读写数据，实际上就是在对应的物理存储器中读写数据。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-11-29</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A6%82%E8%BF%B0/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A6%82%E8%BF%B0/" data-title="汇编之概述"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A6%82%E8%BF%B0/" data-title="汇编之概述"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E5%B9%B6%E5%8F%91%E5%AE%89%E5%85%A8%E4%B9%8B%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/" class="prev" rel="prev" title="并发安全之原子操作"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>并发安全之原子操作</a>
+            <a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%AF%84%E5%AD%98%E5%99%A8/" class="next" rel="next" title="汇编之寄存器">汇编之寄存器<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2022-11-29T15:43:09+08:00","owner":"cold-bin","repo":"blog-comment","title":"汇编之概述"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

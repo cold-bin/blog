@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>操作系统之概述 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="操作系统之概述" />
+<meta property="og:description" content="[toc] 操作系统概念 操作系统（operation system，简称OS），是管理计算机硬件与软件资源的计算机程序。 例如，在windows上win&#43;" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-15T18:32:26+08:00" />
+<meta property="article:modified_time" content="2023-08-14T12:03:21+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="操作系统之概述"/>
+<meta name="twitter:description" content="[toc] 操作系统概念 操作系统（operation system，简称OS），是管理计算机硬件与软件资源的计算机程序。 例如，在windows上win&#43;"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><link rel="prev" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "操作系统之概述",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  6228 ,
+        "url": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0\/","datePublished": "2023-03-15T18:32:26+08:00","dateModified": "2023-08-14T12:03:21+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">操作系统之概述</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>操作系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-03-15">2023-03-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;6228 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;13 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#操作系统概念">操作系统概念</a>
+          <ul>
+            <li><a href="#计算机系统构成">计算机系统构成</a></li>
+            <li><a href="#os的目标和功能">OS的目标和功能</a></li>
+            <li><a href="#os的特征">OS的特征</a>
+              <ul>
+                <li><a href="#并发">并发</a></li>
+                <li><a href="#共享">共享</a></li>
+                <li><a href="#虚拟">虚拟</a></li>
+                <li><a href="#异步">异步</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#操作系统的发展与分类">操作系统的发展与分类</a>
+          <ul>
+            <li><a href="#1手工操作阶段">1、手工操作阶段</a></li>
+            <li><a href="#2批处理阶段">2、批处理阶段</a>
+              <ul>
+                <li><a href="#单道批处理系统">单道批处理系统</a></li>
+                <li><a href="#多道批处理系统">多道批处理系统</a></li>
+              </ul>
+            </li>
+            <li><a href="#3分时操作系统">3、分时操作系统</a></li>
+            <li><a href="#4实时操作系统">4、实时操作系统</a></li>
+            <li><a href="#5其他几种操作系统">5、其他几种操作系统</a></li>
+          </ul>
+        </li>
+        <li><a href="#操作系统的运行环境">操作系统的运行环境</a>
+          <ul>
+            <li><a href="#操作系统的运行机制">操作系统的运行机制</a>
+              <ul>
+                <li><a href="#1内核程序应用程序">1、内核程序&amp;应用程序</a></li>
+                <li><a href="#2特权指令非特权指令">2、特权指令&amp;非特权指令</a></li>
+                <li><a href="#3内核态用户态">3、内核态&amp;用户态</a></li>
+                <li><a href="#4操作系统的内核">4、操作系统的内核</a></li>
+                <li><a href="#5小结">5、小结</a></li>
+              </ul>
+            </li>
+            <li><a href="#操作系统的重要部件和机制">操作系统的重要部件和机制</a>
+              <ul>
+                <li><a href="#0时钟">0、时钟</a></li>
+                <li><a href="#1中断">1、中断</a>
+                  <ul>
+                    <li><a href="#内中断">内中断</a></li>
+                    <li><a href="#外中断">外中断</a></li>
+                    <li><a href="#中断分类">中断分类</a></li>
+                    <li><a href="#中断处理过程">中断处理过程</a></li>
+                  </ul>
+                </li>
+                <li><a href="#2原语">2、原语</a></li>
+                <li><a href="#3系统数据结构">3、系统数据结构</a></li>
+                <li><a href="#4系统调用">4、系统调用</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#操作系统的结构设计">操作系统的结构设计</a>
+          <ul>
+            <li><a href="#大内核os结构-传统的操作系统结构">大内核OS结构-传统的操作系统结构</a></li>
+            <li><a href="#微内核os结构">微内核OS结构</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>[toc]</p>
+<h2 id="操作系统概念">操作系统概念</h2>
+<p>操作系统（operation system，简称OS），是管理计算机硬件与软件资源的计算机程序。</p>
+<p>例如，在windows上<code>win+r</code>快捷键，然后在弹出输入框输入CMD，显示的黑框框也是一个操作系统。（在这个窗口里，可以控制计算机的各种资源）</p>
+<h3 id="计算机系统构成">计算机系统构成</h3>
+<p>由用户、应用程序、操作系统、硬件这四部分组成。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315184022276.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315184022276.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315184022276.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315184022276.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315184022276.png"
+        title="image-20230315184022276" /></p>
+<ul>
+<li>
+<p>操作系统向用户和应用程序提供接口。</p>
+<p>用户或应用程序可以通过这些接口访问计算机的硬件资源，如：用户开启或关闭声音、应用程序向操作系统申请磁盘空间或内存等行为。也就是说，操作系统通过封装具体的硬件细节形成接口，对于用户或应用程序而言是个黑盒，但是强大的封装性更易于被使用。</p>
+</li>
+<li>
+<p>OS是一种系统软件，担任以下角色</p>
+<ol>
+<li>与硬件交互</li>
+<li>对资源共享进行调度管理</li>
+<li>解决并发操作处理中存在的协调问题</li>
+<li>数据结构复杂，外部接口多样化，便于用户反复使用</li>
+</ol>
+</li>
+<li>
+<p>OS主要作用</p>
+<ol>
+<li>管理与配置内存</li>
+<li>决定系统资源供需的优先次序</li>
+<li>控制输入设备与输出设备</li>
+<li>操作网络与管理文件系统等基本事务</li>
+<li>提供一个用户与系统交互的界面 =&gt; GUI</li>
+</ol>
+</li>
+</ul>
+<h3 id="os的目标和功能">OS的目标和功能</h3>
+<ul>
+<li>
+<p>目标</p>
+<ol>
+<li>有效性：提高系统资源利用率、提高系统的吞吐量</li>
+<li>方便性：方便用户使用</li>
+<li>可扩充性：硬件不断发展，依然适配OS</li>
+<li>开放性：兼容不同软件和硬件</li>
+</ol>
+</li>
+<li>
+<p>功能</p>
+<ol>
+<li>
+<p>作为计算机系统资源的管理者</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315190337288.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315190337288.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315190337288.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315190337288.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230315190337288.png"
+        title="image-20230315190337288" /></p>
+</li>
+<li>
+<p>作为用户与计算机硬件系统之间的接口</p>
+<p>接口主要体现在三个方面：操作系统提供的<strong>程序接口</strong>（也就是系统调用）、操作系统提供的<strong>命令接口</strong>、操作系统的<strong>图形用户接口（GUI）</strong></p>
+</li>
+<li>
+<p>实现了对计算机资源的抽象</p>
+<p>抽象的含义就是：将复杂的硬件资源抽象成软件资源，从而提供对外接口的方式，也就是封装</p>
+</li>
+<li>
+<p>举个例子</p>
+<p>浏览器搜索：浏览器会将需要将发送的内容组装成报文，再通过系统调用需要使用浏览器所在设备的网络设备进行远程通信</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="os的特征">OS的特征</h3>
+<p>并发特征是共享、虚拟和异步的前提，其中共享和并发互为前提</p>
+<ul>
+<li>
+<p>并发是共享的前提</p>
+<p>如果只有单道程序运行，则不存在共享的可能。</p>
+</li>
+<li>
+<p>共享是并发的前提</p>
+<p>如果多道程序无法共享部分资源（比如磁盘、网卡等），显然就没有并发这一说（因为相当于只有单道程序访问资源，自然无需调度和管理啦）</p>
+</li>
+<li>
+<p>并发是虚拟的前提</p>
+<p>虚拟的目的就是表达出多道程序并发时的运行态。如果没有并发，自然虚拟就没有意义了</p>
+</li>
+<li>
+<p>并发是异步的前提</p>
+<p>如果没有并发的多道程序，那么单处理机上的多道程序的分时占用处理机的情况就不会发生，自然就谈不上异步了。</p>
+</li>
+</ul>
+<h4 id="并发">并发</h4>
+<p>指的是同一时间间隔内执行和调度多个程序的能力</p>
+<ul>
+<li>宏观上，处理机同时执行多道程序</li>
+<li>微观上，处理机在多道程序间高速切换（分时交替执行）（毕竟操作系统的核是有限的，然后程序的数量显然要大于核的数量）</li>
+</ul>
+<p>主要关注**单个处理机（单个核）**在同一时间段内处理任务数量的能力</p>
+<blockquote>
+<p>并行与并发的区别：</p>
+<p>并行指的是同一时刻发生，并发指的是同一时间段内发生</p>
+</blockquote>
+<h4 id="共享">共享</h4>
+<p>指的是资源共享，系统中的资源供多个并发执行的应用程序共同使用（显然，共享的前提是并发）</p>
+<ul>
+<li>同时访问方式：同一时段，允许多个程序<strong>同时</strong>访问共享资源</li>
+<li>互斥共享方式：也叫独占式。允许多个应用程序在同一个共享资源上独立而互不干扰地工作</li>
+</ul>
+<h4 id="虚拟">虚拟</h4>
+<p>指的是使用某种技术把一个物理实体变成多个逻辑上的对应物。</p>
+<ul>
+<li>
+<p>时分复用技术</p>
+<p>虚拟处理机技术、虚拟设备技术</p>
+<p>多道程序宏观上同时运行在多个核上，微观上是占用核的时间片之后，就会切换下一个应用程序来占用核的时间片，这样轮流工作就保障了多道程序同时运行。</p>
+</li>
+<li>
+<p>空分复用技术</p>
+<p>虚拟磁盘技术（磁盘分区）、虚拟存储器技术</p>
+</li>
+</ul>
+<h4 id="异步">异步</h4>
+<p>指的是：多道程序环境下，允许多个程序并发执行；单个处理机环境下，多个程序分时交替运行；</p>
+<p>加之程序运行的不可预知性（运行的时机、程序暂停、程序的运行时间、程序的性能）就会导致这样的状况：</p>
+<ul>
+<li>宏观上，所有的程序<strong>好像是一直在一起在运行</strong>，但是实际上由于多道程序的存在，那么单个处理机就一定会出现多道程序的分时占用处理机运行，也就是说微观上其实是”走走停停“，也就是说<strong>多道程序不是同步完成的，而是异步完成的。</strong></li>
+</ul>
+<p>显而易见，只有并发出现的多道程序，才会导致分时占用处理机的异步情况发生</p>
+<h2 id="操作系统的发展与分类">操作系统的发展与分类</h2>
+<h3 id="1手工操作阶段">1、手工操作阶段</h3>
+<p>  在计算机发展的初期，没有操作系统，人们只能依靠手工操作来使用计算机。</p>
+<p>  举个栗子，很多年前，人先手工把专门的 “打孔纸” 打好孔，交给机器计算。因为计算机算的快，人手工打孔慢，这就造成了资源的浪费。如下图所示：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/836aa6ea3bc74af684c66bc80fb9eeeb.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/836aa6ea3bc74af684c66bc80fb9eeeb.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/836aa6ea3bc74af684c66bc80fb9eeeb.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/836aa6ea3bc74af684c66bc80fb9eeeb.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/836aa6ea3bc74af684c66bc80fb9eeeb.png"
+        title="在这里插入图片描述" /></p>
+<h3 id="2批处理阶段">2、批处理阶段</h3>
+<h4 id="单道批处理系统">单道批处理系统</h4>
+<p><strong>单道批处理系统</strong>：一种引入了脱机输入/输出技术 ，并由监督程序负责控制作业输入和输出，但在工作期间只能对单份作业进行处理的系统。</p>
+<p>接着举个栗子，这次我们把很多人手工打好的 “打孔纸” 先通过某种手段(卫星机/外围机)包装好，假设我们把它们包装到一盘“磁带”里。接着我们在把一盘接着一盘包装好的 “磁带” <strong>独立地</strong>送入到计算机进行计算。如下图所示：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/4ed5607f71d64a95a8879525c1ec162f.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/4ed5607f71d64a95a8879525c1ec162f.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/4ed5607f71d64a95a8879525c1ec162f.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/4ed5607f71d64a95a8879525c1ec162f.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/4ed5607f71d64a95a8879525c1ec162f.png"
+        title="在这里插入图片描述" /></p>
+<p><strong>主要优点</strong>：缓解了一定程度的人机速度矛盾，资源利用率有所提升。
+<strong>主要缺点</strong>：内存中仅能有一道程序运行，只有该程序运行结束之后才能调入下一道程序。<strong>CPU有大量的时间是在空闲等待I/O完成</strong>。资源利用率依然很低。</p>
+<h4 id="多道批处理系统">多道批处理系统</h4>
+<p><strong>多道批处理系统</strong>：也是一种引入了脱机输入/输出的技术 ，并由监督程序负责控制作业输入和输出，在工作期间能对多份作业同时进行处理的系统。</p>
+<blockquote>
+<p>它就解决了 单道批处理系统 资源利用率依然很低的缺点</p>
+</blockquote>
+<p>在接着举个栗子，在 “磁带” 都准备好后，我们在把一盘接着一盘包装好的 “磁带” <strong>耦合地</strong>送入到计算机进行计算。如下图所示：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b711f12196a74356a422c1b78ea3b876.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b711f12196a74356a422c1b78ea3b876.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b711f12196a74356a422c1b78ea3b876.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b711f12196a74356a422c1b78ea3b876.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b711f12196a74356a422c1b78ea3b876.png"
+        title="在这里插入图片描述" /></p>
+<p><strong>主要优点</strong>：多道程序并发执行，共享计算机资源。<strong>资源利用率大幅提升</strong>，CPU和其他资源更能保持“忙碌”状态，系统吞吐量增大。
+<strong>主要缺点</strong>：用户响应时间长，<strong>没有人机交互功能</strong>（用户提交自己的作业之后就只能等待计算机处理完成，中间不能控制自己的作业执行。比如：无法调试程序/无法在程序运行过程中输入一些参数）。</p>
+<h3 id="3分时操作系统">3、分时操作系统</h3>
+<p><strong>分时操作系统</strong>：计算机以<strong>时间片</strong>为单位，轮流为各个用户/作业服务，各个用户可通过终端与计算机进行交互。</p>
+<blockquote>
+<p>它就解决了 多道批处理系统 不能人机交互的缺点</p>
+</blockquote>
+<p>比如，由4个人在玩电脑，但他们用的是同一个分时操作系统。那么该系统就会按照 “①②③④①②③…” 的顺序轮流分 50ms 给每个用户使用。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d1e9a40ed0454b87b46c67dfef265ae1.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d1e9a40ed0454b87b46c67dfef265ae1.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d1e9a40ed0454b87b46c67dfef265ae1.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d1e9a40ed0454b87b46c67dfef265ae1.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d1e9a40ed0454b87b46c67dfef265ae1.png"
+        title="在这里插入图片描述" /></p>
+<p><strong>主要优点</strong>：用户请求可以被即时响应，<strong>解决了人机交互问题</strong>。允许多个用户同时使用一台计算机，并且用户对计算机的操作相互独立，感受不到别人的存在。
+<strong>主要缺点</strong>：<strong>不能优先处理一些紧急任务</strong>。操作系统对各个用户/作业都是完全公平的，循环地为每个用户/作业服务一个时间片，不区分任务的紧急性。</p>
+<h3 id="4实时操作系统">4、实时操作系统</h3>
+<p><strong>实时操作系统</strong>：实时反映的一种操作系统，不像分时操作系统那样呆板。在实时操作系统的控制下，计算机系统接收到外部信号后及时进行处理，并且要<strong>在严格的时限内处理完事件</strong>。实时操作系统的主要特点是<strong>及时性</strong>和<strong>可靠性</strong>。</p>
+<p><strong>主要优点</strong>：能够优先响应一些紧急任务，某些紧急任务不需时间片排队。</p>
+<p>实时操作系统有时还可以被分为：硬实时操作系统和软实时操作系统。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d6ffd9d6738246a7a1a857361f060ccd.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d6ffd9d6738246a7a1a857361f060ccd.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d6ffd9d6738246a7a1a857361f060ccd.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d6ffd9d6738246a7a1a857361f060ccd.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d6ffd9d6738246a7a1a857361f060ccd.png"
+        title="在这里插入图片描述" /></p>
+<h3 id="5其他几种操作系统">5、其他几种操作系统</h3>
+<p><strong>网络操作系统</strong>：是伴随着计算机网络的发展而诞生的，能把网络中各个计算机有机地结合起来，实现数据传送等功能，实现网络中各种资源的共享（如文件共享）和各台计算机之间的通信。（如：Windows NT 就是一种典型的网络操作系统，网站服务器就可以使用）</p>
+<p><strong>分布式操作系统</strong>：主要特点是分布性和并行性。系统中的各台计算机地位相同，任何工作都可以分布在这些计算机上，由它们并行、协同完成这个任务。</p>
+<p><strong>个人计算机操作系统</strong>：如 Windows XP、MacOS，方便个人使用。</p>
+<p>这些操作系统的每一个抠出来单独讲的话，都是一门学问。我们在这里只了初步的了解。</p>
+<h2 id="操作系统的运行环境">操作系统的运行环境</h2>
+<h3 id="操作系统的运行机制">操作系统的运行机制</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230317114100517.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230317114100517.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230317114100517.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230317114100517.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230317114100517.png"
+        title="image-20230317114100517" /></p>
+<p>操作系统其实也是一种程序，程序的执行过程也就是CPU执行一行行机器指令的过程。区别于一般程序员开发的应用程序，<strong>实现操作系统的程序就是内核程序</strong>。</p>
+<h4 id="1内核程序应用程序">1、内核程序&amp;应用程序</h4>
+<p><strong>内核程序</strong>：实现操作系统的程序称为内核程序，许多内核程序结合在一起便组成了操作系统内核。</p>
+<p><strong>应用程序</strong>：普通程序员借助编程工具以及高级语言所完成的程序叫做应用程序。</p>
+<h4 id="2特权指令非特权指令">2、特权指令&amp;非特权指令</h4>
+<p>**特权指令：**作为系统资源的管理者，操作系统可以使用一些直接关系重大的指令（内存清零等），这些指令被称为特权指令，而且应用程序没有办法直接使用特权指令，这保证了操作系统的安全。</p>
+<p>**非特权指令：**应用程序可以使用的指令，如加减乘除指令等。</p>
+<p>CPU在设计的时候便已经划分出了特权指令以及非特权指令，因此在执行这条命令前CPU就可以先判断指令的内容。</p>
+<h4 id="3内核态用户态">3、内核态&amp;用户态</h4>
+<p>CPU有两种状态：内核态（或称核心态，管态）以及用户态（目态）。</p>
+<ul>
+<li>
+<p>当CPU处于<strong>内核态</strong>时，说明此时正在运行的是内核程序（CPU上加载的是内核程序，是操作系统这个管理者角色在发挥作用），此时可以执行特权指令；</p>
+</li>
+<li>
+<p>当CPU处于<strong>用户态</strong>时，说明此时正在运行的是应用程序，此时只能执行非特权指令。在CPU中有一个寄存器叫做程序状态寄存器（PSW），该寄存器的<code>01</code>状态来表示此时处于内核态还是用户态。</p>
+</li>
+</ul>
+<p>下面我们来讲解一下，用户态与内核态之间是如何相互进行变化的。</p>
+<p><strong>内核态&ndash;&gt;用户态</strong>：需要执行一条特权指令（指令内容是修改PSW寄存器状态），此时内核态转变为用户态，CPU主动让出使用权，CPU会去加载用户态。</p>
+<p><strong>用户态&ndash;&gt;内核态</strong>：由“中断”引发，当CPU检测到中断时，操作系统会强制将CPU变为内核态夺回CPU使用权，再执行与中断有关的一系列操作。</p>
+<p>下面我们用一个小栗子来解释一下这个过程：</p>
+<ol>
+<li>刚开机时，CPU 为“<strong>内核态</strong>”，操作系统内核程序先上CPU运行</li>
+<li>开机完成后，用户可以启动某个应用程序</li>
+<li>操作系统内核程序在合适的时候<strong>主动让出</strong> CPU，让该应用程序上CPU运行</li>
+<li>应用程序运行在“<strong>用户态</strong>”</li>
+<li>此时，一位黑客在应用程序中植入了一条特权指令，企图破坏系统…</li>
+<li>CPU发现接下来要执行的这条指令是特权指令，但是自己又处于“用户态”</li>
+<li>这个非法事件会引发一个<strong>中断</strong>信号</li>
+<li>“中断”使操作系统再次<strong>夺回</strong>CPU的控制权</li>
+<li>操作系统会对引发中断的事件进行处理，处理完了再把CPU使用权交给别的应用程序</li>
+</ol>
+<blockquote>
+<p>中断是操作系统夺回CPU使用权的唯一方式（也是由用户态切换到内核态的唯一方式）</p>
+</blockquote>
+<h4 id="4操作系统的内核">4、操作系统的内核</h4>
+<p>当我们刚开始使用操作系统的时候，会发现一些程序并不是必需的（记事本等），这些程序称为操作系统的非内核功能，下图是将操作系统进行了更进一步的划分。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301112628459.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301112628459.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301112628459.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301112628459.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301112628459.png"
+        title="img" /></p>
+<p>有人将内核划分为大内核以及微内核，这两种划分在不同的时期各有优势。下面用企业来类比一下操作系统：</p>
+<p>内核就是企业的管理层，负责一些重要的工作。只有管理层（内核程序）才能执行特权指令，普通员工（应用程序）只能执行非特权指令。用户态、核心态之间的切换相当于普通员工和管理层之间的工作交接。</p>
+<p><strong>大内核</strong>：企业初创时体量不大，管理层的人会负责大部分的事情。优点是效率高；缺点是组织结构混乱，难以维护。</p>
+<p><strong>微内核</strong>：随着企业体量越来越大，管理层只负责最核心的一些工作。优点是组织结构清晰，方便维护；缺点是效率低。</p>
+<h4 id="5小结">5、小结</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301113327226.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301113327226.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301113327226.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301113327226.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301113327226.png"
+        title="img" /></p>
+<p>需要注意的是：特权指令只能在核心态下执行； 内核程序只能在核心态下执行。</p>
+<h3 id="操作系统的重要部件和机制">操作系统的重要部件和机制</h3>
+<h4 id="0时钟">0、时钟</h4>
+<p>操作系统的时钟是一个很重要的核心部件。CPU时间片的计时、系统本身计时等</p>
+<h4 id="1中断">1、中断</h4>
+<p>操作系统会响应中断信号强制夺回CPU使用权，使用户态转换为内核态。**中断是操作系统夺回CPU使用权的唯一方式，**如果没有“中断”机制，那么一旦应用程序上CPU运行，CPU就会一直运行这个应用程序，其他程序就没有办法再使用CPU，这样的话就不存在并发机制了。一般来说，中断分为两种情况即内中断和外中断。</p>
+<h5 id="内中断">内中断</h5>
+<p>包括：陷入（由应用程序主动引发，如应用程序的系统调用）、故障（由错误条件引发）、终止（由致命错误引发）</p>
+<p>内中断（也称异常）与当前执行的指令有关，中断信号来源于CPU内部。比如，当用户妄图执行特权指令时，CPU便会产生中断，由用户态变为内核态；再比如，当进行除法运算除数为0时同样会发生错误，产生中断。总的来说，就是当前指令是非法的指令，那么一定会引起中断。</p>
+<p>当应用程序想要进行一次系统调用使用内核的服务时，会执行一条**陷入（trap）**指令，陷入指令会引发一条中断信号，操作系统就会夺回CPU的使用权，也就是说，执行“陷入指令”，意味着应用程序主动地将CPU控制权还给操作系统内核。</p>
+<blockquote>
+<p>例如，一个读文件的应用程序开始运行时，并不是由应用应用程序来读取系统文件，而是该应用程序执行到读文件这一段程序时，自己会发生中断，之后操作系统产生陷入指令，再之后执行操作系统的特权指令进行读取</p>
+</blockquote>
+<h5 id="外中断">外中断</h5>
+<p>外中断与当前执行的指令无关，中断信号来源于CPU外部。每次在一条指令结束之后CPU都会检查是否有外中断信号。比如时钟信号，或者I/O设备都可以发出外中断信号。</p>
+<h5 id="中断分类">中断分类</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301141957475.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301141957475.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301141957475.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301141957475.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200301141957475.png"
+        title="img" /></p>
+<p><strong>中断的原理：<strong>不同的中断信号，需要用不同的中断处理程序来处理。当CPU检测到中断信号后，会根据中断信号的类型去查询</strong>“中断向量表”</strong>，以此来找到相应的中断处理程序在内存中的存放位置。所以，显然中断处理程序一定是内核程序，工作在内核态。</p>
+<h5 id="中断处理过程">中断处理过程</h5>
+<ol>
+<li>
+<p>关中断</p>
+<p>CPU不再响应高级中断的请求</p>
+</li>
+<li>
+<p>保存断点</p>
+<p>断点指的是PC（或叫IP，也就是执行程序的地址）</p>
+</li>
+<li>
+<p>引出中断程序</p>
+<p>每个中断都会有一个中断程序，拿到中断程序的地址，但并没有开始执行中断程序</p>
+</li>
+<li>
+<p>保存现场和屏蔽字</p>
+<p>将中断前CPU的所有状态，包括：寄存器的值等现场数据进行保存，方便后续中断执行完毕，CPU现场的恢复</p>
+</li>
+<li>
+<p>开中断</p>
+<p>可以响应其他中断请求</p>
+</li>
+<li>
+<p>执行中断程序</p>
+</li>
+<li>
+<p>再关中断</p>
+</li>
+<li>
+<p>恢复现场和屏蔽字</p>
+</li>
+<li>
+<p>开中断</p>
+</li>
+</ol>
+<p>在上面的中断处理过程中，只有执行中断程序的过程里CPU才能去响应其他中断信号，其余阶段都不能响应。</p>
+<h4 id="2原语">2、原语</h4>
+<p>由若干条指令组成的一个程序段，用以完成某个特定的功能，且执行过程中不会被中断，也就是说<strong>具备原子性</strong></p>
+<p>本质上就是多条指令的封装，通过中断机制里的开关中断来实现</p>
+<h4 id="3系统数据结构">3、系统数据结构</h4>
+<ul>
+<li>进程管理：作业控制块、进程控制块</li>
+<li>存储器管理：存储器分配与回收</li>
+<li>设备管理：缓冲区、设备控制块</li>
+</ul>
+<h4 id="4系统调用">4、系统调用</h4>
+<ul>
+<li>有操作系统实现，给应用程序调用</li>
+<li>是一套接口的集合</li>
+<li>应用程序访问内核服务的方式</li>
+<li>会导致内核从用户态切换到内核态</li>
+</ul>
+<blockquote>
+<p>如拷贝问题：我如果频繁的读取某项数据，会导致用户态和内核态频繁的切换，就比较消耗资源。可以通过零拷贝的方式来避免这种情况的发生</p>
+</blockquote>
+<p>虽然出现了用户态和内核态，比较消耗资源，但是更加安全，避免用户态的肆意妄为导致系统崩溃掉</p>
+<h2 id="操作系统的结构设计">操作系统的结构设计</h2>
+<h3 id="大内核os结构-传统的操作系统结构">大内核OS结构-传统的操作系统结构</h3>
+<ul>
+<li>
+<p>无结构OS</p>
+<ul>
+<li>设计基于功能实现和获得高的效率</li>
+<li>OS是为数众多的一组过程的集合</li>
+<li>OS整体无结构（程序之间）</li>
+<li>程序内部代码无结构（goto语句非常多）</li>
+</ul>
+</li>
+<li>
+<p>模块化OS</p>
+<p>模块的独立性</p>
+<ul>
+<li>模块大小的划分</li>
+<li>衡量模块独立性的指标</li>
+<li>内聚性：模块内部各部分间联系的紧密程度</li>
+<li>耦合度：模块间相互联系和相互影响的程度</li>
+</ul>
+<p>模块化OS的优点</p>
+<ul>
+<li>提高OS设计的正确性、可理解性和可维护性</li>
+<li>增强OS的可适应性</li>
+<li>加速OS的开发过程</li>
+</ul>
+<p>模块化OS的缺点</p>
+<ul>
+<li>设计时对模块的划分与接口的规定不精确</li>
+<li>模块间存在复杂依赖关系</li>
+</ul>
+</li>
+<li>
+<p>分层式OS</p>
+<p>分层设计的基本原则：每一层都仅使用其底层所提供的功能和服务。</p>
+<p>分层设计考虑的因素</p>
+<ul>
+<li>程序嵌套 作业调度/进程控制/内存分配</li>
+<li>运行频率 频率高-&gt; 低层（速度快）时钟管理</li>
+<li>公共模块</li>
+<li>用户接口 最高层</li>
+</ul>
+</li>
+</ul>
+<h3 id="微内核os结构">微内核OS结构</h3>
+<p>微内核技术：精心设计的、能实现现代OS核心功能的小型内核，它与一般OS不同，更小更精练，运行于核心态，开机后 常驻内存。但是微内核并不是完成的操作系统，只是抽出了操作系统最核心部分的功能</p>
+<p>微内核OS结构的特征</p>
+<ul>
+<li>以微内核为OS核心</li>
+<li>以客户/服务器为基础</li>
+<li>采用面向对象的程序设计方法</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-08-14</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/" data-title="操作系统之概述"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/" data-title="操作系统之概述"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="汇编之总结"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>汇编之总结</a>
+            <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="next" rel="next" title="操作系统之进程管理">操作系统之进程管理<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-03-15T18:32:26+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之概述"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

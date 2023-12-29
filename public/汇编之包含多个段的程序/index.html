@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>包含多个段的程序 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="包含多个段的程序" />
+<meta property="og:description" content="[toc] 多个段程序 程序中对段名的引用，将被编译器处理为一个表示段地址的数值。 1 2 3 mov ax, data mov ds, ax mov bx, ds:[6] 在代码段中使用数据 1 2 3 4 5 6 7 8 9 10 11 12 13 14" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-01-07T20:37:19+08:00" />
+<meta property="article:modified_time" content="2023-01-07T20:37:19+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="包含多个段的程序"/>
+<meta name="twitter:description" content="[toc] 多个段程序 程序中对段名的引用，将被编译器处理为一个表示段地址的数值。 1 2 3 mov ax, data mov ds, ax mov bx, ds:[6] 在代码段中使用数据 1 2 3 4 5 6 7 8 9 10 11 12 13 14"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" /><link rel="prev" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8Bbx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" /><link rel="next" href="https://blog.coldbin.top/redis%E5%9F%BA%E7%A1%80/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "包含多个段的程序",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  913 ,
+        "url": "https:\/\/blog.coldbin.top\/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F\/","datePublished": "2023-01-07T20:37:19+08:00","dateModified": "2023-01-07T20:37:19+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">包含多个段的程序</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%B1%87%E7%BC%96/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>汇编</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-01-07">2023-01-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;913 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#多个段程序">多个段程序</a>
+          <ul>
+            <li><a href="#在代码段中使用数据">在代码段中使用数据</a></li>
+            <li><a href="#在代码段中使用栈">在代码段中使用栈</a></li>
+            <li><a href="#将数据代码栈放入不同的段">将数据、代码、栈放入不同的段</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>[toc]</p>
+<h2 id="多个段程序">多个段程序</h2>
+<p>程序中对段名的引用，将被编译器处理为一个表示段地址的数值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="no">data</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">ds</span><span class="p">,</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">6</span><span class="p">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="在代码段中使用数据">在代码段中使用数据</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="c1">;计算 8 个数据的和存到 ax 寄存器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">code</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="no">code</span> <span class="no">segment</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="no">dw</span> <span class="mi">0123</span><span class="no">h</span><span class="p">,</span><span class="mi">0456</span><span class="no">h</span><span class="p">,</span><span class="mi">0789</span><span class="no">h</span><span class="p">,</span><span class="mi">0</span><span class="no">abch</span><span class="p">,</span><span class="mi">0</span><span class="no">defh</span><span class="p">,</span><span class="mi">0</span><span class="no">fedh</span><span class="p">,</span><span class="mi">0</span><span class="no">cbah</span><span class="p">,</span><span class="mi">0987</span><span class="no">h</span> <span class="c1">;define word 定义8个字形数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="nl">start:</span>	<span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0</span>  <span class="c1">;标号start
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0</span>  
+</span></span><span class="line"><span class="cl">			
+</span></span><span class="line"><span class="cl">			<span class="no">mov</span> <span class="no">cx</span><span class="p">,</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">	<span class="nl">s:</span>		<span class="nf">add</span> <span class="no">ax</span><span class="p">,</span> <span class="no">cs</span><span class="p">:[</span><span class="no">bx</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">add</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">loop</span> <span class="no">s</span> 
+</span></span><span class="line"><span class="cl">			
+</span></span><span class="line"><span class="cl">			<span class="no">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">4</span><span class="no">c00h</span> 
+</span></span><span class="line"><span class="cl">			<span class="no">int</span> <span class="mi">21</span><span class="no">h</span> 
+</span></span><span class="line"><span class="cl"><span class="no">code</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl"><span class="nf">end</span> <span class="no">start</span>    
+</span></span><span class="line"><span class="cl"><span class="c1">;end除了通知编译器程序结束外，还可以通知编译器程序的入口在什么地方
+</span></span></span><span class="line"><span class="cl"><span class="c1">;用end指令指明了程序的入口在标号start处，也就是说，“mov bx，0”是程序的第一条指令。
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="在代码段中使用栈">在代码段中使用栈</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="c1">;利用栈，将程序中定义的数据逆序存放。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">codesg</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="no">codesg</span> <span class="no">segment</span> 
+</span></span><span class="line"><span class="cl">	<span class="no">dw</span> <span class="mi">0123</span><span class="no">h</span><span class="err">，</span><span class="mi">0456</span><span class="no">h</span><span class="err">，</span><span class="mi">0789</span><span class="no">h</span><span class="err">，</span><span class="mi">0</span><span class="no">abch</span><span class="err">，</span><span class="mi">0</span><span class="no">defh</span><span class="err">，</span><span class="mi">0</span><span class="no">fedh</span><span class="err">，</span><span class="mi">0</span><span class="no">cbah</span><span class="err">，</span><span class="mi">0987</span><span class="no">h</span> <span class="c1">; 0-15单元
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">dw</span> <span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span><span class="err">，</span><span class="mi">0</span> <span class="c1">; 16-47单元作为栈使用
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			
+</span></span><span class="line"><span class="cl">	<span class="nl">start:</span>	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="no">cs</span> 
+</span></span><span class="line"><span class="cl">			<span class="no">mov</span> <span class="no">ss</span><span class="p">,</span> <span class="no">ax</span> 
+</span></span><span class="line"><span class="cl">			<span class="no">mov</span> <span class="no">sp</span><span class="p">,</span> <span class="mi">30</span><span class="no">h</span> <span class="c1">;将设置栈顶ss:sp指向栈底cs:30。   30h = 48d
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">cx</span><span class="p">,</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">	<span class="nl">s:</span>		<span class="nf">push</span> <span class="no">cs</span><span class="p">:[</span><span class="no">bx</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">add</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">loop</span> <span class="no">s</span>    <span class="c1">;以上将代码段0~15单元中的8个字型数据依次入栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">cx</span><span class="p">,</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">	<span class="nl">s0:</span>		<span class="nf">pop</span> <span class="no">cs</span><span class="p">:[</span><span class="no">bx</span><span class="p">]</span>		
+</span></span><span class="line"><span class="cl">			<span class="no">add</span> <span class="no">bx</span><span class="err">，</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">loop</span> <span class="no">s0</span>   <span class="c1">;以上依次出栈8个字型数据到代码段0~15单元中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">ax</span><span class="err">，</span><span class="mi">4</span><span class="no">c00h</span> 
+</span></span><span class="line"><span class="cl">			<span class="no">int</span> <span class="mi">21</span><span class="no">h</span> 
+</span></span><span class="line"><span class="cl"><span class="no">codesg</span> <span class="no">ends</span> 
+</span></span><span class="line"><span class="cl"><span class="no">end</span> <span class="no">start</span>	<span class="c1">;指明程序的入口在start处
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="将数据代码栈放入不同的段">将数据、代码、栈放入不同的段</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">code</span><span class="p">,</span><span class="no">ds</span><span class="p">:</span><span class="no">data</span><span class="p">,</span><span class="no">ss</span><span class="p">:</span><span class="no">stack</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="no">data</span> <span class="no">segment</span> 
+</span></span><span class="line"><span class="cl">	<span class="no">dw</span> <span class="mi">0123</span><span class="no">h</span><span class="p">,</span><span class="mi">0456</span><span class="no">h</span><span class="p">,</span><span class="mi">0789</span><span class="no">h</span><span class="p">,</span><span class="mi">0</span><span class="no">abch</span><span class="p">,</span><span class="mi">0</span><span class="no">defh</span><span class="p">,</span><span class="mi">0</span><span class="no">fedh</span><span class="p">,</span><span class="mi">0</span><span class="no">cbah</span><span class="p">,</span><span class="mi">0987</span><span class="no">h</span> <span class="c1">;0-15单元
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">data</span> <span class="no">ends</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="no">stack</span> <span class="no">segment</span> 
+</span></span><span class="line"><span class="cl">	<span class="no">dw</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span> <span class="c1">;0-31单元
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">stack</span> <span class="no">ends</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="no">code</span> <span class="no">segment</span> 
+</span></span><span class="line"><span class="cl">	<span class="no">start</span><span class="p">:</span>	<span class="no">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="no">stack</span><span class="c1">;将名称为“stack”的段的段地址送入ax
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nf">mov</span> <span class="no">ss</span><span class="p">,</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">sp</span><span class="p">,</span> <span class="mi">20</span><span class="no">h</span>  <span class="c1">;设置栈顶ss:sp指向stack:20。 20h = 32d
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="no">data</span> <span class="c1">;将名称为“data”的段的段地址送入ax
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nf">mov</span> <span class="no">ds</span><span class="p">,</span> <span class="no">ax</span>   <span class="c1">;ds指向data段
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0</span>    <span class="c1">;ds:bx指向data段中的第一个单元
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">cx</span><span class="p">,</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">	<span class="nl">s:</span>	    <span class="nf">push</span> <span class="p">[</span><span class="no">bx</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">add</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">loop</span> <span class="no">s</span>       <span class="c1">;以上将data段中的0~15单元中的8个字型数据依次入栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">cx</span><span class="p">,</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">	<span class="nl">s0:</span>		<span class="nf">pop</span> <span class="p">[</span><span class="no">bx</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">add</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">loop</span> <span class="no">s0</span>      <span class="c1">;以上依次出栈8个字型数据到data段的0~15单元中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			
+</span></span><span class="line"><span class="cl">			<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">4</span><span class="no">c00h</span> 
+</span></span><span class="line"><span class="cl">			<span class="no">int</span> <span class="mi">21</span><span class="no">h</span> 
+</span></span><span class="line"><span class="cl"><span class="no">code</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl"><span class="nf">end</span> <span class="no">start</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;“end start”说明了程序的入口，这个入口将被写入可执行文件的描述信息，
+</span></span></span><span class="line"><span class="cl"><span class="c1">;可执行文件中的程序被加载入内存后，CPU的CS:IP被设置指向这个入口，从而开始执行程序中的第一条指令
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-01-07</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="包含多个段的程序"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/" data-title="包含多个段的程序"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E4%B9%8Bbx%E5%92%8Cloop%E6%8C%87%E4%BB%A4/" class="prev" rel="prev" title="汇编之BX和loop指令"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>汇编之BX和loop指令</a>
+            <a href="/redis%E5%9F%BA%E7%A1%80/" class="next" rel="next" title="Redis基础">Redis基础<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-07T20:37:19+08:00","owner":"cold-bin","repo":"blog-comment","title":"包含多个段的程序"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>汇编之外中断 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="汇编之外中断" />
+<meta property="og:description" content="外中断 1、外中断 CPU在计算机系统中，除了能够执行指令，进行运算以外，还应该能够对外部设备进行控制，接收它们的输入，向它们进行输出（I/O能" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%A4%96%E4%B8%AD%E6%96%AD/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-01-29T20:59:35+08:00" />
+<meta property="article:modified_time" content="2023-01-29T20:59:35+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="汇编之外中断"/>
+<meta name="twitter:description" content="外中断 1、外中断 CPU在计算机系统中，除了能够执行指令，进行运算以外，还应该能够对外部设备进行控制，接收它们的输入，向它们进行输出（I/O能"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%A4%96%E4%B8%AD%E6%96%AD/" /><link rel="prev" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E7%AB%AF%E5%8F%A3/" /><link rel="next" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "汇编之外中断",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%A4%96%E4%B8%AD%E6%96%AD\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  2502 ,
+        "url": "https:\/\/blog.coldbin.top\/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%A4%96%E4%B8%AD%E6%96%AD\/","datePublished": "2023-01-29T20:59:35+08:00","dateModified": "2023-01-29T20:59:35+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编之外中断</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%B1%87%E7%BC%96/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>汇编</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-01-29">2023-01-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2502 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#外中断">外中断</a>
+      <ul>
+        <li><a href="#1外中断">1、外中断</a></li>
+        <li><a href="#2pc机键盘的处理过程">2、PC机键盘的处理过程</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="外中断">外中断</h1>
+<h2 id="1外中断">1、外中断</h2>
+<p>CPU在计算机系统中，除了能够执行指令，进行运算以外，还应该能够对外部设备进行控制，接收它们的输入，向它们进行输出（I/O能力）</p>
+<p>PC系统的接口卡和主板上，装有各种接口芯片。这些外设接口芯片的内部有若干寄存器，CPU将这些寄存器当作端口来访问</p>
+<p>外设的输入不直接送入内存和CPU，而是送入相关的接口芯片的端口中；
+CPU向外设的输出也不是直接送入外设，而是先送入端口中，再由相关的芯片送到外设。
+CPU还可以向外设输出控制命令，而这些控制命令也是先送到相关芯片的端口中，然后再由相关的芯片根据命令对外设实施控制。</p>
+<p>即：CPU通过端口和外部设备进行联系</p>
+<p>当CPU外部有需要处理的事情发生的时候，比如说，外设的输入到达，相关芯片将向CPU发出相应的中断信息。CPU在执行完当前指令后，可以检测到发送过来的中断信息，引发中断过程，处理外设的输入。</p>
+<p><strong>PC系统中，外中断源有两类</strong></p>
+<p>1、可屏蔽中断</p>
+<p>可屏蔽中断是CPU可以不响应的外中断。CPU是否响应可屏蔽中断，要看标志寄存器的IF位的设置。
+当CPU检测到可屏蔽中断信息时，如果IF=1，则CPU在执行完当前指令后响应中断，引发中断过程；如果IF=0，则不响应可屏蔽中断。</p>
+<p>可屏蔽中断信息来自于CPU外部，中断类型码是通过数据总线送入CPU的；而内中断的中断类型码是在CPU内部产生的。</p>
+<p>中断过程中将IF置0的原因就是，在进入中断处理程序后，禁止其他的可屏蔽中断。
+如果在中断处理程序中需要处理可屏蔽中断，可以用指令将IF置1。</p>
+<p>8086CPU提供的设置IF的指令：<code>sti</code>，设置IF=1；<code>cli</code>，设置IF=0。</p>
+<p>2、不可屏蔽中断</p>
+<p>不可屏蔽中断是CPU必须响应的外中断。当CPU检测到不可屏蔽中断信息时，则在执行完当前指令后，立即响应，引发中断过程。</p>
+<p>对于8086CPU，不可屏蔽中断的中断类型码固定为2，所以中断过程中，不需要取中断类型码。则不可屏蔽中断的中断过程为：①标志寄存器入栈，IF=0，TF=0；②CS、IP入栈；③（IP）=（8），（CS）=（0AH）。</p>
+<p>几乎所有由外设引发的外中断，都是可屏蔽中断。当外设有需要处理的事件（比如说键盘输入）发生时，相关芯片向CPU发出可屏蔽中断信息。不可屏蔽中断是在系统中有必须处理的紧急情况发生时用来通知CPU的中断信息。</p>
+<h2 id="2pc机键盘的处理过程">2、PC机键盘的处理过程</h2>
+<p>键盘中有一个芯片对键盘上的每一个键的开关状态进行扫描。按下一个键时，开关接通，该芯片就产生一个扫描码，扫描码说明了按下的键在键盘上的位置。扫描码被送入主板上的相关接口芯片的寄存器中，该寄存器的端口地址为<code>60h</code>。松开按下的键时，也产生一个扫描码，扫描码说明了松开的键在键盘上的位置。松开按键时产生的扫描码也被送入60h端口中。</p>
+<p>一般将按下一个键时产生的扫描码称为通码，松开一个键产生的扫描码称为断码。</p>
+<p>扫描码长度为一个字节，通码的第7位为0，断码的第7位为1
+即：断码 = 通码 + 80h。比如，g键的通码为22h，断码为a2h</p>
+<p>键盘的输入到达60h端口时，相关的芯片就会向CPU发出中断类型码为9的可屏蔽中断信息。CPU检测到该中断信息后，如果IF=1，则响应中断，引发中断过程，转去执行int 9中断例程。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2019032416380958.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2019032416380958.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2019032416380958.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2019032416380958.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2019032416380958.png"
+        title="在这里插入图片描述" /></p>
+<p>BIOS提供了int 9中断例程，用来进行基本的键盘输入处理，主要的工作如下：
+（1）读出60h端口中的扫描码；
+（2）如果是字符键的扫描码，将该扫描码和它所对应的字符码（即ASCII码）送入内存中的BIOS键盘缓冲区； 如果是控制键（比如Ctrl）和切换键（比如CapsLock）的扫描码，则将其转变为状态字节写入内存中存储状态字节的单元；
+（3）对键盘系统进行相关的控制，比如说，向相关芯片发出应答信息。</p>
+<p>BIOS键盘缓冲区可以存储15个键盘输入，一个键盘输入用一个字单元存放，高位字节存放扫描码，低位字节存放字符码。</p>
+<p><code>0040:17</code>单元存储键盘状态字节，该字节记录了控制键和切换键的状态。键盘状态字节各位记录的信息如下。</p>
+<table>
+<thead>
+<tr>
+<th>0</th>
+<th>右shift状态</th>
+<th>置1表示按下右shift键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>左shift状态</td>
+<td>置1表示按下左shift键</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Ctrl状态</td>
+<td>置1表示按下Ctrl键</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Alt状态</td>
+<td>置1表示按下Alt键</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ScrollLock状态</td>
+<td>置1表示Scroll指示灯亮</td>
+</tr>
+<tr>
+<td>5</td>
+<td>NumLock状态</td>
+<td>置1表示小键盘输入的是数字</td>
+</tr>
+<tr>
+<td>6</td>
+<td>CapsLock状态</td>
+<td>置1表示输入大写字母</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Insert状态</td>
+<td>置1表示处于删除态</td>
+</tr>
+</tbody>
+</table>
+<p><strong>编写int 9中断例程</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="c1">;编程：在屏幕中间依次显示“a”~“z”，并可以让人看清。在显示的过程中，按下&#39;Esc&#39;键后，改变显示的颜色。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">;完整功能代码：
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">code</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">stack</span> <span class="no">segment</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">db</span> <span class="mi">128</span> <span class="no">dup</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nf">stack</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">data</span> <span class="no">segment</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">dw</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="nf">data</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">code</span> <span class="no">segment</span>
+</span></span><span class="line"><span class="cl"><span class="nl">start:</span>	
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span><span class="no">stack</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ss</span><span class="p">,</span><span class="no">ax</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">sp</span><span class="p">,</span><span class="mi">128</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span><span class="no">data</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ds</span><span class="p">,</span><span class="no">ax</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">es</span><span class="p">,</span><span class="no">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">es</span><span class="p">:[</span><span class="mi">9</span><span class="p">*</span><span class="mi">4</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pop</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">es</span><span class="p">:[</span><span class="mi">9</span><span class="p">*</span><span class="mi">4</span><span class="err">+</span><span class="mi">2</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pop</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">2</span><span class="p">]</span>		<span class="c1">;将原来的int 9中断例程的入口地址保存在ds:0、ds:2单元中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">word</span> <span class="no">ptr</span> <span class="no">es</span><span class="p">:[</span><span class="mi">9</span><span class="p">*</span><span class="mi">4</span><span class="p">],</span> <span class="no">offset</span> <span class="no">int9</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">es</span><span class="p">:[</span><span class="mi">9</span><span class="p">*</span><span class="mi">4</span><span class="err">+</span><span class="mi">2</span><span class="p">],</span> <span class="no">cs</span>	<span class="c1">;在中断向量表中设置新的int 9中断例程的入口地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">;显示字符串
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0</span><span class="no">b800h</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">es</span><span class="p">,</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ah</span><span class="p">,</span> <span class="err">&#39;</span><span class="no">a</span><span class="err">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nl">s:</span>	
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span>  <span class="no">es</span><span class="p">:[</span><span class="mi">160</span><span class="p">*</span><span class="mi">12</span><span class="err">+</span><span class="mi">40</span><span class="p">*</span><span class="mi">2</span><span class="p">],</span> <span class="no">ah</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">call</span> <span class="no">delay</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">inc</span> <span class="no">ah</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">cmp</span> <span class="no">ah</span><span class="p">,</span> <span class="err">&#39;</span><span class="no">z</span><span class="err">&#39;</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">jna</span> <span class="no">s</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">es</span><span class="p">,</span><span class="no">ax</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pop</span> <span class="no">es</span><span class="p">:[</span><span class="mi">9</span><span class="p">*</span><span class="mi">4</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">ds</span><span class="c1">;[2]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">pop</span> <span class="no">es</span><span class="c1">;[9*4+2]   	;将中断向量表中int 9中断例程的入口恢复为原来的地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span><span class="mi">4</span><span class="no">c00h</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">int</span> <span class="mi">21</span><span class="no">h</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;将循环延时的程序段写为一个子程序
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">delay:</span>	
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">ax</span> 
+</span></span><span class="line"><span class="cl">	<span class="no">push</span> <span class="no">dx</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">dx</span><span class="p">,</span> <span class="mi">2000</span><span class="no">h</span>  <span class="c1">;用两个16位寄存器来存放32位的循环次数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="nl">s1:</span> 	
+</span></span><span class="line"><span class="cl">	<span class="nf">sub</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">sbb</span> <span class="no">dx</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">cmp</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">jne</span> <span class="no">s1</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">cmp</span> <span class="no">dx</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">jne</span> <span class="no">s1</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pop</span> <span class="no">dx</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pop</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">ret</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">;------以下为新的int 9中断例程--------------------
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nl">int9:</span>	
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">bx</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">es</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nf">in</span> <span class="no">al</span><span class="p">,</span> <span class="mi">60</span><span class="no">h</span><span class="c1">;从端口60h读出键盘的输入
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pushf</span> <span class="c1">;标志寄存器入栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pushf</span>   
+</span></span><span class="line"><span class="cl">	<span class="no">pop</span> <span class="no">bx</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">and</span> <span class="no">bh</span><span class="p">,</span><span class="mi">11111100</span><span class="no">b</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">push</span> <span class="no">bx</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">popf</span>	<span class="c1">;TF=0,IF=0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	
+</span></span><span class="line"><span class="cl">	<span class="nf">call</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">0</span><span class="p">]</span> 	<span class="c1">;对int指令进行模拟，调用原来的int 9中断例程
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="nf">cmp</span> <span class="no">al</span><span class="p">,</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">jne</span> <span class="no">int9ret</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span><span class="mi">0</span><span class="no">b800h</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">mov</span> <span class="no">es</span><span class="p">,</span><span class="no">ax</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">inc</span> <span class="no">byte</span> <span class="no">ptr</span> <span class="no">es</span><span class="p">:[</span><span class="mi">160</span><span class="p">*</span><span class="mi">12</span><span class="err">+</span><span class="mi">40</span><span class="p">*</span><span class="mi">2</span><span class="err">+</span><span class="mi">1</span><span class="p">]</span>  <span class="c1">;属性增加1，改变颜色
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nl">int9ret:</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pop</span> <span class="no">es</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pop</span> <span class="no">bx</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">pop</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">iret</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">code</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">end</span> <span class="no">start</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>CPU对外设输入的通常处理方法
+（1）外设的输入送入端口；
+（2）向CPU发出外中断（可屏蔽中断）信息；
+（3）CPU检测到可屏蔽中断信息，如果IF=1，CPU在执行完当前指令后响应中断，执行相应的中断例程；
+（4）可在中断例程中实现对外设输入的处理。</p>
+<p>端口和中断机制，是CPU进行I/O的基础。</p>
+</blockquote>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-01-29</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%A4%96%E4%B8%AD%E6%96%AD/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%A4%96%E4%B8%AD%E6%96%AD/" data-title="汇编之外中断"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%A4%96%E4%B8%AD%E6%96%AD/" data-title="汇编之外中断"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E7%AB%AF%E5%8F%A3/" class="prev" rel="prev" title="汇编之端口"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>汇编之端口</a>
+            <a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%80%BB%E7%BB%93/" class="next" rel="next" title="汇编之总结">汇编之总结<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-29T20:59:35+08:00","owner":"cold-bin","repo":"blog-comment","title":"汇编之外中断"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

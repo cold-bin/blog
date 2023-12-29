@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Go语言设计与实现之基础数据结构 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Go语言设计与实现之基础数据结构" />
+<meta property="og:description" content="这里介绍一些关于go语言底层数据结构的原理与实现，如\slice\array\channel\map\string" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-27T22:55:23+08:00" />
+<meta property="article:modified_time" content="2023-10-27T22:55:23+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="Go语言设计与实现之基础数据结构"/>
+<meta name="twitter:description" content="这里介绍一些关于go语言底层数据结构的原理与实现，如\slice\array\channel\map\string"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" /><link rel="prev" href="https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" /><link rel="next" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Go语言设计与实现之基础数据结构",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "go语言底层原理","wordcount":  4942 ,
+        "url": "https:\/\/blog.coldbin.top\/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84\/","datePublished": "2023-10-27T22:55:23+08:00","dateModified": "2023-10-27T22:55:23+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Go语言设计与实现之基础数据结构</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/golang/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>golang</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-10-27">2023-10-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;4942 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;10 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#go底层数据结构原理">go底层数据结构原理</a>
+      <ul>
+        <li><a href="#数组">数组</a></li>
+        <li><a href="#切片">切片</a></li>
+        <li><a href="#哈希表">哈希表</a></li>
+        <li><a href="#字符串">字符串</a></li>
+        <li><a href="#接口">接口</a></li>
+        <li><a href="#通道">通道</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>这里介绍一些关于go语言底层数据结构的原理与实现，如\slice\array\channel\map\string</p>
+<h1 id="go底层数据结构原理">go底层数据结构原理</h1>
+<h2 id="数组">数组</h2>
+<p>数组是一个定长的顺序表，内存上元素地址是连续的。</p>
+<ul>
+<li>
+<p>初始化（不考虑逃逸分析）</p>
+<p>初始化有两种方式：<code>[...]{1,2,3,4}</code>或<code>[4]{1,2,3,4}</code>。这两种方式初始化的方式仅仅只是语法糖而已，在SSA中间代码生成的时候，其实是一样的处理逻辑。</p>
+<ol>
+<li>数组元素个数&lt;=4个时，那么数组就会直接在栈上分配；</li>
+<li>数组元素个数&gt;4个时，那么就会在静态存储区初始化，然后拷贝回栈中；</li>
+</ol>
+</li>
+<li>
+<p>访问和赋值</p>
+<p>不论是访问操作还是赋值操作，首先就是确定索引。</p>
+<p>对于常量索引，代码编译期间就可以判定是否越界；而对于变量索引，需要在运行时中插入检测函数检测是否越界。通过这两种方式，可以保证数组访问不会越界，一旦越界会报错。</p>
+</li>
+</ul>
+<h2 id="切片">切片</h2>
+<p>切片相比数组，具备自扩容特点，不同的是切片是在数组之上进一步封装。在运行时中的结构如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">SliceHeader</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Data</span> <span class="kt">uintptr</span> <span class="c1">// 指向底层数组的指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">Len</span>  <span class="kt">int</span> <span class="c1">// 当前切片长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">Cap</span>  <span class="kt">int</span> <span class="c1">// 切片的容量，也就是底层数组大小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>
+<p>切片的特点：</p>
+<ol>
+<li>
+<p>封装：这样封装之后，底层数组的扩容、缩容等操作对于上层可以做到无感，也就是上层不需要关心扩容缩容的问题，由切片来实现。</p>
+</li>
+<li>
+<p>运行时确定：与数组不同，是在编译期间就决定好结构了，读写位置是在编译期间就固定的；但是切片在运行时可能由于先前分配的容量不够，触发切片底层数组扩缩容，结构会发生改变。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>初始化</p>
+<p>初始化有三种方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 通过下标的方式获得数组或者切片的一部分；
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">arr</span> <span class="o">:=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">slice</span> <span class="o">:=</span> <span class="nx">arr</span><span class="p">[:]</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 使用字面量初始化新的切片；
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">slice</span><span class="o">:=</span><span class="p">[]</span><span class="kt">int</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 使用关键字 make 创建切片：
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">slice</span><span class="o">:=</span><span class="nb">make</span><span class="p">([]</span><span class="kt">int</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">slice</span><span class="p">[</span><span class="mi">0</span><span class="p">]=</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="nx">slice</span><span class="p">[</span><span class="mi">1</span><span class="p">]=</span><span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="nx">slice</span><span class="p">[</span><span class="mi">2</span><span class="p">]=</span><span class="mi">3</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>其中第二种初始化方式在编译期间都会被展开成<code>arr[:]</code>和方式一一样的处理逻辑；</li>
+<li>如果是第三种初始化方式，会在运行时对传入参数进行进一步检查和操作
+<ul>
+<li>是否<code>cap&gt;=len</code></li>
+<li>切片如果发生了逃逸或者需要的内存过大，就在堆上进行分配</li>
+<li>切片如果没有发生逃逸或者需要的内存较小，<code>make</code>函数会在编译阶段变成和前面两种方式一样地处理逻辑，也就是分配到栈上。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>访问元素</p>
+<ol>
+<li>
+<p>获取<code>len</code>、<code>cap</code>和访问切片中的元素</p>
+<p><code>len(slice)</code> 或者 <code>cap(slice)</code> 在一些情况下会直接替换成切片的长度或者容量，不需要在运行时获取；除了获取切片的长度和容量之外，访问切片中元素使用的 <code>OINDEX</code> 操作也会在SSA中间代码生成期间转换成对地址的直接访问</p>
+</li>
+<li>
+<p><code>range</code>切片也会被转化成更简单的<code>for</code>循环</p>
+</li>
+</ol>
+</li>
+<li>
+<p>追加和扩容</p>
+<ol>
+<li>
+<p>追加</p>
+<p><code>append</code>有两种方式：一种是覆盖原变量<code>slice=append(slice,1,2,3)</code>，另一种是不覆盖回原变量<code>append(slice,1,2,3)</code>。</p>
+<blockquote>
+<p>后者如果底层数组发生扩容，那么slice指向就会失效了.</p>
+</blockquote>
+<p>如果我们选择覆盖原有的变量，就不需要担心切片发生拷贝影响性能，因为 Go 语言编译器已经对这种常见的情况做出了优化。</p>
+</li>
+<li>
+<p>扩容</p>
+<p>在分配内存空间之前需要先确定新的切片容量，运行时根据切片的当前容量选择不同的策略进行扩容：</p>
+<ol>
+<li>
+<p>如果期望容量大于当前容量的两倍就会使用期望容量；</p>
+</li>
+<li>
+<p>如果当前切片的长度小于 1024 就会将容量翻倍；</p>
+</li>
+<li>
+<p>如果当前切片的长度大于 1024 就会每次增加 25% 的容量，直到新容量大于期望容量；</p>
+<p>上述代码片段仅会确定切片的大致容量，下面还需要根据切片中的元素大小对齐内存，当数组中元素所占的字节大小为 1、8 或者 2 的倍数时，运行时会使用如下所示的代码对齐内存</p>
+</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<p>尽量避免大切片的扩容或复制时发生的大规模内存拷贝。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="哈希表">哈希表</h2>
+<p>哈希表是一种数据结构，具备O(1)级别的读写性能。但是设计一个优秀的哈希表，需要解决两个关键点：哈希冲突和哈希函数。</p>
+<ul>
+<li>
+<p>初始化</p>
+<p>两种初始化方式：字面量<code>map[string]int{&quot;1&quot;:11}</code>和<code>make(map[string]int,1)</code></p>
+<p>这两种初始化方式仅仅只是语法糖，最后都会转化为对<code>runtime.makemap</code>调用，这个函数主要干了：</p>
+<ol>
+<li>计算哈希占用的内存是否溢出或者超出能分配的最大值；</li>
+<li>调用 <a href="https://draveness.me/golang/tree/runtime.fastrand" target="_blank" rel="noopener noreffer "><code>runtime.fastrand</code></a> 获取一个随机的哈希种子；</li>
+<li>根据传入的 <code>hint</code> 计算出需要的最小需要的桶的数量；</li>
+<li>使用 <a href="https://draveness.me/golang/tree/runtime.makeBucketArray" target="_blank" rel="noopener noreffer "><code>runtime.makeBucketArray</code></a> 创建用于保存桶的数组；
+<ul>
+<li>当桶的数量小于 2^4^ 时，由于数据较少、使用溢出桶的可能性较低，会省略创建的过程以减少额外开销；</li>
+<li>当桶的数量多于 2^4^ 时，会额外创建 2^B^−2^4^ 个溢出桶；</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>读操作</p>
+<p>两种方式：读操作返回一个参数<code>v:=map[k]</code>；读操作返回两个参数<code>v,ok:=map[k]</code>。底层实现上，一个是调用了<code>runtime.mapaccess1</code>，而另一个是调用了<code>runtime.mapaccess2</code>，这两个函数的实现差不多，只是后者多了个<code>bool</code>返回值。</p>
+<ol>
+<li>先通过哈希表设置的哈希函数和哈希种子获取当前key的哈希值；</li>
+<li>然后再拿到桶的序号和哈希的高8位数字；（哈希高8位数字是用来和桶中的<code>tophash</code>比较和快速定位桶中<code>key</code>的地址的）</li>
+<li>依次遍历桶中的8个<code>tophash</code>，如果找到<code>tophash</code>与key哈希后的高8位数字相等，然后就直接指针偏移到对应的<code>key[i]</code>并与<code>key</code>比较，如果相等就再偏移拿到<code>value[i]</code>并返回。</li>
+<li>桶中没有，会去溢出桶里找</li>
+</ol>
+</li>
+<li>
+<p>写操作</p>
+<ol>
+<li>首先还是先拿到<code>key</code>的哈希值和桶；</li>
+<li>然后再比较桶中的存储的 <code>tophash</code>和<code>key</code>的哈希高8位，如果相同就会直接返回目标位置的地址；</li>
+<li>如果在桶中没找到，就去单链表结构的溢出桶里继续寻找，如果有就返回<code>value</code>地址；</li>
+<li>如果还没有找到<code>key</code>，就会为新的键值对规划存储的内存地址，并返回<code>value</code>的地址；</li>
+<li>而后续的写入是由编译期间插入的汇编代码执行的。</li>
+</ol>
+</li>
+<li>
+<p>哈希扩容</p>
+<p>随着哈希元素的逐渐增多，特别是溢出桶的增加（溢出桶的遍历复杂度是O(n)级别的），哈希性能会逐渐恶化，我们需要扩容。扩容的条件是：</p>
+<ol>
+<li>
+<p>装载因子已经超过 6.5；</p>
+<p>这个条件引起的扩容触发的是翻倍扩容，增加桶容量。扩容是增量触发的的，并不是一次性完成的。而且扩容期间读操作会使用旧桶的数据；写操作才会触发旧桶的分流。这样可以摊销掉扩容的时间复杂度。</p>
+</li>
+<li>
+<p>哈希使用了太多溢出桶；</p>
+<p>由这个条件引起的扩容是等量扩容<code>sameSizeGrow</code>：如果出现太多溢出桶，它会创建数量和旧桶一样数量的新桶保存数据，然后垃圾回收会清理老的溢出桶并释放内存。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>删除操作</p>
+<p>哈希表的删除逻辑与写入逻辑很相似，只是触发哈希的删除需要使用关键字，如果在删除期间遇到了哈希表的扩容，就会分流桶中的元素，分流结束之后会找到桶中的目标元素完成键值对的删除工作。</p>
+</li>
+</ul>
+<blockquote>
+<p>Go 语言使用拉链法来解决哈希碰撞的问题实现了哈希表，它的访问、写入和删除等操作都在编译期间转换成了运行时的函数或者方法。哈希在每一个桶中存储键对应哈希的前 8 位，当对哈希进行操作时，这些 <code>tophash</code> 就成为可以帮助哈希快速遍历桶中元素的缓存。</p>
+<p>哈希表的每个桶都只能存储 8 个键值对，一旦当前哈希的某个桶超出 8 个，新的键值对就会存储到哈希的溢出桶中。随着键值对数量的增加，溢出桶的数量和哈希的装载因子也会逐渐升高，超过一定范围就会触发扩容，扩容会将桶的数量翻倍，元素再分配的过程也是在调用写操作时增量进行的，不会造成性能的瞬时巨大抖动。</p>
+</blockquote>
+<h2 id="字符串">字符串</h2>
+<p>go语言字符串底层实现就是一个<strong>只读</strong>的数组结构<code>[n]byte</code>。字符串可以被索引，但是不能被直接修改。</p>
+<ul>
+<li>
+<p>数据结构</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">StringHeader</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">Data</span> <span class="kt">uintptr</span> <span class="c1">// 底层数组指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">Len</span>  <span class="kt">int</span> <span class="c1">// 底层数组大小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>字符串拼接</p>
+<ol>
+<li>
+<p><code>+</code></p>
+<p>性能最差的拼接方式。由于go语言字符串是只读数据结构，拼接字符串会将字符串重新拷贝分配到新的地址上。所以<code>+</code>会造成字符串的大量拷贝。</p>
+</li>
+<li>
+<p><code>fmt.Sprintf</code></p>
+<p>使用反射，也会涉及到拷贝，性能较差</p>
+</li>
+<li>
+<p><code>strings.Builder</code></p>
+<p>底层切片有复用机制，而且转化为字符串时，使用了零拷贝机制。</p>
+</li>
+<li>
+<p><code>strings.Bytes</code></p>
+<p>还行</p>
+</li>
+</ol>
+</li>
+<li>
+<p>类型转化</p>
+<p>某些场景下，我们需要将<code>string</code>和<code>[]byte</code>互相转化，如果对于原结构不做任何改变的话，可以考虑使用<code>unsafe</code></p>
+</li>
+</ul>
+<h2 id="接口">接口</h2>
+<p>接口也是 Go 语言中的一种类型，它能够出现在变量的定义、函数的入参和返回值中并对它们进行约束，不过 Go 语言中有两种略微不同的接口，一种是带有一组方法的接口，另一种是不带任何方法的 <code>interface{}</code>：Go 语言使用 <a href="https://draveness.me/golang/tree/runtime.iface" target="_blank" rel="noopener noreffer "><code>runtime.iface</code></a> 表示第一种接口，使用 <a href="https://draveness.me/golang/tree/runtime.eface" target="_blank" rel="noopener noreffer "><code>runtime.eface</code></a> 表示第二种不包含任何方法的接口 <code>interface{}</code></p>
+<blockquote>
+<p>值得注意的是：接口不是任意类型，接口也是一种类型。</p>
+</blockquote>
+<ul>
+<li>
+<p>接口零值</p>
+<p>接口的零值是指类型和值都要为<code>nil</code>才表示零值。如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">main</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">TestStruct</span> <span class="kd">struct</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">NilOrNot</span><span class="p">(</span><span class="nx">v</span> <span class="kd">interface</span><span class="p">{})</span> <span class="kt">bool</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">v</span> <span class="o">==</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">s</span> <span class="o">*</span><span class="nx">TestStruct</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">s</span> <span class="o">==</span> <span class="kc">nil</span><span class="p">)</span>      <span class="c1">// #=&gt; true
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nf">NilOrNot</span><span class="p">(</span><span class="nx">s</span><span class="p">))</span>   <span class="c1">// #=&gt; false
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">$</span> <span class="k">go</span> <span class="nx">run</span> <span class="nx">main</span><span class="p">.</span><span class="k">go</span>
+</span></span><span class="line"><span class="cl"><span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="kc">false</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>数据结构</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 运行时的类型结构
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">_type</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">size</span>       <span class="kt">uintptr</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ptrdata</span>    <span class="kt">uintptr</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">hash</span>       <span class="kt">uint32</span> <span class="c1">// 快速判断类型是否相等
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">tflag</span>      <span class="nx">tflag</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">align</span>      <span class="kt">uint8</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fieldAlign</span> <span class="kt">uint8</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">kind</span>       <span class="kt">uint8</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">equal</span>      <span class="kd">func</span><span class="p">(</span><span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span><span class="p">,</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span><span class="p">)</span> <span class="kt">bool</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">gcdata</span>     <span class="o">*</span><span class="kt">byte</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">str</span>        <span class="nx">nameOff</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ptrToThis</span>  <span class="nx">typeOff</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>
+<p>空接口</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">eface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 字节
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">_type</span> <span class="o">*</span><span class="nx">_type</span> <span class="c1">// 指向底层数据类型：类型大小、hash、对齐等
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">data</span>  <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span> <span class="c1">// 指向数据的指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>非空接口</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">iface</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 16 字节
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">tab</span>  <span class="o">*</span><span class="nx">itab</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">data</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span> <span class="c1">// 指向数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">itab</span> <span class="kd">struct</span> <span class="p">{</span> <span class="c1">// 32 字节
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">inter</span> <span class="o">*</span><span class="nx">interfacetype</span> <span class="c1">// 指向接口类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">_type</span> <span class="o">*</span><span class="nx">_type</span> <span class="c1">// 指向真实数据类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">hash</span>  <span class="kt">uint32</span> <span class="c1">// 对_type字段中hash的拷贝，可以减少指针解引用的开销
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">_</span>     <span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="kt">byte</span> <span class="c1">// pad
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fun</span>   <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="kt">uintptr</span> <span class="c1">// 虽然只有一个元素，但是其实指针，指向一组固定大小的方法数组
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+</li>
+<li>
+<p>类型转化</p>
+<p>无论是指针接受者还是值接受者实现转化为接口类型时，会在运行时获取接受者的类型以及数据，组装好运行时的<code>eface</code>或<code>iface</code>结构体。</p>
+</li>
+<li>
+<p>类型断言</p>
+<p>断言的实质其实就是比较目标类型的hash和接口类型的hash是否相等；</p>
+</li>
+<li>
+<p>动态派发</p>
+<p>动态派发（Dynamic dispatch）是在运行期间选择具体多态操作（方法或者函数）执行的过程，它是面向对象语言中的常见特性<a href="https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-interface/#fn:6" target="_blank" rel="noopener noreffer ">6</a>。</p>
+<p>在如下所示的代码中，<code>main</code> 函数调用了两次 <code>Quack</code> 方法：</p>
+<ol>
+<li>第一次以 <code>Duck</code> 接口类型的身份调用，调用时需要经过运行时的动态派发；</li>
+<li>第二次以 <code>*Cat</code> 具体类型的身份调用，编译期就会确定调用的函数：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="kd">var</span> <span class="nx">c</span> <span class="nx">Duck</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">Cat</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span> <span class="s">&#34;draven&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">c</span><span class="p">.</span><span class="nf">Quack</span><span class="p">()</span> <span class="c1">// 动态派发
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">c</span><span class="p">.(</span><span class="o">*</span><span class="nx">Cat</span><span class="p">).</span><span class="nf">Quack</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>动态派发会进行额外的指令来选择函数。使用动态派发会对程序性能造成一定影响，建议都使用指针实现，因为指针实现的动态派发成本更小一点。而且给项目带来的好处时要大于性能上的一点损失的。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="通道">通道</h2>
+<p><code>chan</code>是go语言特有的数据结构，是go实现CSP并发编程模型的关键数据结构。值得注意的是，<code>chan</code>并不是完全无锁的结构，只是在某些关键路径上实现了无锁。</p>
+<ul>
+<li>
+<p>数据结构</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">hchan</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">qcount</span>   <span class="kt">uint</span> <span class="c1">// 元素个数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">dataqsiz</span> <span class="kt">uint</span> <span class="c1">// 循环队列的长度
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">buf</span>      <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span><span class="c1">// 缓冲区数据指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">elemsize</span> <span class="kt">uint16</span> <span class="c1">// 元素大小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">closed</span>   <span class="kt">uint32</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">elemtype</span> <span class="o">*</span><span class="nx">_type</span> <span class="c1">// 元素类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">sendx</span>    <span class="kt">uint</span> <span class="c1">// 发送操作处理到的位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">recvx</span>    <span class="kt">uint</span> <span class="c1">// 接收操作处理到的位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>         <span class="nx">recvq</span>    <span class="nx">waitq</span> <span class="c1">// 缓冲区空间为空而阻塞的接收goroutine双向链表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">sendq</span>    <span class="nx">waitq</span> <span class="c1">// 缓冲区空间不足而阻塞的发送goroutine双向链表
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="nx">lock</span> <span class="nx">mutex</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">waitq</span> <span class="kd">struct</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">first</span> <span class="o">*</span><span class="nx">sudog</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">last</span>  <span class="o">*</span><span class="nx">sudog</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>创建管道</p>
+<p>创建管道只能通过<code>make(vhan int,n)</code>的方式</p>
+<ol>
+<li>如果是创建无缓冲的管道，也就是<code>hchan.buf</code>为<code>nil</code>，不会分配内存</li>
+<li>如果是channel中存储的类型是指针，那么会直接给<code>hchan.buf</code>分配内存</li>
+<li>如果是有缓冲并且基础类型不是指针的，则也会直接给<code>hchan.buf</code>分配内存</li>
+</ol>
+</li>
+<li>
+<p>发送数据</p>
+<p>发送数据之前，会给<code>chan</code>加锁，防止并发安全问题。发送的逻辑如下：</p>
+<ol>
+<li>如果<code>hchan.recvq</code>非空，表示有goroutine阻塞等待接收管道数据，则会取出最先陷入等待的goroutine并直接向它发送数据，并且将该goroutine标记为可运行，等待处理器调度执行；</li>
+<li>如果<code>hchan.recvq</code>为空，表示没有goroutine阻塞等待接收管道数据，且缓冲区有空余空间，就会将发送数据写入<code>hchan.buf</code>中；</li>
+<li>如果缓冲区已满或者没有接收者来接收数据，那么执行发送操作的goroutine就会一直阻塞下去</li>
+</ol>
+<blockquote>
+<p>调度时机：第一步并没有立即调度执行；还有就是第三步阻塞其实就是调用<code>gopark</code>让出处理器使用权。</p>
+</blockquote>
+</li>
+<li>
+<p>接收数据</p>
+<p>接收数据之前也会给<code>chan</code>加锁，接收逻辑如下：</p>
+<ol>
+<li>当<code>hchan</code>为空时，会直接挂起当前goroutine</li>
+<li>如果当前<code>hchan</code>已经被关闭并且缓冲区没有数据，会直接返回</li>
+<li>如果<code>hchan.sendq</code>队列存在挂起的goroutine，表示存在期待发送数据的goroutine，那么可以直接将该goroutine取出来，然后去接收数据</li>
+<li>如果缓冲区存在数据，则去缓冲区取数据</li>
+<li>如果缓冲区也没有数据，那么就会阻塞挂起等待，将当前goroutine加入<code>hchan.recvq</code>队列里等待调度器唤醒。</li>
+</ol>
+<blockquote>
+<p>调度时机：第一步挂起协程；第五步也会挂起协程</p>
+</blockquote>
+</li>
+<li>
+<p>关闭管道</p>
+<p>一旦管道关闭，管道还能读取数据，但是不能写入数据，而且管道也不会发生阻塞</p>
+</li>
+</ul></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-10-27</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" data-title="Go语言设计与实现之基础数据结构"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9F%BA%E7%A1%80%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" data-title="Go语言设计与实现之基础数据结构"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/go%E8%AF%AD%E8%A8%80%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86/">go语言底层原理</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F/" class="prev" rel="prev" title="Go设计模式之桥接模式"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Go设计模式之桥接模式</a>
+            <a href="/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E8%B0%83%E5%BA%A6%E5%99%A8/" class="next" rel="next" title="Go语言设计与实现之调度器">Go语言设计与实现之调度器<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-10-27T22:55:23+08:00","owner":"cold-bin","repo":"blog-comment","title":"Go语言设计与实现之基础数据结构"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

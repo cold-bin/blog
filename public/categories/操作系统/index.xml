@@ -1,0 +1,48 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>操作系统 - Category - 阿冰的小屋</title>
+        <link>https://blog.coldbin.top/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
+        <description>操作系统 - Category - 阿冰的小屋</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>cold-bin@qq.com (阿冰)</managingEditor>
+            <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Tue, 30 May 2023 12:10:06 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="self" type="application/rss+xml" /><item>
+    <title>操作系统之输入输出管理</title>
+    <link>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/</link>
+    <pubDate>Tue, 30 May 2023 12:10:06 &#43;0800</pubDate>
+    <author>阿冰</author>
+    <guid>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/</guid>
+    <description><![CDATA[[toc] IO管理概述 IO设备基本概念 IO设备管理是操作系统设计中最凌乱也最具挑战性的部分。由于它包含了很多领域的不同设备以及与设备相关的应用程序，]]></description>
+</item>
+<item>
+    <title>操作系统之文件管理</title>
+    <link>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/</link>
+    <pubDate>Sun, 21 May 2023 15:19:47 &#43;0800</pubDate>
+    <author>阿冰</author>
+    <guid>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/</guid>
+    <description><![CDATA[[toc] 文件系统基础 文件的概念 由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文]]></description>
+</item>
+<item>
+    <title>操作系统之内存管理</title>
+    <link>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</link>
+    <pubDate>Thu, 11 May 2023 19:53:00 &#43;0800</pubDate>
+    <author>阿冰</author>
+    <guid>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</guid>
+    <description><![CDATA[[toc] 内存管理概念 内存管理的基本原理和要求 存储器结构 上图展示了一个典型的存储器层次结构。一般而言，从高层往底层走，存储设备变得更慢、更便宜和更大]]></description>
+</item>
+<item>
+    <title>操作系统之进程管理</title>
+    <link>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
+    <pubDate>Fri, 17 Mar 2023 14:55:42 &#43;0800</pubDate>
+    <author>阿冰</author>
+    <guid>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
+    <description><![CDATA[[TOC] 什么是进程？ 概念 进程（process）：是一个具有一定独立功能的程序，关于某个数据集合的一次运行活动，是操作系统资源分配的基本单位 要点 进程]]></description>
+</item>
+<item>
+    <title>操作系统之概述</title>
+    <link>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/</link>
+    <pubDate>Wed, 15 Mar 2023 18:32:26 &#43;0800</pubDate>
+    <author>阿冰</author>
+    <guid>https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/</guid>
+    <description><![CDATA[[toc] 操作系统概念 操作系统（operation system，简称OS），是管理计算机硬件与软件资源的计算机程序。 例如，在windows上win+]]></description>
+</item>
+</channel>
+</rss>

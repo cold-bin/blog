@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>汇编之转移指令原理 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="汇编之转移指令原理" />
+<meta property="og:description" content="转移指令的原理 可以修改IP，或同时修改CS和IP的指令统称为转移指令。概括地讲，转移指令就是可以控制CPU执行内存中某处代码的指令。 8086" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E5%8E%9F%E7%90%86/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-01-13T21:29:13+08:00" />
+<meta property="article:modified_time" content="2023-01-13T21:29:13+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="汇编之转移指令原理"/>
+<meta name="twitter:description" content="转移指令的原理 可以修改IP，或同时修改CS和IP的指令统称为转移指令。概括地讲，转移指令就是可以控制CPU执行内存中某处代码的指令。 8086"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E5%8E%9F%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/" /><link rel="next" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8Bcall%E5%92%8Cret%E6%8C%87%E4%BB%A4/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "汇编之转移指令原理",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/%E6%B1%87%E7%BC%96%E4%B9%8B%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E5%8E%9F%E7%90%86\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  2257 ,
+        "url": "https:\/\/blog.coldbin.top\/%E6%B1%87%E7%BC%96%E4%B9%8B%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E5%8E%9F%E7%90%86\/","datePublished": "2023-01-13T21:29:13+08:00","dateModified": "2023-01-13T21:29:13+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">汇编之转移指令原理</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%B1%87%E7%BC%96/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>汇编</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-01-13">2023-01-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2257 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#转移指令的原理">转移指令的原理</a>
+      <ul>
+        <li><a href="#1操作符offset">1、操作符offset</a></li>
+        <li><a href="#2jmp指令">2、<code>jmp</code>指令</a>
+          <ul>
+            <li><a href="#1依据位移进行转移的jmp指令">1、依据位移进行转移的<code>jmp</code>指令</a></li>
+            <li><a href="#2转移的目的地址在指令中的jmp指令">2、转移的目的地址在指令中的<code>jmp</code>指令</a></li>
+            <li><a href="#3转移地址在寄存器或内存中的jmp指令">3、转移地址在寄存器或内存中的jmp指令</a></li>
+            <li><a href="#4jcxz指令和loop指令">4、<code>jcxz</code>指令和<code>loop</code>指令</a></li>
+          </ul>
+        </li>
+        <li><a href="#3总结">3、总结</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="转移指令的原理">转移指令的原理</h1>
+<hr>
+<p>可以修改<code>IP</code>，或同时修改CS和IP的指令统称为转移指令。概括地讲，转移指令就是可以控制CPU执行内存中某处代码的指令。</p>
+<p>8086CPU的转移行为有以下几类。</p>
+<ul>
+<li>只修改<code>IP</code>时，称为<code>段内转移</code>，比如：<code>jmp ax</code>。</li>
+<li>同时修改<code>CS</code>和<code>IP</code>时，称为<code>段间转移</code>，比如：<code>jmp 1000:0</code>。</li>
+</ul>
+<p>由于转移指令对<code>IP</code>的修改范围不同，段内转移又分为：<code>短转移和近转移</code>。</p>
+<ul>
+<li>短转移<code>IP</code>的修改范围为<code>-128 ~ 127</code>。</li>
+<li>近转移<code>IP</code>的修改范围为<code>-32768 ~ 32767</code>。</li>
+</ul>
+<p>8086CPU的转移指令分为以下几类。</p>
+<ul>
+<li>无条件转移指令（如：<code>jmp</code>）</li>
+<li>条件转移指令</li>
+<li>循环指令（如：<code>loop</code>）</li>
+<li>过程</li>
+<li>中断</li>
+</ul>
+<h2 id="1操作符offset">1、操作符offset</h2>
+<p>操作符offset在汇编语言中是由编译器处理的符号，它的功能是取得标号的偏移地址。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="c1">;将s处的一条指令复制到s0处
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">codesg</span>
+</span></span><span class="line"><span class="cl"><span class="nf">codesg</span> <span class="no">segment</span>
+</span></span><span class="line"><span class="cl"> <span class="nl">s:</span>   <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="no">bx</span>           <span class="c1">;（mov ax,bx 的机器码占两个字节）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nf">mov</span> <span class="no">si</span><span class="p">,</span> <span class="no">offset</span> <span class="no">s</span>     <span class="c1">;获得标号s的偏移地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nf">mov</span> <span class="no">di</span><span class="p">,</span> <span class="no">offset</span> <span class="no">s0</span>    <span class="c1">;获得标号s0的偏移地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      
+</span></span><span class="line"><span class="cl">      <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="no">cs</span><span class="p">:[</span><span class="no">si</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      <span class="nf">mov</span> <span class="no">cs</span><span class="p">:[</span><span class="no">di</span><span class="p">],</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl"> <span class="nl">s0:</span>  <span class="nf">nop</span>                     <span class="c1">;（nop的机器码占一个字节）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nf">nop</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">codesg</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl"> <span class="nf">ends</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="2jmp指令">2、<code>jmp</code>指令</h2>
+<p><code>jmp</code>为无条件转移，转到标号处执行指令可以只修改IP，也可以同时修改CS和IP；</p>
+<p><code>jmp</code>指令要给出两种信息：</p>
+<ul>
+<li>转移的目的地址</li>
+<li>转移的距离（段间转移、段内短转移，段内近转移）</li>
+</ul>
+<p><code>jmp short 标号</code> <code>jmp near ptr 标号</code> <code>jcxz 标号</code> <code>loop 标号</code> 等几种汇编指令，它们对 IP的修改</p>
+<p>是根据转移目的地址和转移起始地址之间的位移来进行的。在它们对应的机器码中不包含转移的目的地址，而包含的是到目的地址的位移距离。</p>
+<h3 id="1依据位移进行转移的jmp指令">1、依据位移进行转移的<code>jmp</code>指令</h3>
+<p><code>jmp short 标号</code>（段内短转移）</p>
+<p>指令“<code>jmp short 标号</code>”的功能为<code>(IP)=(IP)+8位位移</code>，转到标号处执行指令</p>
+<p>（1）8位位移 = “标号”处的地址 - <code>jmp</code>指令后的第一个字节的地址；</p>
+<p>（2）short指明此处的位移为8位位移；</p>
+<p>（3）8位位移的范围为-128~127，用补码表示</p>
+<p>（4）8位位移由编译程序在编译时算出。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">codesg</span>
+</span></span><span class="line"><span class="cl"><span class="nf">codesg</span> <span class="no">segment</span>
+</span></span><span class="line"><span class="cl">  <span class="nl">start:</span><span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">jmp</span> <span class="no">short</span> <span class="no">s</span> <span class="c1">;s不是被翻译成目的地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">add</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">      <span class="nl">s:</span><span class="nf">inc</span> <span class="no">ax</span> <span class="c1">;程序执行后， ax中的值为 1 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">codesg</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl"><span class="nf">end</span> <span class="no">start</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>CPU不需要这个目的地址就可以实现对IP的修改。这里是依据位移进行转移</p>
+<p><strong><code>jmp short s</code>指令的读取和执行过程：</strong></p>
+<ol>
+<li>(CS)=0BBDH，(IP)=0006，上一条指令执行结束后<code>CS:IP</code>指向<code>EB 03</code>（<code>jmp short s</code>的机器码）；</li>
+<li>读取指令码<code>EB 03</code>进入指令缓冲器；</li>
+<li>(IP) = (IP) + 所读取指令的长度 = (IP) + 2 = 0008，<code>CS:IP</code>指向<code>add ax,1</code>；</li>
+<li>CPU指行指令缓冲器中的指令<code>EB 03</code>；</li>
+<li>指令<code>EB 03</code>执行后，(IP)=000BH，<code>CS:IP</code>指向<code>inc ax</code></li>
+</ol>
+<p><code>jmp near ptr 标号</code> （段内近转移）</p>
+<p>指令“<code>jmp near ptr 标号</code>”的功能为：<code>(IP) = (IP) + 16位位移</code>。</p>
+<h3 id="2转移的目的地址在指令中的jmp指令">2、转移的目的地址在指令中的<code>jmp</code>指令</h3>
+<p><code>jmp far ptr 标号</code>（段间转移或远转移）</p>
+<p>指令 “<code>jmp far ptr 标号</code>” 功能如下：</p>
+<ul>
+<li>(CS) = 标号所在段的段地址；</li>
+<li>(IP) = 标号所在段中的偏移地址。</li>
+<li><code>far ptr</code>指明了指令用标号的段地址和偏移地址修改<code>CS</code>和<code>IP</code>。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">assume</span> <span class="no">cs</span><span class="p">:</span><span class="no">codesg</span>
+</span></span><span class="line"><span class="cl"><span class="nf">codesg</span> <span class="no">segment</span>
+</span></span><span class="line"><span class="cl">   <span class="nl">start:</span> <span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">		  <span class="nf">mov</span> <span class="no">bx</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">          <span class="nf">jmp</span> <span class="no">far</span> <span class="no">ptr</span>  <span class="no">s</span> <span class="c1">;s被翻译成转移的目的地址0B01 BD0B
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>          <span class="nf">db</span> <span class="mi">256</span> <span class="no">dup</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="c1">;转移的段地址：0BBDH，偏移地址：010BH
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nl">s:</span>    <span class="nf">add</span> <span class="no">ax</span><span class="p">,</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">          <span class="nf">inc</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">codesg</span> <span class="no">ends</span>
+</span></span><span class="line"><span class="cl"><span class="nf">end</span> <span class="no">start</span>
+</span></span><span class="line"><span class="cl"><span class="err">12345678910</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20190322151439754.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20190322151439754.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20190322151439754.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20190322151439754.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20190322151439754.png"
+        title="在这里插入图片描述" /></p>
+<h3 id="3转移地址在寄存器或内存中的jmp指令">3、转移地址在寄存器或内存中的jmp指令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">jmp 16位寄存器
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>功能：<code>IP</code> =（16位寄存器）</p>
+<p>转移地址在内存中的<code>jmp</code>指令有两种格式：</p>
+<ul>
+<li><code>jmp word ptr 内存单元地址</code>（段内转移）</li>
+</ul>
+<p>功能：从内存单元地址处开始存放着一个字，是转移的目的偏移地址。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0123</span><span class="no">H</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">0</span><span class="p">],</span> <span class="no">ax</span>
+</span></span><span class="line"><span class="cl"><span class="nf">jmp</span> <span class="no">word</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;执行后，(IP)=0123H
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>jmp dword ptr 内存单元地址</code>（段间转移）</li>
+</ul>
+<p>功能：从内存单元地址处开始存放着两个字，高地址处的字是转移的目的段地址，低地址处是转移的目的偏移地址。</p>
+<ol>
+<li>(CS)=(内存单元地址+2)</li>
+<li>(IP)=(内存单元地址)</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">ax</span><span class="p">,</span> <span class="mi">0123</span><span class="no">H</span>
+</span></span><span class="line"><span class="cl"><span class="nf">mov</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">0</span><span class="p">],</span> <span class="no">ax</span><span class="c1">;偏移地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">mov</span> <span class="no">word</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="c1">;段地址
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">jmp</span> <span class="no">dword</span> <span class="no">ptr</span> <span class="no">ds</span><span class="p">:[</span><span class="mi">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="c1">;执行后，
+</span></span></span><span class="line"><span class="cl"><span class="c1">;(CS)=0
+</span></span></span><span class="line"><span class="cl"><span class="c1">;(IP)=0123H
+</span></span></span><span class="line"><span class="cl"><span class="c1">;CS:IP 指向 0000:0123。
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="4jcxz指令和loop指令">4、<code>jcxz</code>指令和<code>loop</code>指令</h3>
+<p><strong><code>jcxz</code>指令</strong></p>
+<p><code>jcxz</code>指令为有条件转移指令，所有的有条件转移指令都是短转移，</p>
+<p>在对应的机器码中包含转移的位移，而不是目的地址。对IP的修改范围都为<code>-128~127</code>。</p>
+<p>指令格式：<code>jcxz 标号</code>（如果(cx)=0，则转移到标号处执行。）</p>
+<p>当(cx) = 0时，(IP) = (IP) + 8位位移</p>
+<ul>
+<li>8位位移 = “标号”处的地址 - <code>jcxz</code>指令后的第一个字节的地址；</li>
+<li>8位位移的范围为-128~127，用补码表示；</li>
+<li>8位位移由编译程序在编译时算出。</li>
+</ul>
+<p>当(cx)!=0时，什么也不做（程序向下执行）</p>
+<p><strong><code>loop</code>指令</strong></p>
+<p>loop指令为循环指令，所有的循环指令都是短转移，在对应的机器码中包含转移的位移，而不是目的地址。</p>
+<p>对IP的修改范围都为<code>-128~127</code>。</p>
+<p>指令格式：<code>loop 标号</code> ((cx) = (cx) - 1，如果(cx) ≠ 0，转移到标号处执行)。</p>
+<p>(cx) = (cx) - 1；如果 (cx) != 0，(IP) = (IP) + 8位位移。</p>
+<ul>
+<li>8位位移 = 标号处的地址 - <code>loop</code>指令后的第一个字节的地址；</li>
+<li>8位位移的范围为<code>-128~127</code>，用补码表示；</li>
+<li>8位位移由编译程序在编译时算出。</li>
+</ul>
+<p>如果（cx）= 0，什么也不做（程序向下执行）。</p>
+<h2 id="3总结">3、总结</h2>
+<ul>
+<li>转移指令时，都是以下一个指令的偏移量为依据，如果是下一个指令的目标地址，那么这段程序就不能随意放到某个地址了。使用偏移量就可以很好解决这个问题：无论这段代码放到哪里都可以通过位移来找寻指令</li>
+<li>归根结底，指令其实就是<code>cs:ip</code>指向地址的内容，那么我们要转移指令，就是修改<code>cs:ip</code>的指向地址</li>
+<li>实现循环：每次循环体结束都会返回到循环代码的头部，那么如何实现呢？答案就是：转移指令，每当循环执行完毕时，我们就将指令转移到循环体头部；</li>
+<li>实现if-else：类似循环，不过使用的是条件转移指令</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-01-13</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E5%8E%9F%E7%90%86/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E5%8E%9F%E7%90%86/" data-title="汇编之转移指令原理"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E8%BD%AC%E7%A7%BB%E6%8C%87%E4%BB%A4%E5%8E%9F%E7%90%86/" data-title="汇编之转移指令原理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/" class="prev" rel="prev" title="汇编之数据处理问题"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>汇编之数据处理问题</a>
+            <a href="/%E6%B1%87%E7%BC%96%E4%B9%8Bcall%E5%92%8Cret%E6%8C%87%E4%BB%A4/" class="next" rel="next" title="汇编之call和ret指令">汇编之call和ret指令<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-13T21:29:13+08:00","owner":"cold-bin","repo":"blog-comment","title":"汇编之转移指令原理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

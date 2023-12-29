@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>makefile - Tag - 阿冰的小屋</title>
+        <link>https://blog.coldbin.top/tags/makefile/</link>
+        <description>makefile - Tag - 阿冰的小屋</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>cold-bin@qq.com (阿冰)</managingEditor>
+            <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Sat, 16 Jul 2022 22:13:26 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/tags/makefile/" rel="self" type="application/rss+xml" /><item>
+    <title>Makefile在go项目的实践</title>
+    <link>https://blog.coldbin.top/makefile%E5%9C%A8go%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%AE%9E%E8%B7%B5/</link>
+    <pubDate>Sat, 16 Jul 2022 22:13:26 &#43;0800</pubDate>
+    <author>阿冰</author>
+    <guid>https://blog.coldbin.top/makefile%E5%9C%A8go%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%AE%9E%E8%B7%B5/</guid>
+    <description><![CDATA[Make介绍 make命令是GNU的工程化编译工具，用以实现工程化的管理，提高开发效率。 Make解释Makefile 中的指令（应该说是规则）。]]></description>
+</item>
+</channel>
+</rss>
