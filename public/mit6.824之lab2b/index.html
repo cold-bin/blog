@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Mit6.824之lab2B - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Mit6.824之lab2B" />
+<meta property="og:description" content="lab2B 论文回顾与总结 原论文比较晦涩，有些地方没有读懂，这里摘抄的B战某up主视频的进一步解释。解读共识算法Raft（3）日志复制 客户端如何定位l" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2b/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-12-29T17:14:36+08:00" />
+<meta property="article:modified_time" content="2023-12-29T17:14:36+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="Mit6.824之lab2B"/>
+<meta name="twitter:description" content="lab2B 论文回顾与总结 原论文比较晦涩，有些地方没有读懂，这里摘抄的B战某up主视频的进一步解释。解读共识算法Raft（3）日志复制 客户端如何定位l"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2b/" /><link rel="prev" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2a/" /><link rel="next" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2c/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Mit6.824之lab2B",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/mit6.824%E4%B9%8Blab2b\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "mit6.824","wordcount":  4589 ,
+        "url": "https:\/\/blog.coldbin.top\/mit6.824%E4%B9%8Blab2b\/","datePublished": "2023-12-29T17:14:36+08:00","dateModified": "2023-12-29T17:14:36+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Mit6.824之lab2B</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin/" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>分布式系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-12-29">2023-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;4589 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;10 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#lab2b">lab2B</a>
+          <ul>
+            <li><a href="#论文回顾与总结">论文回顾与总结</a>
+              <ul>
+                <li><a href="#客户端如何定位leader">客户端如何定位leader</a></li>
+                <li><a href="#日志结构">日志结构</a></li>
+                <li><a href="#日志复制">日志复制</a></li>
+              </ul>
+            </li>
+            <li><a href="#实现思路">实现思路</a></li>
+            <li><a href="#调试过程">调试过程</a></li>
+            <li><a href="#结果">结果</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="lab2b">lab2B</h2>
+<h3 id="论文回顾与总结">论文回顾与总结</h3>
+<blockquote>
+<p>原论文比较晦涩，有些地方没有读懂，这里摘抄的B战某up主视频的进一步解释。<a href="https://www.bilibili.com/video/BV1VY4y1e7px/?share_source=copy_web&amp;vd_source=107e16d1212e01260cbd925c05ad6eee" target="_blank" rel="noopener noreffer ">解读共识算法Raft（3）日志复制</a></p>
+</blockquote>
+<h4 id="客户端如何定位leader">客户端如何定位leader</h4>
+<p>leader被选举出来后，开始为客户端提供服务，而其他节点接收到客户端请求时需要将请求转向leader。客户端如何如何请求leader呢？</p>
+<ul>
+<li>第一种情况，请求的节点刚好是leader，则直接成功请求然后进入日志复制和提交状态机的后续工作</li>
+<li>第二种情况，请求的节点是follower，follower可以通过心跳得知leader节点的id，然后告知客户端</li>
+<li>第三种情况，请求的节点处于宕机，无法产生响应，那么客户端再去请求其他节点</li>
+</ul>
+<h4 id="日志结构">日志结构</h4>
+<p>leader接收到客户端的指令后，会把指令作为一个新的条目追加到日志里去。一条日志含有三个信息：</p>
+<ul>
+<li>
+<p>状态机指令</p>
+</li>
+<li>
+<p>leader任期号</p>
+<p>任期号是raft状态机的逻辑时钟，用于判定节点状态和校验日志是否过期</p>
+</li>
+<li>
+<p>日志索引</p>
+<p>单调递增。如果leader宕机了，那么可能存在日志号相同的情况下，内容不同</p>
+</li>
+</ul>
+<p>需要任期号和日志索引才能唯一确定一条日志</p>
+<h4 id="日志复制">日志复制</h4>
+<ul>
+<li>leader并行发送<code>AppendEntries</code>RPC给follower，让它们复制该条目，当该条目被超过半数以上的follower复制过后，leader就可以在本地执行该指令并把结果返回给客户端。</li>
+<li>本地执行指令，也就是leader应用日志到状态机这一步，被称为提交</li>
+</ul>
+<p>上面的机制，在leader和follower都能正常运行的情况下，raft能正常工作。但是在分布式场景下，难免会发生一些故障问题，raft需要保证在有宕机的情况下继续支持日志复制，并且保证每个副本日志顺序的一致性。具体有三种可能：</p>
+<ol>
+<li>
+<p>如果有follower因为某些原因没有给leader响应，那么leader会不断地重发追加条目请求（<code>AppendEntries</code> RPC），哪怕leader已经没有了响应</p>
+</li>
+<li>
+<p>如果有follower崩溃后恢复，这是raft追加条目的一致性检查生效，保证follower能按顺序恢复崩溃后缺失的日志</p>
+<blockquote>
+<p>raft的一致性检查：leader在每一个发往follower的追加条目RPC中，会放入前一个日志条目的索引位置和任期号，如果follower在它的日志中找不到前一个日志，那么它就会拒绝此日志，leader收到follower的拒接后，会发送前一个日志条目，从而逐渐向前定位到follower第一个缺失的日志，然后按照顺序补齐follower缺失的所有日志</p>
+<p>当附加日志 RPC 的请求被拒绝的时候，跟随者可以(返回)冲突条目的任期号和该任期号对应的最小索引地址。</p>
+</blockquote>
+</li>
+<li>
+<p>如果leader崩溃，那么崩溃的leader可能已经复制了日志到部分follower但还没有提交而被选出的新leader又可能不具备这些日志，这样就有部分follower中的日志和新leader的日志不相同。</p>
+<blockquote>
+<p>raft会在这种情况下，leader通过强制follower复制它的日志来解决不一致的问题，这意味着follower中跟leader冲突的日志条目会被新leader的日志条目覆盖。</p>
+<p>当然，由于这些日志没有提交，也就是没有应用到raft状态机里，不违背一致性。</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>总结</strong></p>
+<ul>
+<li>通过这种机制，leader在当权之后就不需要任何特殊的操作来使日志恢复一致性</li>
+<li>leader只需要进行正常的操作，然后日志就能在回复<code>AppendEntries</code>一致性检查失败的时候自动趋于一致</li>
+<li>leader从来不会覆盖或删除自己的日志条目</li>
+<li>只要过半的节点能正常运行，raft就能接受、复制并应用新的日志条目</li>
+<li>在正常情况下，新的日志条目可以在一个RPC来回中被复制给集群中过半的机器</li>
+<li>单个运行慢的follower不会影响整体的性能（超过半数就可以提交日志并返回客户端了）</li>
+</ul>
+<h3 id="实现思路">实现思路</h3>
+<p>最主要实现几个关键的地方：</p>
+<ol>
+<li>
+<p>选举限制</p>
+<p>投票时一定只能投给日志至少和自己一样新的。当集群中超过半数的节点复制了日志，被称为已提交，已提交的日志一定会被应用到状态机里。因为没有获得最新日志的节点无法获得超过半数节点的投票，也就无法成为领导者，所以，领导者的日志只要已经提交，那么就算当前领导者退位，重新选举的领导者一定具备最新的日志。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 论文里安全性的保证：参数的日志是否至少和自己一样新
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">isLogUpToDate</span><span class="p">(</span><span class="nx">lastLogTerm</span><span class="p">,</span> <span class="nx">lastLogIndex</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">bool</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">lastLogTerm</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">lastLogTerm</span><span class="p">()</span> <span class="o">||</span> <span class="p">(</span><span class="nx">lastLogTerm</span> <span class="o">==</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">lastLogTerm</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">lastLogIndex</span> <span class="o">&gt;=</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">lastLogIndex</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>心跳和日志复制应该是同一个实现</p>
+<p>最开始的时候，我是在<code>Start</code>方法里添加一致性协议的额外操作：开启额外的协程去做日志复制。但是我后面发现日志复制和心跳的实现逻辑差不多，而且就算含有日志的<code>AppendEntries</code>RPC其实也可以算上一次心跳。而且周期地心跳的发送也有助于日志尽快地被复制到其他节点（看了一些网上的实现过后，便将心跳和日志复制整合到一起了。）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">heartbeatBroadcast</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Debug</span><span class="p">(</span><span class="nx">dTimer</span><span class="p">,</span> <span class="s">&#34;S%d start broadcast&#34;</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">peers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">peer</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">peer</span> <span class="p">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">peer</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">peer</span> <span class="o">==</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="k">continue</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="nx">args</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">AppendEntriesArgs</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Term</span><span class="p">:</span>         <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">LeaderId</span><span class="p">:</span>     <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Entries</span><span class="p">:</span>      <span class="nb">make</span><span class="p">([]</span><span class="nx">Logt</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">PrevLogIndex</span><span class="p">:</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">PrevLogTerm</span><span class="p">:</span>  <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">Term</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">LeaderCommit</span><span class="p">:</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">args</span><span class="p">.</span><span class="nx">Entries</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">Entries</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]:]</span><span class="o">...</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">peer</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">reply</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">AppendEntriesReply</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">Debug</span><span class="p">(</span><span class="nx">dLog</span><span class="p">,</span> <span class="s">`sendAppendEntries S%d -&gt; S%d, args %+v`</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">peer</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">sendAppendEntries</span><span class="p">(</span><span class="nx">peer</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">reply</span><span class="p">);</span> <span class="nx">ok</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">				<span class="k">defer</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">				<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nf">Debug</span><span class="p">(</span><span class="nx">dLog</span><span class="p">,</span> <span class="s">`after sendAppendEntries S%d, nextIndex:%d matchIndex:%d`</span><span class="p">,</span> <span class="nx">peer</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">],</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">matchIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">				<span class="nf">Debug</span><span class="p">(</span><span class="nx">dLog</span><span class="p">,</span> <span class="s">`before sendAppendEntries S%d, nextIndex:%d matchIndex:%d`</span><span class="p">,</span> <span class="nx">peer</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">],</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">matchIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span> <span class="o">!=</span> <span class="nx">leader</span> <span class="p">{</span> <span class="cm">/*不是leader，没有必要在进行广播*/</span>
+</span></span><span class="line"><span class="cl">					<span class="k">return</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span> <span class="cm">/*过期该返回*/</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">rf</span><span class="p">.</span><span class="nf">changeRole</span><span class="p">(</span><span class="nx">follower</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">=</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span>
+</span></span><span class="line"><span class="cl">					<span class="k">return</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Success</span> <span class="p">{</span> <span class="cm">/*心跳成功或日志复制成功*/</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">rf</span><span class="p">.</span><span class="nx">matchIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span> <span class="p">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">PrevLogIndex</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">Entries</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">matchIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">					<span class="cm">/*超过半数节点追加成功，也就是已提交，并且还是leader，那么就可以应用当前任期里的日志到状态机里。找到共识N：遍历对等点，找到相同的N*/</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">N</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span>
+</span></span><span class="line"><span class="cl">					<span class="k">for</span> <span class="nx">_N</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">_N</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">);</span> <span class="nx">_N</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">						<span class="nx">succeedNum</span> <span class="o">:=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">						<span class="k">for</span> <span class="nx">peer</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">peer</span> <span class="p">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">peer</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">							<span class="k">if</span> <span class="nx">_N</span> <span class="o">&lt;=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">matchIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">_N</span><span class="p">].</span><span class="nx">Term</span> <span class="o">==</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">								<span class="nx">succeedNum</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">							<span class="p">}</span>
+</span></span><span class="line"><span class="cl">						<span class="p">}</span>
+</span></span><span class="line"><span class="cl">						<span class="k">if</span> <span class="nx">succeedNum</span> <span class="p">&gt;</span> <span class="nx">n</span><span class="o">/</span><span class="mi">2</span> <span class="p">{</span> <span class="cm">/*继续找更大的共识N*/</span>
+</span></span><span class="line"><span class="cl">							<span class="nx">N</span> <span class="p">=</span> <span class="nx">_N</span>
+</span></span><span class="line"><span class="cl">						<span class="p">}</span>
+</span></span><span class="line"><span class="cl">					<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">					<span class="k">if</span> <span class="nx">N</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="p">{</span> <span class="cm">/*leader可以提交了*/</span>
+</span></span><span class="line"><span class="cl">						<span class="nf">Debug</span><span class="p">(</span><span class="nx">dLog</span><span class="p">,</span> <span class="s">`S%d commit to index: %d`</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">N</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">						<span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="p">=</span> <span class="nx">N</span>
+</span></span><span class="line"><span class="cl">						<span class="nx">rf</span><span class="p">.</span><span class="nx">conds</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">].</span><span class="nf">Signal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">					<span class="p">}</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="cm">/*失败，减小nextIndex重试*/</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span><span class="o">--</span>
+</span></span><span class="line"><span class="cl">					<span class="k">if</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span> <span class="p">&lt;</span> <span class="mi">1</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">						<span class="nx">rf</span><span class="p">.</span><span class="nx">nextIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span> <span class="p">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">					<span class="p">}</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}(</span><span class="nx">peer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>AppendEntries` 新日志条目</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// rf是跟随者或者候选人
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">AppendEntries</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">AppendEntriesArgs</span><span class="p">,</span> <span class="nx">reply</span> <span class="o">*</span><span class="nx">AppendEntriesReply</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;after AppendEntries S%d status{currentTerm:%d,role:%s,log:%v,lastApplied:%d,commitIndex:%d,leaderCommit:%d}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span><span class="p">.</span><span class="nf">String</span><span class="p">(),</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">LeaderCommit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;before AppendEntries S%d status{currentTerm:%d,role:%s,log:%v,lastApplied:%d,commitIndex:%d,leaderCommit:%d}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span><span class="p">.</span><span class="nf">String</span><span class="p">(),</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">LeaderCommit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Term</span> <span class="p">&lt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span> <span class="cm">/*请求的leader任期落后了，leader会变成follower，应该拒绝请求*/</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Success</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 刷新选举超时器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">rf</span><span class="p">.</span><span class="nf">changeRole</span><span class="p">(</span><span class="nx">follower</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">rf</span><span class="p">.</span><span class="nx">electionTimer</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="nf">withRandomElectionDuration</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Debug</span><span class="p">(</span><span class="nx">dTimer</span><span class="p">,</span> <span class="s">&#34;S%d -&gt; S%d AppendEntries, S%d reset election timer&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">LeaderId</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Term</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span> <span class="cm">/*请求的leader任期更大，那么rf的任期需要更新，并转化为follower,并且取消以前任期的无效投票*/</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span> <span class="p">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">noVote</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">PrevLogIndex</span> <span class="cm">/*可能rf过期，领导者已经应用了很多日志*/</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">PrevLogIndex</span><span class="p">].</span><span class="nx">Term</span> <span class="o">!=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">PrevLogTerm</span> <span class="cm">/*该条目的任期在 prevLogIndex 上不能和 prevLogTerm 匹配上，则返回假*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Success</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">entry</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Entries</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">index</span> <span class="o">:=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">PrevLogIndex</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">index</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/*重叠*/</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">index</span><span class="p">].</span><span class="nx">Term</span> <span class="o">!=</span> <span class="nx">entry</span><span class="p">.</span><span class="nx">Term</span> <span class="p">{</span> <span class="cm">/*看是否发生冲突*/</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nx">log</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[:</span><span class="nx">index</span><span class="p">]</span>        <span class="c1">// 删除当前以及后续所有log
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>				<span class="nx">rf</span><span class="p">.</span><span class="nx">log</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">,</span> <span class="nx">entry</span><span class="p">)</span> <span class="c1">// 把新log加入进来
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="cm">/*没有冲突，那么就不添加这个重复的log*/</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/*没有重叠，且刚好在下一个位置*/</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">log</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">,</span> <span class="nx">entry</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">LeaderCommit</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="p">=</span> <span class="nb">min</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">LeaderCommit</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">conds</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">].</span><span class="nf">Signal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Success</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>分清楚已提交和已应用区别</p>
+<ul>
+<li>已提交：指的是集群中超过半数节点复制了日志</li>
+<li>已应用：指的是已提交的日志应用到状态机后的状态</li>
+</ul>
+<p>其中，已提交只能由当前任期的leader去统计集群存在超过半数节点在<code>N</code>索引处已经复制了当前任期的日志，这个时候leader的<code>leaderCommit</code>才能赋值为<code>N</code>.(下面是代码实现)</p>
+<p><strong>leader是否可以提交</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">N</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="nx">_N</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">_N</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">);</span> <span class="nx">_N</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">succeedNum</span> <span class="o">:=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="nx">peer</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">peer</span> <span class="p">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">peer</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nx">_N</span> <span class="o">&lt;=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">matchIndex</span><span class="p">[</span><span class="nx">peer</span><span class="p">]</span> <span class="o">&amp;&amp;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">_N</span><span class="p">].</span><span class="nx">Term</span> <span class="o">==</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">succeedNum</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">succeedNum</span> <span class="p">&gt;</span> <span class="nx">n</span><span class="o">/</span><span class="mi">2</span> <span class="p">{</span> <span class="cm">/*继续找更大的共识N*/</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">N</span> <span class="p">=</span> <span class="nx">_N</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="nx">N</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="p">{</span> <span class="cm">/*leader可以提交了*/</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">Debug</span><span class="p">(</span><span class="nx">dLog</span><span class="p">,</span> <span class="s">`S%d apply to index: %d`</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">N</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="p">=</span> <span class="nx">N</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">rf</span><span class="p">.</span><span class="nx">conds</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">].</span><span class="nf">Signal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>跟随者提交</strong></p>
+<p>跟随者是通过领导者心跳或者日志复制RPC时，leaderCommit字段来比较提交的。所以领导者提交日志时，需要等到领导者下一次广播才能让跟随者也跟着提交。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">LeaderCommit</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="p">=</span> <span class="nb">min</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">LeaderCommit</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">rf</span><span class="p">.</span><span class="nx">conds</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">].</span><span class="nf">Signal</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>应用日志</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">applier</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">killed</span><span class="p">()</span> <span class="o">==</span> <span class="kc">false</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">conds</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">].</span><span class="nx">L</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">conds</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">].</span><span class="nf">Wait</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">conds</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">].</span><span class="nx">L</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">);</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">applyMsg</span> <span class="o">&lt;-</span> <span class="nx">ApplyMsg</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">CommandValid</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">Command</span><span class="p">:</span>      <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">Command</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">CommandIndex</span><span class="p">:</span> <span class="nx">i</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">Debug</span><span class="p">(</span><span class="nx">dLog2</span><span class="p">,</span> <span class="s">&#34;applied, S%d applier status{lastApplied:%d,commitIndex:%d}&#34;</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ol>
+<h3 id="调试过程">调试过程</h3>
+<p>调试过程中遇到了一些问题。</p>
+<ul>
+<li>
+<p>集群某节点断网一段时间后恢复网络，并且选举出新的leader时，集群中的新日志明明已经复制到了超过半数节点，但是还是无法提交日志。</p>
+<p>通过排查日志发现，重新选举过后，我是按照论文里的把所有节点的nextIndex和matchIndex重新初始化为<code>领导人最后的日志条目的索引+1</code>和<code>0</code>。但是，由于领导者<code>AppendEntries</code>RPC广播时，并不会对自己广播，所以只会去更新跟随者的nextIndex和matchIndex。所以，就导致了集群中节点matchIndex无法在commitIndex上达成大多数，所以就迟迟无法提交。而且，领导者持有最新日志，nextIndex和matchIndex应该初始化为<code>len(rf.log)</code>和<code>len(rf.log) - 1</code></p>
+</li>
+<li>
+<p><code>only 2 decided for index 6; wanted 3</code>表示在索引3处，只有两个server apply，还差一个server没有apply。</p>
+<blockquote>
+<p>在做lab4A前大量测试测出来的bug</p>
+</blockquote>
+<p>为什么会出现这种情况呢？思考在极端并发下，下面代码会出现什么情况</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 将已提交的日志应用到状态机里。
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 注意：防止日志被应用状态机之前被裁减掉，也就是说，一定要等日志被应用过后才能被裁减掉。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">applierEvent</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">killed</span><span class="p">()</span> <span class="o">==</span> <span class="kc">false</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">cond</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span> <span class="c1">// 等待signal唤醒
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">msgs</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="nx">ApplyMsg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="o">-</span><span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">msgs</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">msgs</span><span class="p">,</span> <span class="nx">ApplyMsg</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">CommandValid</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">Command</span><span class="p">:</span>      <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nf">logIndex</span><span class="p">(</span><span class="nx">i</span><span class="p">)].</span><span class="nx">Command</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">CommandIndex</span><span class="p">:</span> <span class="nx">i</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">CommandTerm</span><span class="p">:</span>  <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nf">logIndex</span><span class="p">(</span><span class="nx">i</span><span class="p">)].</span><span class="nx">Term</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="p">})</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">msg</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">msgs</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">applyMsg</span> <span class="o">&lt;-</span> <span class="nx">msg</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面的代码在极高并发下，会有这样一个bug：在我们唤醒等待并且释放锁过后，如果此时还有日志提交并调用<code>signal</code>那么这个时候会丢掉这次唤醒（唤醒失败），所以上面的写法在极高并发下是有问题的。因为必须在下一次唤醒才能把上一次丢掉的唤醒恢复。</p>
+<p>解决方案：</p>
+<ul>
+<li>不再使用applier协程。需要提交的时候直接调用apply及时应用日志，避免唤醒的丢失（不那么优雅</li>
+<li>按照条件变量正确用法使用，可以避免丢失唤醒和虚假唤醒问题</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// 将已提交的日志应用到状态机里。
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 注意：防止日志被应用状态机之前被裁减掉，也就是说，一定要等日志被应用过后才能被裁减掉。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">applierEvent</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">killed</span><span class="p">()</span> <span class="o">==</span> <span class="kc">false</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span> <span class="o">&lt;=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span> <span class="cm">/*防止虚假唤醒*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">cond</span><span class="p">.</span><span class="nf">Wait</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">msgs</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">([]</span><span class="nx">ApplyMsg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="o">-</span><span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">msgs</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">msgs</span><span class="p">,</span> <span class="nx">ApplyMsg</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">CommandValid</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">Command</span><span class="p">:</span>      <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nf">logIndex</span><span class="p">(</span><span class="nx">i</span><span class="p">)].</span><span class="nx">Command</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">CommandIndex</span><span class="p">:</span> <span class="nx">i</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">CommandTerm</span><span class="p">:</span>  <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nx">rf</span><span class="p">.</span><span class="nf">logIndex</span><span class="p">(</span><span class="nx">i</span><span class="p">)].</span><span class="nx">Term</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="p">})</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">msg</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">msgs</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">applyMsg</span> <span class="o">&lt;-</span> <span class="nx">msg</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h3 id="结果">结果</h3>
+<p>脚本测试了3000次</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">➜  raft git:<span class="o">(</span>main<span class="o">)</span> <span class="nv">VERBOSE</span><span class="o">=</span><span class="m">0</span> go <span class="nb">test</span> -race -run 2B
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: basic agreement ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 1.1       number of Raft peers:3          number of RPC sends:  <span class="m">16</span>        number of bytes:   <span class="m">4028</span>         number of Raft agreements reported:   <span class="m">3</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: RPC byte count ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 2.6       number of Raft peers:3          number of RPC sends:  <span class="m">50</span>        number of bytes: <span class="m">113152</span>         number of Raft agreements reported:  <span class="m">11</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: <span class="nb">test</span> progressive failure of followers ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 4.9       number of Raft peers:3          number of RPC sends: <span class="m">124</span>        number of bytes:  <span class="m">25386</span>         number of Raft agreements reported:   <span class="m">3</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: <span class="nb">test</span> failure of leaders ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 5.4       number of Raft peers:3          number of RPC sends: <span class="m">191</span>        number of bytes:  <span class="m">40897</span>         number of Raft agreements reported:   <span class="m">3</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: agreement after follower reconnects ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 6.2       number of Raft peers:3          number of RPC sends: <span class="m">129</span>        number of bytes:  <span class="m">31350</span>         number of Raft agreements reported:   <span class="m">8</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: no agreement <span class="k">if</span> too many followers disconnect ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 3.9       number of Raft peers:5          number of RPC sends: <span class="m">218</span>        number of bytes:  <span class="m">43500</span>         number of Raft agreements reported:   <span class="m">3</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: concurrent Start<span class="o">()</span>s ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 0.6       number of Raft peers:3          number of RPC sends:   <span class="m">8</span>        number of bytes:   <span class="m">2012</span>         number of Raft agreements reported:   <span class="m">6</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: rejoin of partitioned leader ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 6.2       number of Raft peers:3          number of RPC sends: <span class="m">180</span>        number of bytes:  <span class="m">41682</span>         number of Raft agreements reported:   <span class="m">4</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: leader backs up quickly over incorrect follower logs ...
+</span></span><span class="line"><span class="cl">  Passed -- real time:33.3       number of Raft peers:5          number of RPC sends:3500        number of bytes:2111589         number of Raft agreements reported: <span class="m">104</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2B<span class="o">)</span>: RPC counts aren<span class="err">&#39;</span>t too high ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 2.4       number of Raft peers:3          number of RPC sends:  <span class="m">44</span>        number of bytes:  <span class="m">11512</span>         number of Raft agreements reported:  <span class="m">12</span>
+</span></span><span class="line"><span class="cl">PASS
+</span></span><span class="line"><span class="cl">ok      6.5840/raft     67.725s
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-12-29</span>
+            </div><div class="post-info-license">
+                <span>自由转载-非商用-保持署名</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/mit6.824%E4%B9%8Blab2b/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2b/" data-title="Mit6.824之lab2B"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2b/" data-title="Mit6.824之lab2B"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/mit6.824/">mit6.824</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/mit6.824%E4%B9%8Blab2a/" class="prev" rel="prev" title="Mit6.824之lab2A"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Mit6.824之lab2A</a>
+            <a href="/mit6.824%E4%B9%8Blab2c/" class="next" rel="next" title="Mit6.824之lab2C">Mit6.824之lab2C<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-12-29T17:14:36+08:00","owner":"cold-bin","repo":"blog-comment","title":"Mit6.824之lab2B"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

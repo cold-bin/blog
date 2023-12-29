@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Mit6.824之lab2A - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Mit6.824之lab2A" />
+<meta property="og:description" content="lab2A 论文回顾 去除原论文中不是lab2A描述 Raft 是一种用来管理章节 2 中描述的复制日志的算法。图 2 为了参考之用，总结这个算法的简略版本，图 3列举了这" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2a/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-12-29T17:13:27+08:00" />
+<meta property="article:modified_time" content="2023-12-29T17:13:27+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="Mit6.824之lab2A"/>
+<meta name="twitter:description" content="lab2A 论文回顾 去除原论文中不是lab2A描述 Raft 是一种用来管理章节 2 中描述的复制日志的算法。图 2 为了参考之用，总结这个算法的简略版本，图 3列举了这"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2a/" /><link rel="prev" href="https://blog.coldbin.top/%E6%8A%98%E8%85%BE%E5%B0%8F%E8%AE%B0-2023-12-28/" /><link rel="next" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2b/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Mit6.824之lab2A",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/mit6.824%E4%B9%8Blab2a\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "mit6.824","wordcount":  4024 ,
+        "url": "https:\/\/blog.coldbin.top\/mit6.824%E4%B9%8Blab2a\/","datePublished": "2023-12-29T17:13:27+08:00","dateModified": "2023-12-29T17:13:27+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Mit6.824之lab2A</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin/" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>分布式系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-12-29">2023-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;4024 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;9 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#lab2a">lab2A</a>
+          <ul>
+            <li><a href="#论文回顾">论文回顾</a></li>
+            <li><a href="#实现思路">实现思路</a>
+              <ul>
+                <li><a href="#心跳">心跳</a></li>
+                <li><a href="#请求投票">请求投票</a></li>
+                <li><a href="#定时任务">定时任务</a></li>
+                <li><a href="#调试过程">调试过程</a></li>
+              </ul>
+            </li>
+            <li><a href="#结果">结果</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="lab2a">lab2A</h2>
+<h3 id="论文回顾">论文回顾</h3>
+<blockquote>
+<p>去除原论文中不是lab2A描述</p>
+</blockquote>
+<p>Raft 是一种用来管理章节 2 中描述的复制日志的算法。图 2 为了参考之用，总结这个算法的简略版本，图 3列举了这个算法的一些关键特性。图中的这些元素会在剩下的章节逐一介绍。</p>
+<p>Raft 通过选举一个杰出的领导人，然后给予他全部的管理复制日志的责任来实现一致性。领导人从客户端接收日志条目（log
+entries），把日志条目复制到其他服务器上，并告诉其他的服务器什么时候可以安全地将日志条目应用到他们的状态机中。拥有一个领导人大大简化了对复制日志的管理。例如，领导人可以决定新的日志条目需要放在日志中的什么位置而不需要和其他服务器商议，并且数据都从领导人流向其他服务器。一个领导人可能会发生故障，或者和其他服务器失去连接，在这种情况下一个新的领导人会被选举出来。</p>
+<p>通过领导人的方式，Raft 将一致性问题分解成了三个相对独立的子问题，这些问题会在接下来的子章节中进行讨论：</p>
+<ul>
+<li><strong>领导选举</strong>：当现存的领导人发生故障的时候, 一个新的领导人需要被选举出来（章节 5.2）</li>
+<li><strong>日志复制</strong>：领导人必须从客户端接收日志条目（log entries）然后复制到集群中的其他节点，并强制要求其他节点的日志和自己保持一致。</li>
+<li><strong>安全性</strong>：在 Raft 中安全性的关键是在图 3 中展示的状态机安全：如果有任何的服务器节点已经应用了一个确定的日志条目到它的状态机中，那么其他服务器节点不能在同一个日志索引位置应用一个不同的指令。章节
+5.4 阐述了 Raft 算法是如何保证这个特性的；这个解决方案涉及到选举机制（5.2 节）上的一个额外限制。</li>
+</ul>
+<p><strong>状态</strong>：</p>
+<p>所有服务器上的持久性状态
+(在响应 RPC 请求之前，已经更新到了稳定的存储设备)</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>currentTerm</td>
+<td>服务器已知最新的任期（在服务器首次启动时初始化为0，单调递增）</td>
+</tr>
+<tr>
+<td>votedFor</td>
+<td>当前任期内收到选票的 candidateId，如果没有投给任何候选人 则为空</td>
+</tr>
+<tr>
+<td>log[]</td>
+<td>日志条目；每个条目包含了用于状态机的命令，以及领导人接收到该条目时的任期（初始索引为1）</td>
+</tr>
+</tbody>
+</table>
+<p>所有服务器上的易失性状态</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>commitIndex</td>
+<td>已知已提交的最高的日志条目的索引（初始值为0，单调递增）</td>
+</tr>
+<tr>
+<td>lastApplied</td>
+<td>已经被应用到状态机的最高的日志条目的索引（初始值为0，单调递增）</td>
+</tr>
+</tbody>
+</table>
+<p>领导人（服务器）上的易失性状态
+(选举后已经重新初始化)</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nextIndex[]</td>
+<td>对于每一台服务器，发送到该服务器的下一个日志条目的索引（初始值为领导人最后的日志条目的索引+1）</td>
+</tr>
+<tr>
+<td>matchIndex[]</td>
+<td>对于每一台服务器，已知的已经复制到该服务器的最高日志条目的索引（初始值为0，单调递增）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>追加条目（AppendEntries）RPC</strong>：</p>
+<p>由领导人调用，用于日志条目的复制，同时也被当做心跳使用</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>term</td>
+<td>领导人的任期</td>
+</tr>
+<tr>
+<td>leaderId</td>
+<td>领导人 ID 因此跟随者可以对客户端进行重定向（译者注：跟随者根据领导人 ID 把客户端的请求重定向到领导人，比如有时客户端把请求发给了跟随者而不是领导人）</td>
+</tr>
+<tr>
+<td>prevLogIndex</td>
+<td>紧邻新日志条目之前的那个日志条目的索引</td>
+</tr>
+<tr>
+<td>prevLogTerm</td>
+<td>紧邻新日志条目之前的那个日志条目的任期</td>
+</tr>
+<tr>
+<td>entries[]</td>
+<td>需要被保存的日志条目（被当做心跳使用时，则日志条目内容为空；为了提高效率可能一次性发送多个）</td>
+</tr>
+<tr>
+<td>leaderCommit</td>
+<td>领导人的已知已提交的最高的日志条目的索引</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>返回值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>term</td>
+<td>当前任期，对于领导人而言 它会更新自己的任期</td>
+</tr>
+<tr>
+<td>success</td>
+<td>如果跟随者所含有的条目和 prevLogIndex 以及 prevLogTerm 匹配上了，则为 true</td>
+</tr>
+</tbody>
+</table>
+<p>接收者的实现：</p>
+<ol>
+<li>返回假 如果领导人的任期小于接收者的当前任期（译者注：这里的接收者是指跟随者或者候选人）（5.1 节）</li>
+</ol>
+<p><strong>请求投票（RequestVote）RPC</strong>：</p>
+<p>由候选人负责调用用来征集选票（5.2 节）</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>term</td>
+<td>候选人的任期号</td>
+</tr>
+<tr>
+<td>candidateId</td>
+<td>请求选票的候选人的 ID</td>
+</tr>
+<tr>
+<td>lastLogIndex</td>
+<td>候选人的最后日志条目的索引值</td>
+</tr>
+<tr>
+<td>lastLogTerm</td>
+<td>候选人最后日志条目的任期号</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>返回值</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>term</td>
+<td>当前任期号，以便于候选人去更新自己的任期号</td>
+</tr>
+<tr>
+<td>voteGranted</td>
+<td>候选人赢得了此张选票时为真</td>
+</tr>
+</tbody>
+</table>
+<p>接收者实现：</p>
+<ol>
+<li>如果<code>term &lt; currentTerm</code>返回 false （5.2 节）</li>
+<li>如果 votedFor 为空或者为 candidateId，并且候选人的日志至少和自己一样新，那么就投票给他（5.2 节，5.4 节）</li>
+</ol>
+<p><strong>所有服务器需遵守的规则</strong>：</p>
+<p>所有服务器：</p>
+<ul>
+<li>如果接收到的 RPC 请求或响应中，任期号<code>T &gt; currentTerm</code>，则令 <code>currentTerm = T</code>，并切换为跟随者状态（5.1 节）</li>
+</ul>
+<p>跟随者（5.2 节）：</p>
+<ul>
+<li>响应来自候选人和领导人的请求</li>
+<li>如果在超过选举超时时间的情况之前没有收到<strong>当前领导人</strong>（即该领导人的任期需与这个跟随者的当前任期相同）的心跳/附加日志，或者是给某个候选人投了票，就自己变成候选人</li>
+</ul>
+<p>候选人（5.2 节）：</p>
+<ul>
+<li>
+<p>在转变成候选人后就立即开始选举过程</p>
+<ul>
+<li>自增当前的任期号（currentTerm）</li>
+<li>给自己投票</li>
+<li>重置选举超时计时器</li>
+</ul>
+</li>
+<li>
+<p>发送请求投票的 RPC 给其他所有服务器（并发发送，如果没有响应就不管）</p>
+</li>
+<li>
+<p>如果接收到大多数服务器的选票，那么就变成领导人</p>
+</li>
+<li>
+<p>如果接收到来自新的领导人的附加日志（AppendEntries）RPC，则转变成跟随者</p>
+</li>
+<li>
+<p>如果选举过程超时，则再次发起一轮选举</p>
+</li>
+</ul>
+<p>领导人：</p>
+<ul>
+<li>一旦成为领导人：发送空的附加日志（AppendEntries）RPC（心跳）给其他所有的服务器；在一定的空余时间之后不停的重复发送，以防止跟随者超时（5.2
+节）</li>
+</ul>
+<h3 id="实现思路">实现思路</h3>
+<p>Lab2A只需要实现心跳、请求投票、定时任务。</p>
+<h4 id="心跳">心跳</h4>
+<ul>
+<li>领导人任期内需要向其他所有对等点（候选者和跟随者）发送<code>AppendEntries</code>RPC以重置选举超时器，维护自己的权威，以防止其他节点进入选举。</li>
+<li>除了任期内，领导人需要周期性地对所有对等点广播心跳以外，在领导人被选举出来的一刻也应该对所有对等点发送广播（这里就不等待定时任务到来才进行广播了，可能存在一定的时延导致某些节点无法收到，从而延长多次选举周期）</li>
+</ul>
+<p><strong>实现</strong></p>
+<ul>
+<li>
+<p>接受者（可能是跟随者，也可能是候选者）收到心跳后，首先判断是否可以接收请求，如果可以更换为跟随者并刷新选举超时计时器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// rf是跟随者或者候选人
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">AppendEntries</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">AppendEntriesArgs</span><span class="p">,</span> <span class="nx">reply</span> <span class="o">*</span><span class="nx">AppendEntriesReply</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;after called AppendEntries S%d status{currentTerm:%d,role:%s,log:%v,lastApplied:%d,commitIndex:%d}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span><span class="p">.</span><span class="nf">String</span><span class="p">(),</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;before called AppendEntries S%d status{currentTerm:%d,role:%s,log:%v,lastApplied:%d,commitIndex:%d}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span><span class="p">.</span><span class="nf">String</span><span class="p">(),</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">lastApplied</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Term</span> <span class="p">&lt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span> <span class="cm">/*请求的leader任期落后了，leader会变成follower，应该拒绝请求*/</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Success</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 刷新选举超时器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">rf</span><span class="p">.</span><span class="nf">changeRole</span><span class="p">(</span><span class="nx">follower</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">rf</span><span class="p">.</span><span class="nx">electionTimer</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="nf">withRandomElectionDuration</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;S%d -&gt; S%d heartbeat, S%d reset election timer&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">LeaderId</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>请求者异步并发发送请求RPC即可</p>
+<blockquote>
+<p>论文中提到：如果对等点没有响应，那就一直请求直到响应，但是这在某些情况可能会造成内存泄漏，例如集群中某个follower一直处于下线状态，那么这段时期的所有RPC都存在并且随着任期增加，而GC赶不上内存分配的速度，那么可能会存在内存泄漏的问题</p>
+<p>可以酌情考虑配置一定的重试次数，超过次数过后报警</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">heartbeatBroadcast</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;S%d start heartbeat broadcast&#34;</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">peers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">i</span> <span class="o">==</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span> <span class="p">{</span> <span class="cm">/*skip self*/</span>
+</span></span><span class="line"><span class="cl">			<span class="k">continue</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="nx">args</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">AppendEntriesArgs</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Term</span><span class="p">:</span>         <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">LeaderId</span><span class="p">:</span>     <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">PrevLogIndex</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">PrevLogTerm</span><span class="p">:</span>  <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">Term</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">LeaderCommit</span><span class="p">:</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">commitIndex</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="c1">// 异步发送
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">peer</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">reply</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">AppendEntriesReply</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">sendAppendEntries</span><span class="p">(</span><span class="nx">peer</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">reply</span><span class="p">);</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="k">return</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="k">defer</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">=</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nf">changeRole</span><span class="p">(</span><span class="nx">follower</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h4 id="请求投票">请求投票</h4>
+<p>成为候选者，就会广播投票请求</p>
+<blockquote>
+<p>如果是广播到候选者时，不会收到选票，因为i候选者已经给自己投票了</p>
+</blockquote>
+<ul>
+<li>
+<p>接收者</p>
+<ol>
+<li>如果接受者任期较大时，请求无效</li>
+<li>如果接收者任期较小时，接收者切换为follower，并清除自己的上一任期的投票结果</li>
+<li>如果候选人的日志至少和自己一样新，那么就投票</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">RequestVote</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">RequestVoteArgs</span><span class="p">,</span> <span class="nx">reply</span> <span class="o">*</span><span class="nx">RequestVoteReply</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// Your code here (2A, 2B).
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;after called RequestVote, S%d status{votedFor:%d,role:%s,currentTerm:%d}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span><span class="p">.</span><span class="nf">String</span><span class="p">(),</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;before called RequestVote, S%d status{votedFor:%d,role:%s,currentTerm:%d}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span><span class="p">.</span><span class="nf">String</span><span class="p">(),</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Term</span> <span class="p">&lt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span> <span class="cm">/*请求者任期较小，拒绝请求*/</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">VoteGranted</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Term</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span> <span class="cm">/*还可以投票*/</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nf">changeRole</span><span class="p">(</span><span class="nx">follower</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span> <span class="p">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">noVote</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span> <span class="o">==</span> <span class="nx">noVote</span> <span class="o">||</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span> <span class="o">==</span> <span class="nx">args</span><span class="p">.</span><span class="nx">CandidateId</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">logUpToDate</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">LastLogTerm</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">LastLogIndex</span><span class="p">)</span> <span class="p">{</span> <span class="cm">/*日志至少和自己一样新，才能投票，否则不能投票*/</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span> <span class="p">=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">CandidateId</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">rf</span><span class="p">.</span><span class="nx">electionTimer</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="nf">withRandomElectionDuration</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;S%d vote to S%d, S%d election timer reset&#34;</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">CandidateId</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">VoteGranted</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">VoteGranted</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>请求者</p>
+<p>开始选举时，就会并发广播请求投票RPC。如果有候选者成为leader，就需要<strong>立即</strong>广播领导人的心跳，避免其他对等点的选举超时器超时，触发新一轮选举。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// for candidate
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">startElection</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">approvedNum</span> <span class="o">:=</span> <span class="mi">1</span> <span class="c1">// 先给自己投一票
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">rf</span><span class="p">.</span><span class="nx">electionTimer</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="nf">withRandomElectionDuration</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;S%d start election, S%d reset election timer&#34;</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">peers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">args</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">RequestVoteArgs</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Term</span><span class="p">:</span>         <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">CandidateId</span><span class="p">:</span>  <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">LastLogIndex</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">LastLogTerm</span><span class="p">:</span>  <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">args</span><span class="p">.</span><span class="nx">LastLogTerm</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nx">rf</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">Term</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 向其他对等点并发发送投票请求
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">i</span> <span class="o">==</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span> <span class="p">{</span> <span class="cm">/*skip self*/</span>
+</span></span><span class="line"><span class="cl">			<span class="k">continue</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="k">go</span> <span class="kd">func</span><span class="p">(</span><span class="nx">peer</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">reply</span> <span class="o">:=</span> <span class="nb">new</span><span class="p">(</span><span class="nx">RequestVoteReply</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">ok</span> <span class="o">:=</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span> <span class="p">!</span><span class="nx">ok</span> <span class="p">{</span> <span class="cm">/* network is destroyed*/</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">ok</span> <span class="p">=</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">sendRequestVote</span><span class="p">(</span><span class="nx">peer</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">reply</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="k">defer</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span> <span class="p">&gt;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">votedFor</span> <span class="p">=</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span><span class="p">,</span> <span class="nx">noVote</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nf">changeRole</span><span class="p">(</span><span class="nx">follower</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Term</span> <span class="o">==</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">currentTerm</span> <span class="o">&amp;&amp;</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span> <span class="o">==</span> <span class="nx">candidate</span> <span class="cm">/*我们需要确认此刻仍然是candidate，没有发生状态变化*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">VoteGranted</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">approvedNum</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">					<span class="k">if</span> <span class="nx">approvedNum</span> <span class="p">&gt;</span> <span class="nx">n</span><span class="o">/</span><span class="mi">2</span> <span class="p">{</span> <span class="cm">/*找到leader了，需要及时广播，防止选举超时*/</span>
+</span></span><span class="line"><span class="cl">						<span class="nx">rf</span><span class="p">.</span><span class="nf">changeRole</span><span class="p">(</span><span class="nx">leader</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">						<span class="nx">rf</span><span class="p">.</span><span class="nf">heartbeatBroadcast</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">						<span class="nx">rf</span><span class="p">.</span><span class="nf">initializeLeaderEasilyLostState</span><span class="p">()</span> <span class="cm">/*领导人（服务器）上的易失性状态(选举后已经重新初始化)*/</span>
+</span></span><span class="line"><span class="cl">					<span class="p">}</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}(</span><span class="nx">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></li>
+</ul>
+<h4 id="定时任务">定时任务</h4>
+<p>lab2A中只有两个定时任务：</p>
+<ul>
+<li>一个是选举超时器超时时，需要开启新一轮选举</li>
+<li>另一个则是领导人每隔一段时间就需要向集群中的其他对等点广播心跳以维护权威</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">ticker</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">killed</span><span class="p">()</span> <span class="o">==</span> <span class="kc">false</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// Your code here (2A)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="c1">// Check if a leader election should be started.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="k">select</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">rf</span><span class="p">.</span><span class="nx">electionTimer</span><span class="p">.</span><span class="nx">C</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nf">changeRole</span><span class="p">(</span><span class="nx">candidate</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nf">startElection</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">rf</span><span class="p">.</span><span class="nx">heartbeatTicker</span><span class="p">.</span><span class="nx">C</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span> <span class="o">==</span> <span class="nx">leader</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nf">heartbeatBroadcast</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nx">electionTimer</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="nf">withRandomElectionDuration</span><span class="p">())</span> <span class="c1">// leader广播完毕时，也应该把自己的选举超时器刷新一下
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>				<span class="nf">Debug</span><span class="p">(</span><span class="nx">dInfo</span><span class="p">,</span> <span class="s">&#34;S%d reset election timer&#34;</span><span class="p">,</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">me</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="调试过程">调试过程</h4>
+<p>实现的初版能过lab2A的测试，但是会有<code>warning: term changed even though there were no failures</code>的问题。意思是，没有任何网络分区、延时等错误，但是在测试程序休眠2秒后，任期会发生变化。</p>
+<ul>
+<li>
+<p>通过日志打印，我发现最开始的时候，心跳RPC只发送了一次过后就没有了，所以跟随者没有收到后续心跳RPC，从而导致跟随者频繁地选举超时并开启下一任期的选举。</p>
+<p>解决：将原代码实现的<code>Timer</code>换成了<code>Ticker</code>，这样就不用考虑<code>Timer</code>的刷新了，因为心跳是固定时间段</p>
+</li>
+<li>
+<p>但是，问题依然还没有被解决，依然会出现上诉WARNING。我又查看了一下日志，发现选举的leader经过多次心跳过后，leader的选举超时器会发生超时。原来如此，我应该在leader发送完广播之后，也要重置自己的选举计时器。</p>
+</li>
+</ul>
+<h3 id="结果">结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">➜  raft git:<span class="o">(</span>main<span class="o">)</span> <span class="nv">VERBOSE</span><span class="o">=</span><span class="m">0</span> go <span class="nb">test</span> -race -run 2A
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2A<span class="o">)</span>: initial election ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 3.1       number of Raft peers:3          number of RPC sends:  <span class="m">60</span>        number of bytes:  <span class="m">15050</span>         number of Raft agreements reported:   <span class="m">0</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2A<span class="o">)</span>: election after network failure ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 4.6       number of Raft peers:3          number of RPC sends: <span class="m">139</span>        number of bytes:  <span class="m">26141</span>         number of Raft agreements reported:   <span class="m">0</span>
+</span></span><span class="line"><span class="cl">Test <span class="o">(</span>2A<span class="o">)</span>: multiple elections ...
+</span></span><span class="line"><span class="cl">  Passed -- real time: 5.5       number of Raft peers:7          number of RPC sends: <span class="m">675</span>        number of bytes: <span class="m">123169</span>         number of Raft agreements reported:   <span class="m">0</span>
+</span></span><span class="line"><span class="cl">PASS
+</span></span><span class="line"><span class="cl">ok      6.5840/raft     14.281s
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-12-29</span>
+            </div><div class="post-info-license">
+                <span>自由转载-非商用-保持署名</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/mit6.824%E4%B9%8Blab2a/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2a/" data-title="Mit6.824之lab2A"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2a/" data-title="Mit6.824之lab2A"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/mit6.824/">mit6.824</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/%E6%8A%98%E8%85%BE%E5%B0%8F%E8%AE%B0-2023-12-28/" class="prev" rel="prev" title="折腾小记 2023 12 28"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>折腾小记 2023 12 28</a>
+            <a href="/mit6.824%E4%B9%8Blab2b/" class="next" rel="next" title="Mit6.824之lab2B">Mit6.824之lab2B<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-12-29T17:13:27+08:00","owner":"cold-bin","repo":"blog-comment","title":"Mit6.824之lab2A"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>

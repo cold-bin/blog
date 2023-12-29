@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Mit6.824之lab3A - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Mit6.824之lab3A" />
+<meta property="og:description" content="lab3A 论文总结 论文里对于客户端的阐述主要集中在第八节，较为简短，提到了以下几点： 真正的实现在mit6.824的第八节课上给了tips，看我后续的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.coldbin.top/mit6.824%E4%B9%8Blab3a/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-12-29T17:16:27+08:00" />
+<meta property="article:modified_time" content="2023-12-29T17:16:27+08:00" /><meta property="og:site_name" content="阿冰的小屋" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
+
+<meta name="twitter:title" content="Mit6.824之lab3A"/>
+<meta name="twitter:description" content="lab3A 论文总结 论文里对于客户端的阐述主要集中在第八节，较为简短，提到了以下几点： 真正的实现在mit6.824的第八节课上给了tips，看我后续的"/>
+<meta name="application-name" content="阿冰的小屋">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab3a/" /><link rel="prev" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab2d/" /><link rel="next" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab3b/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Mit6.824之lab3A",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.coldbin.top\/mit6.824%E4%B9%8Blab3a\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "mit6.824","wordcount":  4159 ,
+        "url": "https:\/\/blog.coldbin.top\/mit6.824%E4%B9%8Blab3a\/","datePublished": "2023-12-29T17:16:27+08:00","dateModified": "2023-12-29T17:16:27+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@type": "Organization",
+            "name": "阿冰","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "width":  396 ,
+                    "height":  396 
+                }},"author": {
+                "@type": "Person",
+                "name": "阿冰"
+            },"description": ""
+    }
+    </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                </a></div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="阿冰的小屋"><img
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
+        alt="/favicon.ico"
+        title="/favicon.ico" />阿冰的小屋</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+            </a></div>
+    </div>
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Mit6.824之lab3A</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin/" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>分布式系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-12-29">2023-12-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;4159 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;9 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#lab3a">lab3A</a>
+          <ul>
+            <li><a href="#论文总结">论文总结</a></li>
+            <li><a href="#实现思路">实现思路</a>
+              <ul>
+                <li><a href="#lec-8中lab3a提示的翻译">LEC 8中Lab3A提示的翻译</a></li>
+                <li><a href="#client-call实现">client call实现</a></li>
+                <li><a href="#server-rpc实现">server rpc实现</a></li>
+                <li><a href="#额外的apply实现">额外的apply实现</a></li>
+              </ul>
+            </li>
+            <li><a href="#调试过程">调试过程</a></li>
+            <li><a href="#结果">结果</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="lab3a">lab3A</h2>
+<h3 id="论文总结">论文总结</h3>
+<p>论文里对于客户端的阐述主要集中在第八节，较为简短，提到了以下几点：</p>
+<blockquote>
+<p>真正的实现在mit6.824的第八节课上给了tips，看我后续的翻译</p>
+</blockquote>
+<ul>
+<li>
+<p>client如何与leader通信的</p>
+<p>只有leader才会处理client的请求，如果不是leader的服务器接收到了client的请求，将会把请求进行重定向到leader来处理。（在实现的时候，并没有采取这种策略，主要实现没有实现成功，就直接客户端暴力挨个请求了</p>
+</li>
+<li>
+<p>需要额外处理leader reply超时</p>
+</li>
+<li>
+<p>实现线性化语义</p>
+<p>线性化语义可以通过前面已经实现的raft底层保证，但是raft并不保证command的不重复，需要在应用层额外保证command（即client Get/Put/Append重复发送的RPC）的不重复性。引入<code>duplicate table</code>实现。</p>
+</li>
+<li>
+<p>只读操作不记录日志（不要求实现）</p>
+</li>
+</ul>
+<h3 id="实现思路">实现思路</h3>
+<h4 id="lec-8中lab3a提示的翻译">LEC 8中Lab3A提示的翻译</h4>
+<ol>
+<li>
+<p>lab3A交互草图</p>
+<p><figure><a class="lightgallery" href="https://figure.coldbin.top/2023-12-29-233900f0edb83a20b901fe473c005dd2-image-20231212150951790-ad9f45.png" title="image-20231212150951790" data-thumbnail="https://figure.coldbin.top/2023-12-29-233900f0edb83a20b901fe473c005dd2-image-20231212150951790-ad9f45.png" data-sub-html="<h2>raft与kvserver交互草图</h2><p>image-20231212150951790</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="https://figure.coldbin.top/2023-12-29-233900f0edb83a20b901fe473c005dd2-image-20231212150951790-ad9f45.png"
+            data-srcset="https://figure.coldbin.top/2023-12-29-233900f0edb83a20b901fe473c005dd2-image-20231212150951790-ad9f45.png, https://figure.coldbin.top/2023-12-29-233900f0edb83a20b901fe473c005dd2-image-20231212150951790-ad9f45.png 1.5x, https://figure.coldbin.top/2023-12-29-233900f0edb83a20b901fe473c005dd2-image-20231212150951790-ad9f45.png 2x"
+            data-sizes="auto"
+            alt="https://figure.coldbin.top/2023-12-29-233900f0edb83a20b901fe473c005dd2-image-20231212150951790-ad9f45.png" />
+    </a><figcaption class="image-caption">raft与kvserver交互草图</figcaption>
+    </figure></p>
+</li>
+<li>
+<p>如果<code>Get</code>或<code>Put</code>RPC timeout了(也就是<code>Call() return false</code>)，client应该怎么处理？</p>
+<blockquote>
+<ul>
+<li>如果服务端dead或者请求丢失，client re-send即可</li>
+<li>如果服务器已经执行了请求，但是reply在网络中丢失了，re-send是有危险的</li>
+</ul>
+</blockquote>
+</li>
+<li>
+<p>不好区分上面的两种情况。上面两种情况对于client而言，看起来是一样的(no reply)。如果请求已经被执行过了，那么client仍然需要这个reply</p>
+<blockquote>
+<p>让<code>kvserver</code>
+检测重复client的请求。client每次请求都会携带一个唯一ID，并在re-send一个rpc时，携带与上次RPC相同的id。<code>kvserver</code>
+维护一个按id索引的&quot;duplicate table&quot;，在执行后为每个rpc创建一个条目，用以在&quot;duplicate table&quot;
+中记录reply。如果第二个rpc以相同的id到达，则它是重复的，可以根据&quot;duplicate table&quot;来生成reply。</p>
+</blockquote>
+</li>
+<li>
+<p>新的领导者如何获得&quot;duplicate table&quot;？</p>
+<blockquote>
+<p>将 id 放入传递给 Raft 的记录操作中，所有副本都应在执行时更新其table，以便如果它们成为领导者后这些信息依然保留。</p>
+</blockquote>
+</li>
+<li>
+<p>如果服务器崩溃，它如何恢复&quot;duplicate table&quot;？</p>
+<blockquote>
+<ul>
+<li>如果没有快照，日志重播将填充&quot;duplicate table&quot;</li>
+<li>如果有快照，快照必须包含&quot;duplicate table&quot;的副本</li>
+</ul>
+</blockquote>
+</li>
+<li>
+<p>如果重复请求在原始请求执行之前到达怎么办？</p>
+<p>再次调用<code>Start()</code>，会导致它可能在log中两次。当<code>cmd</code>出现在<code>applyCh</code>上时，如果table里已经有了，就没有必要执行了。</p>
+</li>
+<li>
+<p>保持table较小的idea</p>
+<ul>
+<li>
+<p>每个client一个条目，而不是每次 RPC 一个条目</p>
+</li>
+<li>
+<p>每个client只有一次 RPC 没有完成</p>
+<blockquote>
+<p>每个客户端一次只能有一个未完成的RPC，这意味着客户端在发送一个RPC请求之后，必须等待服务器对该请求的响应，才能发送下一个RPC请求。这样可以确保每个客户端一次只有一个RPC请求在处理中，简化了并发控制。</p>
+</blockquote>
+</li>
+<li>
+<p>每个client按顺序对 RPC 进行编号</p>
+</li>
+<li>
+<p>当服务器收到client 第10个RPC 时，它可以忽略client的较低条目，因为这意味着client永远不会重新发送旧的 RPC</p>
+</li>
+</ul>
+</li>
+<li>
+<p>一些细节</p>
+<ul>
+<li>每个client都需要一个唯一的client id（64位随机数字即可）</li>
+<li>client需要在每次rpc中发送client id和seq，如果需要re-send，client就携带相同的seq</li>
+<li>kvserver中按client id索引的table仅包含 seq 和value（如果已执行）</li>
+<li>RPC 处理程序首先检查table，只有 seq 大于 table 条目的seq才能执行<code>Start()</code></li>
+<li>每个log条目必须包含client id和seq</li>
+<li>当operation出现在 <code>applyCh</code> 上时，更新client table条目中的 seq 和 value，唤醒正在等待的 RPC 处理程序（如果有）</li>
+</ul>
+</li>
+<li>
+<p><code>kvserver</code>可能会返回table中的旧值，但是返回的确实是当前值，没有问题。</p>
+<blockquote>
+<p>C1 C2</p>
+<p>-- &ndash;
+put(x,10)
+first send of get(x), reply(10) dropped
+put(x,20)
+re-sends get(x), server gets 10 from table, not 20</p>
+<p>get(x) and put(x,20) run concurrently, so could run before or after;
+so, returning the remembered value 10 is correct</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="client-call实现">client call实现</h4>
+<p>客户端没啥好说，不断轮询server，直到请求到leader，当然为了区分重复rpc，需要携带客户端标识和rpc重复标识</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">ck</span> <span class="o">*</span><span class="nx">Clerk</span><span class="p">)</span> <span class="nf">Get</span><span class="p">(</span><span class="nx">key</span> <span class="kt">string</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dGet</span><span class="p">,</span> <span class="s">&#34;C%d(Seq %d) -&gt; S%d Get {key:%s}&#34;</span><span class="p">,</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">sequenceId</span><span class="p">,</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">leader</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">args</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">GetArgs</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Key</span><span class="p">:</span>        <span class="nx">key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">ClientId</span><span class="p">:</span>   <span class="nx">ck</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">SequenceId</span><span class="p">:</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">sequenceId</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ck</span><span class="p">.</span><span class="nx">sequenceId</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">server</span> <span class="o">:=</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">leader</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">GetReply</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">servers</span><span class="p">[</span><span class="nx">server</span><span class="p">].</span><span class="nf">Call</span><span class="p">(</span><span class="s">&#34;KVServer.Get&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">reply</span><span class="p">);</span> <span class="nx">ok</span> <span class="cm">/*网络正常*/</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="cm">/*请求的是leader*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">ck</span><span class="p">.</span><span class="nx">leader</span> <span class="p">=</span> <span class="nx">server</span>
+</span></span><span class="line"><span class="cl">			<span class="k">return</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Value</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span> <span class="k">else</span> <span class="cm">/*网路分区或请求的不是leader，请求下一个*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">server</span> <span class="p">=</span> <span class="p">(</span><span class="nx">server</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="nx">ck</span><span class="p">.</span><span class="nx">servers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">ck</span> <span class="o">*</span><span class="nx">Clerk</span><span class="p">)</span> <span class="nf">PutAppend</span><span class="p">(</span><span class="nx">key</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">value</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">op</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dGet</span><span class="p">,</span> <span class="s">&#34;C%d(Seq %d) -&gt; S%d %s {key:%s}&#34;</span><span class="p">,</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">sequenceId</span><span class="p">,</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">leader</span><span class="p">,</span> <span class="nx">op</span><span class="p">,</span> <span class="nx">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// like Clerk.Get
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">args</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">PutAppendArgs</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Key</span><span class="p">:</span>        <span class="nx">key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Value</span><span class="p">:</span>      <span class="nx">value</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Op</span><span class="p">:</span>         <span class="nx">op</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">ClientId</span><span class="p">:</span>   <span class="nx">ck</span><span class="p">.</span><span class="nx">clientId</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">SequenceId</span><span class="p">:</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">sequenceId</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ck</span><span class="p">.</span><span class="nx">sequenceId</span><span class="o">++</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">server</span> <span class="o">:=</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">leader</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">PutAppendReply</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">ck</span><span class="p">.</span><span class="nx">servers</span><span class="p">[</span><span class="nx">server</span><span class="p">].</span><span class="nf">Call</span><span class="p">(</span><span class="s">&#34;KVServer.PutAppend&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">reply</span><span class="p">);</span> <span class="nx">ok</span> <span class="cm">/*网络正常一定返回 Err=OK*/</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="cm">/*请求的是leader*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">ck</span><span class="p">.</span><span class="nx">leader</span> <span class="p">=</span> <span class="nx">server</span>
+</span></span><span class="line"><span class="cl">			<span class="k">return</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span> <span class="k">else</span> <span class="cm">/*网路分区或请求的不是leader，请求下一个*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">server</span> <span class="p">=</span> <span class="p">(</span><span class="nx">server</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="nx">ck</span><span class="p">.</span><span class="nx">servers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">ck</span> <span class="o">*</span><span class="nx">Clerk</span><span class="p">)</span> <span class="nf">Put</span><span class="p">(</span><span class="nx">key</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">value</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ck</span><span class="p">.</span><span class="nf">PutAppend</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="s">&#34;Put&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">ck</span> <span class="o">*</span><span class="nx">Clerk</span><span class="p">)</span> <span class="nf">Append</span><span class="p">(</span><span class="nx">key</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">value</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ck</span><span class="p">.</span><span class="nf">PutAppend</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="s">&#34;Append&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="server-rpc实现">server rpc实现</h4>
+<ul>
+<li>Get
+<ol>
+<li>先调用<code>Start</code>在raft中达成共识</li>
+<li>kvserver应用层等待raft提交并应用command</li>
+<li>应用状态机过后，才可以返回；否则超时失败返回</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">kv</span> <span class="o">*</span><span class="nx">KVServer</span><span class="p">)</span> <span class="nf">Get</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">GetArgs</span><span class="p">,</span> <span class="nx">reply</span> <span class="o">*</span><span class="nx">GetReply</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dGet</span><span class="p">,</span> <span class="s">&#34;S%d(%s) Get args{%+v} reply{%+v}&#34;</span><span class="p">,</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">rf</span><span class="p">.</span><span class="nf">Role</span><span class="p">(),</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">reply</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">op</span> <span class="o">:=</span> <span class="nx">Op</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Type</span><span class="p">:</span>       <span class="nx">GET</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Key</span><span class="p">:</span>        <span class="nx">args</span><span class="p">.</span><span class="nx">Key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">ClientId</span><span class="p">:</span>   <span class="nx">args</span><span class="p">.</span><span class="nx">ClientId</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">SequenceId</span><span class="p">:</span> <span class="nx">args</span><span class="p">.</span><span class="nx">SequenceId</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 如果是leader则会追加成功；否则会失败并返回当前不是leader的错误，客户端定位下一个server
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">index</span><span class="p">,</span> <span class="nx">term</span><span class="p">,</span> <span class="nx">isLeader</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">rf</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="nx">op</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">!</span><span class="nx">isLeader</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Err</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">ErrNoKey</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// leader 才有资格等待apply协程唤醒
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">kv</span><span class="p">.</span><span class="nx">wakeClient</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="p">=</span> <span class="nx">ch</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// 延迟释放资源
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">go</span> <span class="nx">kv</span><span class="p">.</span><span class="nf">clean</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">select</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">time</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">rpcTimeout</span><span class="p">)</span> <span class="cm">/*超时还没有提交*/</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="nx">msgTerm</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch</span> <span class="cm">/*阻塞等待唤醒*/</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">msgTerm</span> <span class="o">==</span> <span class="nx">term</span> <span class="cm">/*term一样表示当前leader不是过期的leader*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">Key</span><span class="p">];</span> <span class="nx">ok</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">reply</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Err</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="p">=</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">OK</span><span class="p">,</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">reply</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Err</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">ErrNoKey</span><span class="p">,</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="k">return</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">reply</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Err</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">ErrNoKey</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>Put/Append
+<ol>
+<li>由于该类请求会改变状态机，所以不能重复执行，先按照tips里去重。如果已经请求过了，那么可以直接返回</li>
+<li>后面的步骤和Get一样了</li>
+</ol>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">kv</span> <span class="o">*</span><span class="nx">KVServer</span><span class="p">)</span> <span class="nf">PutAppend</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">PutAppendArgs</span><span class="p">,</span> <span class="nx">reply</span> <span class="o">*</span><span class="nx">PutAppendReply</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dAppend</span><span class="p">,</span> <span class="s">&#34;S%d(%s) PutAppend args{%+v} reply{%+v}&#34;</span><span class="p">,</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">me</span><span class="p">,</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">rf</span><span class="p">.</span><span class="nf">Role</span><span class="p">(),</span> <span class="nx">args</span><span class="p">,</span> <span class="nx">reply</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">op</span> <span class="o">:=</span> <span class="nx">Op</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Type</span><span class="p">:</span>       <span class="nf">OpType</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">Op</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Key</span><span class="p">:</span>        <span class="nx">args</span><span class="p">.</span><span class="nx">Key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Value</span><span class="p">:</span>      <span class="nx">args</span><span class="p">.</span><span class="nx">Value</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">ClientId</span><span class="p">:</span>   <span class="nx">args</span><span class="p">.</span><span class="nx">ClientId</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">SequenceId</span><span class="p">:</span> <span class="nx">args</span><span class="p">.</span><span class="nx">SequenceId</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// 如果follower或leader已经请求过了，可以直接返回了
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="nx">ind</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">duptable</span><span class="p">[</span><span class="nx">args</span><span class="p">.</span><span class="nx">ClientId</span><span class="p">];</span> <span class="nx">ok</span> <span class="o">&amp;&amp;</span> <span class="nx">ind</span> <span class="o">&gt;=</span> <span class="nx">args</span><span class="p">.</span><span class="nx">SequenceId</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span><span class="p">.</span><span class="nx">Err</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="p">=</span> <span class="nx">OK</span><span class="p">,</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">index</span><span class="p">,</span> <span class="nx">term</span><span class="p">,</span> <span class="nx">isLeader</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">rf</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="nx">op</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">!</span><span class="nx">isLeader</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">reply</span><span class="p">.</span><span class="nx">Err</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="p">=</span> <span class="nx">OK</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ch</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kt">int</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">kv</span><span class="p">.</span><span class="nx">wakeClient</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="p">=</span> <span class="nx">ch</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">go</span> <span class="nx">kv</span><span class="p">.</span><span class="nf">clean</span><span class="p">(</span><span class="nx">index</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">select</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">time</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">rpcTimeout</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="nx">msgTerm</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch</span> <span class="cm">/*阻塞等待*/</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">msgTerm</span> <span class="o">==</span> <span class="nx">term</span> <span class="cm">/*term一样表示当前leader不是过期的leader*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">reply</span><span class="p">.</span><span class="nx">Err</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="p">=</span> <span class="nx">OK</span><span class="p">,</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl">			<span class="k">return</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">reply</span><span class="p">.</span><span class="nx">Err</span><span class="p">,</span> <span class="nx">reply</span><span class="p">.</span><span class="nx">Leader</span> <span class="p">=</span> <span class="nx">OK</span><span class="p">,</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="额外的apply实现">额外的apply实现</h4>
+<p>kvserver位于raft的应用层，需要将raft提交的command应用到状态机里，也就是执行command。需要注意的是，为了保证新leader也同时具备相同的log和状态机，所以不论是leader还是follower都需要从applyCh管道取出log并还原出原来的command，然后顺序command。</p>
+<p>注意，在上面的提示翻译中，raft底层实现并没有判重机制，所以需要在执行command之前再判一次重。</p>
+<p>等待应用完状态机过后，leader才reply客户端。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// raft提交的command，应用层应用，这个是针对所有的server
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 对于leader：把所有已提交的command，执行并应用到状态机中；并且leader也需要让客户端reply
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 对于follower：也需要把已提交的command，执行并应用到状态机中；follower没有客户端请求，无需等待
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 应用状态机的时候，只需要应用Put/Append即可，Get不会对状态机造成任何影响
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">kv</span> <span class="o">*</span><span class="nx">KVServer</span><span class="p">)</span> <span class="nf">apply</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">msg</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">applyCh</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">index</span> <span class="o">:=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">CommandIndex</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">term</span> <span class="o">:=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">CommandTerm</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">op</span> <span class="o">:=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">Command</span><span class="p">.(</span><span class="nx">Op</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">preSequenceId</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">duptable</span><span class="p">[</span><span class="nx">op</span><span class="p">.</span><span class="nx">ClientId</span><span class="p">];</span> <span class="nx">ok</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">preSequenceId</span> <span class="o">==</span> <span class="nx">op</span><span class="p">.</span><span class="nx">SequenceId</span> <span class="cm">/*应用前需要再判一次重*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span> <span class="k">else</span> <span class="cm">/*没有重复，可以应用状态机并记录在table里*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">kv</span><span class="p">.</span><span class="nx">duptable</span><span class="p">[</span><span class="nx">op</span><span class="p">.</span><span class="nx">ClientId</span><span class="p">]</span> <span class="p">=</span> <span class="nx">op</span><span class="p">.</span><span class="nx">SequenceId</span>
+</span></span><span class="line"><span class="cl">			<span class="k">switch</span> <span class="nx">op</span><span class="p">.</span><span class="nx">Type</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="k">case</span> <span class="nx">PUT</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">kv</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">op</span><span class="p">.</span><span class="nx">Key</span><span class="p">]</span> <span class="p">=</span> <span class="nx">op</span><span class="p">.</span><span class="nx">Value</span>
+</span></span><span class="line"><span class="cl">			<span class="k">case</span> <span class="nx">APPEND</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">				<span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">op</span><span class="p">.</span><span class="nx">Key</span><span class="p">];</span> <span class="nx">ok</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">kv</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">op</span><span class="p">.</span><span class="nx">Key</span><span class="p">]</span> <span class="p">=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">op</span><span class="p">.</span><span class="nx">Key</span><span class="p">]</span> <span class="o">+</span> <span class="nx">op</span><span class="p">.</span><span class="nx">Value</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">					<span class="nx">kv</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">op</span><span class="p">.</span><span class="nx">Key</span><span class="p">]</span> <span class="p">=</span> <span class="nx">op</span><span class="p">.</span><span class="nx">Value</span>
+</span></span><span class="line"><span class="cl">				<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="k">case</span> <span class="nx">GET</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">				<span class="cm">/*noting*/</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">ch</span><span class="p">,</span> <span class="nx">ok</span> <span class="o">:=</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">wakeClient</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span> <span class="nx">ok</span> <span class="cm">/*leader唤醒客户端reply*/</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nf">Debug</span><span class="p">(</span><span class="nx">dClient</span><span class="p">,</span> <span class="s">&#34;S%d wakeup client&#34;</span><span class="p">,</span> <span class="nx">kv</span><span class="p">.</span><span class="nx">me</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">ch</span> <span class="o">&lt;-</span> <span class="nx">term</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="nf">Debug</span><span class="p">(</span><span class="nx">dApply</span><span class="p">,</span> <span class="s">&#34;apply msg{%+v}&#34;</span><span class="p">,</span> <span class="nx">msg</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">		<span class="nx">kv</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="调试过程">调试过程</h3>
+<p><strong>labgob warning: Decoding into a non-default variable/field Err may not work</strong>问题</p>
+<p>这个问题的出现意思是，多个rpc调用了相同的reply。解决方案就是每次发起rpc的时候，新分配一个reply</p>
+<p><strong><code>Test: ops complete fast enough (3A) ...</code>用例</strong></p>
+<p>该用例测试结果显示<code>Operations completed too slowly 100.000356ms/op &gt; 33.333333ms/op</code></p>
+<p>表示每次操作花费时间过多，其实这个问题刚开始出现我就猜到是哪出现问题了。主要是我在实现底层raft的时候，应用层调用<code>Start</code>后，需要等待到下一次心跳（100ms）才能发送日志同步。所以，应用层调用<code>Start</code>过后不能立即同步日志。解决方案就是在<code>Start</code>中<strong>立即</strong>开启一致性协议</p>
+<p>在<code>Start</code>中加入下面的代码，用以唤醒log replicate</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">rf</span><span class="p">.</span><span class="nx">replicateSignal</span> <span class="o">&lt;-</span> <span class="kd">struct</span><span class="p">{}{}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>raft实例启动的时候注册并监听下面的事件驱动</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">rf</span> <span class="o">*</span><span class="nx">Raft</span><span class="p">)</span> <span class="nf">logReplicateEvent</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="nx">rf</span><span class="p">.</span><span class="nf">killed</span><span class="p">()</span> <span class="o">==</span> <span class="kc">false</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">select</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">rf</span><span class="p">.</span><span class="nx">replicateSignal</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Lock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">			<span class="k">if</span> <span class="nx">rf</span><span class="p">.</span><span class="nx">role</span> <span class="o">==</span> <span class="nx">leader</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nf">heartbeatBroadcast</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">				<span class="nx">rf</span><span class="p">.</span><span class="nx">electionTimer</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="nf">withRandomElectionDuration</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">rf</span><span class="p">.</span><span class="nx">mu</span><span class="p">.</span><span class="nf">Unlock</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>**Test: partitions, one client (3A) &hellip;**用例</p>
+<p>发现分区过后，rpc一直卡住没有reply，导致整个raft底层和kvserver上层都卡死了9分钟。后面也参考了一些博客，应该引入超时机制避免rpc没有reply，一直卡死的情况。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">select</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="o">&lt;-</span><span class="nx">time</span><span class="p">.</span><span class="nf">After</span><span class="p">(</span><span class="nx">rpcTimeout</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nx">msgTerm</span> <span class="o">:=</span> <span class="o">&lt;-</span><span class="nx">ch</span> <span class="cm">/*阻塞等待rpc reply*/</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// todo
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="结果">结果</h3>
+<p>脚本测试过100次，无报错</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">➜  kvraft git:<span class="o">(</span>main<span class="o">)</span> go <span class="nb">test</span> -race -run 3A
+</span></span><span class="line"><span class="cl">Test: one client <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  15.2  <span class="m">5</span>  <span class="m">4331</span>  <span class="m">666</span>
+</span></span><span class="line"><span class="cl">Test: ops <span class="nb">complete</span> fast enough <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  25.1  <span class="m">3</span>  <span class="m">3997</span>    <span class="m">0</span>
+</span></span><span class="line"><span class="cl">Test: many clients <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  15.8  <span class="m">5</span>  <span class="m">6663</span>  <span class="m">838</span>
+</span></span><span class="line"><span class="cl">Test: unreliable net, many clients <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  16.5  <span class="m">5</span>  <span class="m">5576</span>  <span class="m">751</span>
+</span></span><span class="line"><span class="cl">Test: concurrent append to same key, unreliable <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --   1.1  <span class="m">3</span>   <span class="m">233</span>   <span class="m">52</span>
+</span></span><span class="line"><span class="cl">Test: progress in majority <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --   0.4  <span class="m">5</span>    <span class="m">58</span>    <span class="m">2</span>
+</span></span><span class="line"><span class="cl">Test: no progress in minority <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --   1.0  <span class="m">5</span>   <span class="m">111</span>    <span class="m">3</span>
+</span></span><span class="line"><span class="cl">Test: completion after heal <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --   1.0  <span class="m">5</span>    <span class="m">67</span>    <span class="m">3</span>
+</span></span><span class="line"><span class="cl">Test: partitions, one client <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  22.4  <span class="m">5</span>  <span class="m">4432</span>  <span class="m">541</span>
+</span></span><span class="line"><span class="cl">Test: partitions, many clients <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  23.4  <span class="m">5</span>  <span class="m">7680</span>  <span class="m">762</span>
+</span></span><span class="line"><span class="cl">Test: restarts, one client <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  19.6  <span class="m">5</span>  <span class="m">6127</span>  <span class="m">693</span>
+</span></span><span class="line"><span class="cl">Test: restarts, many clients <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  20.3  <span class="m">5</span> <span class="m">11905</span>  <span class="m">879</span>
+</span></span><span class="line"><span class="cl">Test: unreliable net, restarts, many clients <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  21.1  <span class="m">5</span>  <span class="m">6442</span>  <span class="m">762</span>
+</span></span><span class="line"><span class="cl">Test: restarts, partitions, many clients <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  27.5  <span class="m">5</span> <span class="m">11506</span>  <span class="m">737</span>
+</span></span><span class="line"><span class="cl">Test: unreliable net, restarts, partitions, many clients <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  28.4  <span class="m">5</span>  <span class="m">6395</span>  <span class="m">673</span>
+</span></span><span class="line"><span class="cl">Test: unreliable net, restarts, partitions, random keys, many clients <span class="o">(</span>3A<span class="o">)</span> ...
+</span></span><span class="line"><span class="cl">  ... Passed --  30.6  <span class="m">7</span> <span class="m">11251</span>  <span class="m">680</span>
+</span></span><span class="line"><span class="cl">PASS
+</span></span><span class="line"><span class="cl">ok      6.5840/kvraft   270.706s
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2023-12-29</span>
+            </div><div class="post-info-license">
+                <span>自由转载-非商用-保持署名</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/mit6.824%E4%B9%8Blab3a/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab3a/" data-title="Mit6.824之lab3A"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab3a/" data-title="Mit6.824之lab3A"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/mit6.824/">mit6.824</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/mit6.824%E4%B9%8Blab2d/" class="prev" rel="prev" title="Mit6.824之lab2D"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Mit6.824之lab2D</a>
+            <a href="/mit6.824%E4%B9%8Blab3b/" class="next" rel="next" title="Mit6.824之lab3B">Mit6.824之lab3B<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"><div id="gitalk" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-12-29T17:16:27+08:00","owner":"cold-bin","repo":"blog-comment","title":"Mit6.824之lab3A"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+</html>
