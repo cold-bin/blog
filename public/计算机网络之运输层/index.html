@@ -1,10 +1,13 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>计算机网络之运输层 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="计算机网络之运输层" />
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>计算机网络之运输层 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="计算机网络之运输层" />
 <meta property="og:description" content="[toc] 运输层概述 运输层的基本功能 运输层协议为运行在不同主机上的应用进程之间提供了逻辑通信功能，使得运行在不同主机上的进程像直连一样。 复用和分用 差" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,9 +20,12 @@
 <meta name="twitter:title" content="计算机网络之运输层"/>
 <meta name="twitter:description" content="[toc] 运输层概述 运输层的基本功能 运输层协议为运行在不同主机上的应用进程之间提供了逻辑通信功能，使得运行在不同主机上的进程像直连一样。 复用和分用 差"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" />
+<link rel="stylesheet" href="/css/main.d5cb6f29e0750a13b17688d628b04d50f9fbbd32e0629ccc0dcf796a299ae226.css" integrity="sha256-1ctvKeB1ChOxdojWKLBNUPn7vTLgYpzMDc95aima4iY="><link rel="stylesheet" href="/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css" integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH&#43;KuXHiZWODptY5K8NF4="><link rel="stylesheet" href="/css/color.b0a0f8c429ce52dfa2805b5f9e99ccdae1e8fbfd9adf4f3ddb409d8201fc0c5a.css" integrity="sha256-sKD4xCnOUt&#43;igFtfnpnM2uHo&#43;/2a308920CdggH8DFo="><link rel="stylesheet" href="/css/style.min.5963810f80932dd0408e0fe2003ab30dbccfb3400fe079d989aad753741320e0.css" integrity="sha256-WWOBD4CTLdBAjg/iADqzDbzPs0AP4HnZiarXU3QTIOA="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc=">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc="></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -27,13 +33,13 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  16508 ,
-        "url": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82\/","datePublished": "2023-07-11T17:36:16+08:00","dateModified": "2023-07-11T17:36:16+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@id": "https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/"
+        },"image": ["https://blog.coldbin.top/favicon.ico"],"genre": "posts","wordcount":  16513 ,
+        "url": "https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/","datePublished": "2023-07-11T17:36:16+08:00","dateModified": "2023-07-11T17:36:16+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
             "@type": "Organization",
             "name": "阿冰","logo": {
                     "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "url": "https://blog.coldbin.top/images/avatar.png",
                     "width":  396 ,
                     "height":  396 
                 }},"author": {
@@ -42,34 +48,43 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
             <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
+        class="logo"
+        loading="lazy"
+        src="/favicon.ico"
+        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+        title="/favicon.ico" >阿冰的小屋</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search fa-fw"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle fa-fw"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                    <i class="fas fa-adjust fa-fw"></i>
                 </a></div>
         </div>
     </div>
@@ -78,13 +93,13 @@
         <div class="header-wrapper">
             <div class="header-title">
                 <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
+        class="logo"
+        loading="lazy"
+        src="/favicon.ico"
+        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+        title="/favicon.ico" >阿冰的小屋</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -94,39 +109,154 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search fa-fw"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle fa-fw"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
-</header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">计算机网络之运输层</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>计算机网络</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-07-11">2023-07-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;16508 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;33 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">Contents</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#运输层概述">运输层概述</a>
+          <ul>
+            <li><a href="#运输层的基本功能">运输层的基本功能</a></li>
+            <li><a href="#多路复用和多路分解">多路复用和多路分解</a></li>
+            <li><a href="#运输层和网络层的关系">运输层和网络层的关系</a></li>
+            <li><a href="#端口号">端口号</a></li>
+          </ul>
+        </li>
+        <li><a href="#udp协议">UDP协议</a>
+          <ul>
+            <li><a href="#特点">特点</a></li>
+            <li><a href="#udp的使用场景">UDP的使用场景</a></li>
+            <li><a href="#udp协议报文格式">UDP协议报文格式</a></li>
+          </ul>
+        </li>
+        <li><a href="#tcp协议">TCP协议</a>
+          <ul>
+            <li><a href="#特点-1">特点</a></li>
+            <li><a href="#tcp报文段格式">TCP报文段格式</a></li>
+            <li><a href="#tcp可靠传输原理">TCP可靠传输原理</a>
+              <ul>
+                <li><a href="#停止等待协议">停止等待协议</a>
+                  <ul>
+                    <li><a href="#确认应答机制">确认应答机制</a></li>
+                    <li><a href="#停等机制">停等机制</a></li>
+                    <li><a href="#自动超时重传机制arq">自动超时重传机制（ARQ）</a></li>
+                    <li><a href="#举例">举例</a>
+                      <ul>
+                        <li><a href="#无差错的情况">无差错的情况</a></li>
+                        <li><a href="#有差错的情况分组丢失或差错">有差错的情况（分组丢失或差错）</a></li>
+                        <li><a href="#确认报文丢失或迟到">确认报文丢失或迟到</a></li>
+                      </ul>
+                    </li>
+                  </ul>
+                </li>
+                <li><a href="#连续arq协议">连续ARQ协议</a>
+                  <ul>
+                    <li><a href="#流水线传输机制">流水线传输机制</a></li>
+                    <li><a href="#累积确认机制">累积确认机制</a></li>
+                    <li><a href="#捎带确认机制">捎带确认机制</a></li>
+                    <li><a href="#回退n机制">回退N机制</a></li>
+                  </ul>
+                </li>
+                <li><a href="#对比">对比</a></li>
+                <li><a href="#tcp可靠传输的实现">TCP可靠传输的实现</a></li>
+              </ul>
+            </li>
+            <li><a href="#tcp的发送时机">TCP的发送时机</a></li>
+            <li><a href="#nagle算法">Nagle算法</a></li>
+            <li><a href="#重传机制">重传机制</a>
+              <ul>
+                <li><a href="#超时重传">超时重传</a></li>
+                <li><a href="#快速重传">快速重传</a></li>
+                <li><a href="#sack-方法">SACK 方法</a></li>
+                <li><a href="#duplicate-sack">Duplicate SACK</a></li>
+              </ul>
+            </li>
+            <li><a href="#滑动窗口">滑动窗口</a>
+              <ul>
+                <li><a href="#滑动窗口的工作过程">滑动窗口的工作过程</a></li>
+                <li><a href="#缓冲区与窗口的关联">缓冲区与窗口的关联</a>
+                  <ul>
+                    <li><a href="#发送方的发送缓存与发送窗口">发送方的发送缓存与发送窗口</a></li>
+                    <li><a href="#接受方的接收缓存与接收窗口">接受方的接收缓存与接收窗口</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#流量控制">流量控制</a>
+              <ul>
+                <li><a href="#持续计时器">持续计时器</a></li>
+              </ul>
+            </li>
+            <li><a href="#拥塞控制">拥塞控制</a>
+              <ul>
+                <li><a href="#拥塞控制的方法">拥塞控制的方法</a>
+                  <ul>
+                    <li><a href="#慢开始算法慢启动">慢开始算法（慢启动）</a></li>
+                    <li><a href="#拥塞避免算法">拥塞避免算法</a></li>
+                    <li><a href="#快速重传算法">快速重传算法</a></li>
+                    <li><a href="#快恢复算法">快恢复算法</a></li>
+                  </ul>
+                </li>
+                <li><a href="#拥塞惩罚机制">拥塞惩罚机制</a></li>
+                <li><a href="#tcp拥塞控制动态流程图">TCP拥塞控制动态流程图</a></li>
+                <li><a href="#主动队列管理-aqm">主动队列管理 AQM</a></li>
+              </ul>
+            </li>
+            <li><a href="#连接管理">连接管理</a>
+              <ul>
+                <li><a href="#三次握手建立连接">三次握手建立连接</a></li>
+                <li><a href="#四次挥手断开连接">四次挥手断开连接</a>
+                  <ul>
+                    <li><a href="#tcp半关闭">TCP半关闭</a></li>
+                    <li><a href="#tcp同时打开与关闭">TCP同时打开与关闭</a></li>
+                    <li><a href="#连接建立超时">连接建立超时</a></li>
+                    <li><a href="#tcp有限状态机">TCP有限状态机</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#计时器">计时器</a></li>
+            <li><a href="#heading"></a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">计算机网络之运输层</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">阿冰</a>
+                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="far fa-folder fa-fw"></i>计算机网络</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-07-11">2023-07-11</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-07-11">2023-07-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;16513 words&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;33 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -242,9 +372,9 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>[toc]</p>
-<h2 id="运输层概述">运输层概述</h2>
-<h3 id="运输层的基本功能">运输层的基本功能</h3>
-<ul>
+<h2 id="运输层概述" class="headerLink">
+    <a href="#%e8%bf%90%e8%be%93%e5%b1%82%e6%a6%82%e8%bf%b0" class="header-mark"></a>运输层概述</h2><h3 id="运输层的基本功能" class="headerLink">
+    <a href="#%e8%bf%90%e8%be%93%e5%b1%82%e7%9a%84%e5%9f%ba%e6%9c%ac%e5%8a%9f%e8%83%bd" class="header-mark"></a>运输层的基本功能</h3><ul>
 <li>运输层协议为运行在不同主机上的应用进程之间提供了逻辑通信功能，使得运行在不同主机上的进程像直连一样。</li>
 <li>复用和分用</li>
 <li>差错检验</li>
@@ -252,8 +382,8 @@
 <blockquote>
 <p>进程到进程的数据交付（多路复用和多路分解）和差错检查是两个最低限度的运输层服务，也是UDP能提供的仅有的两种服务。</p>
 </blockquote>
-<h3 id="多路复用和多路分解">多路复用和多路分解</h3>
-<ul>
+<h3 id="多路复用和多路分解" class="headerLink">
+    <a href="#%e5%a4%9a%e8%b7%af%e5%a4%8d%e7%94%a8%e5%92%8c%e5%a4%9a%e8%b7%af%e5%88%86%e8%a7%a3" class="header-mark"></a>多路复用和多路分解</h3><ul>
 <li>
 <p>多路复用</p>
 <p>在数据的发送端，传输层收集各个套接字中需要发送的数据，将它们封装上首部信息后（之后用于分解），交给网络层；</p>
@@ -266,25 +396,25 @@
 <blockquote>
 <p>复用强调的是多个用户进程能够复用相同的运输层协议，例如不同进程的UDP套接字的发送缓冲区数据能被收集后统一交给运输层的UDP协议处理和封装。</p>
 </blockquote>
-<h3 id="运输层和网络层的关系">运输层和网络层的关系</h3>
-<ul>
+<h3 id="运输层和网络层的关系" class="headerLink">
+    <a href="#%e8%bf%90%e8%be%93%e5%b1%82%e5%92%8c%e7%bd%91%e7%bb%9c%e5%b1%82%e7%9a%84%e5%85%b3%e7%b3%bb" class="header-mark"></a>运输层和网络层的关系</h3><ul>
 <li>运输层为不同主机的应用程序提供了逻辑通信和数据交付服务</li>
 <li>网络层为主机和主机提供了逻辑通信和数据交付服务。</li>
 </ul>
 <p>运输层是基于网络层的服务的，只有实现了主机间逻辑通信才能再此基础上实现端到端进程间通信；运输层是网络层的功能扩展，网络层不能保证数据的可靠传输，而运输层则扩展了这个功能。</p>
 <p>总结就是：网络层是运输层的基础和服务者，运输层是网络层的扩展，其实协议栈的每个上下层都是这个关系。</p>
-<h3 id="端口号">端口号</h3>
-<p>在TCP/IP体系的运输层中，不同操作系统采用的进程标识符结构不一样，所以，为了保证主机与主机中各个进程之间的通信，所以我们采用16位端口号来映射主机内的某个进程。</p>
+<h3 id="端口号" class="headerLink">
+    <a href="#%e7%ab%af%e5%8f%a3%e5%8f%b7" class="header-mark"></a>端口号</h3><p>在TCP/IP体系的运输层中，不同操作系统采用的进程标识符结构不一样，所以，为了保证主机与主机中各个进程之间的通信，所以我们采用16位端口号来映射主机内的某个进程。</p>
 <p>端口号分为3类</p>
 <ol>
 <li>熟知端口（0~1023号端口）：作为指定用途的端口（如80是Web服务器端口），不会随机对口进行分配</li>
 <li>登记端口（1024~49151）：可以作为服务器进程被随机分配的端口</li>
 <li>短暂端口（49152~65535）：客户端在与对端连接通信时动态选择，连接关闭后端口就关闭，被系统收回，因此又叫短暂端口。</li>
 </ol>
-<h2 id="udp协议">UDP协议</h2>
-<p>UDP是一种无连接的、面向报文的、尽最大努力交付（不保证可靠交付）的运输层协议。</p>
-<h3 id="特点">特点</h3>
-<ul>
+<h2 id="udp协议" class="headerLink">
+    <a href="#udp%e5%8d%8f%e8%ae%ae" class="header-mark"></a>UDP协议</h2><p>UDP是一种无连接的、面向报文的、尽最大努力交付（不保证可靠交付）的运输层协议。</p>
+<h3 id="特点" class="headerLink">
+    <a href="#%e7%89%b9%e7%82%b9" class="header-mark"></a>特点</h3><ul>
 <li><strong>不建立连接</strong>：减少了3次握手的时延。</li>
 <li><strong>不保证可靠交付</strong>：报文可能丢失、乱序（但不会比特差错），而且不负责重发。丢失时可以通知应用层，让应用层组织重发。因为不保证可靠交付，所以也没有确认应答机制。</li>
 <li><strong>面向报文</strong>：一次交付一个完整报文。<strong>UDP协议不会对应用层交付给运输层的报文切分</strong>（即使这个应用层报文很大），而是直接对应用层报文加上首部就交给网络层（但网络层会对其分片的），保留了报文的边界。需要应用层决定一次发送多少数据以避免发生IP分片。</li>
@@ -292,19 +422,19 @@
 <li><strong>支持多种交互通信</strong>：支持一对一，一对多，多对多，多对一的交互通信，而TCP只能做到一对一。这里的一对一和一对多是指socket，具体是指一个服务端的socket可以为多个客户端的socket通信和服务。而TCP服务端的一个client套接字只能为一个客户端socket收发消息。</li>
 <li><strong>首部开销小</strong>：8个字节，比TCP的20字节首部短。</li>
 </ul>
-<h3 id="udp的使用场景">UDP的使用场景</h3>
-<ul>
+<h3 id="udp的使用场景" class="headerLink">
+    <a href="#udp%e7%9a%84%e4%bd%bf%e7%94%a8%e5%9c%ba%e6%99%af" class="header-mark"></a>UDP的使用场景</h3><ul>
 <li>实时应用：语音电话或视频会议。利用了UDP开销小、效率高、没有拥塞的特点。</li>
 <li>一次性传小量数据的应用：如果一次性大量数据则不利于UDP不切分数据的特点。</li>
 <li>多媒体应用：如播放视频。因为视频对传输可靠性没那么高，即使小部分数据丢失也不影响视频播放。</li>
 </ul>
-<h3 id="udp协议报文格式">UDP协议报文格式</h3>
-<img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112013661.png" alt="img" style="zoom:50%;" />
+<h3 id="udp协议报文格式" class="headerLink">
+    <a href="#udp%e5%8d%8f%e8%ae%ae%e6%8a%a5%e6%96%87%e6%a0%bc%e5%bc%8f" class="header-mark"></a>UDP协议报文格式</h3><img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112013661.png" alt="img" style="zoom:50%;" />
 <p>每个UDP报文分为UDP报头和UDP数据区两部分。报头由<strong>4个16位长</strong>(2字节) 字段组成，分别说明该报文的<strong>源端口、目的端口、报文长度、校验值</strong></p>
-<h2 id="tcp协议">TCP协议</h2>
-<p>TCP协议是一种面向连接、面向字节流、提供可靠传输服务的一对一通信传输层协议。</p>
-<h3 id="特点-1">特点</h3>
-<ul>
+<h2 id="tcp协议" class="headerLink">
+    <a href="#tcp%e5%8d%8f%e8%ae%ae" class="header-mark"></a>TCP协议</h2><p>TCP协议是一种面向连接、面向字节流、提供可靠传输服务的一对一通信传输层协议。</p>
+<h3 id="特点-1" class="headerLink">
+    <a href="#%e7%89%b9%e7%82%b9-1" class="header-mark"></a>特点</h3><ul>
 <li>面向连接：数据收发前需要建立连接，数据收发要通过这个逻辑的虚拟信道。</li>
 <li>全双工通信：通信两端都可收可发，而且双向的收发可以同时发生。</li>
 <li>一对一通信：一个client socket只能与一个server socket进行数据收发。如果要实现多个client数据接收，只能开启相应数量的server</li>
@@ -312,8 +442,8 @@
 <li>可靠传输服务：数据不丢失、不重复、无差错、不乱序。</li>
 </ul>
 <p>TCP功能在UDP功能（数据交付和差错检验）的基础上加上了连接管理、超时重传、流量控制和拥塞控制。</p>
-<h3 id="tcp报文段格式">TCP报文段格式</h3>
-<p>TCP首部的前20个字节是固定的（TCP首部最小长度为20字节，最大长度60），后面4n字节是按需增加的选项。</p>
+<h3 id="tcp报文段格式" class="headerLink">
+    <a href="#tcp%e6%8a%a5%e6%96%87%e6%ae%b5%e6%a0%bc%e5%bc%8f" class="header-mark"></a>TCP报文段格式</h3><p>TCP首部的前20个字节是固定的（TCP首部最小长度为20字节，最大长度60），后面4n字节是按需增加的选项。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112040070.png" alt="img" style="zoom:50%;" />
 <ul>
 <li>
@@ -364,14 +494,15 @@
 </li>
 <li>
 <p><strong>选项字段（最大40字节）</strong>：该字段长度可变。有如下可选项：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>所有可选选项都包含该选项的类型长度还有实际内容（例如下面的时间戳选项，kind=8表示这是一个时间戳选项，length表示时间戳选项长度为10字节).所有可选选项都在建立连接时的SYN报文指定开启。</p>
 <ul>
 <li>
@@ -385,14 +516,15 @@
 </li>
 <li>
 <p><strong>时间戳选项</strong>：占10字节，包含最主要的是时间戳值字段（4字节）和时间戳回送回答字段（4字节）。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <blockquote>
 <p>有两个作用：</p>
 <p>A. 计算报文在两端传输层的往返时延（接近于RTT）</p>
@@ -415,18 +547,18 @@
 </ul>
 </li>
 </ul>
-<h3 id="tcp可靠传输原理">TCP可靠传输原理</h3>
-<h4 id="停止等待协议">停止等待协议</h4>
-<p>简单来说，就是发一个数据包，就等待一个ACK，然后再发一个数据包；如果等不到ACK就需要重发一个数据包。</p>
+<h3 id="tcp可靠传输原理" class="headerLink">
+    <a href="#tcp%e5%8f%af%e9%9d%a0%e4%bc%a0%e8%be%93%e5%8e%9f%e7%90%86" class="header-mark"></a>TCP可靠传输原理</h3><h4 id="停止等待协议" class="headerLink">
+    <a href="#%e5%81%9c%e6%ad%a2%e7%ad%89%e5%be%85%e5%8d%8f%e8%ae%ae" class="header-mark"></a>停止等待协议</h4><p>简单来说，就是发一个数据包，就等待一个ACK，然后再发一个数据包；如果等不到ACK就需要重发一个数据包。</p>
 <p>停止等待协议，是一个保证可靠传输的协议，主要有以下机制构成：</p>
-<h5 id="确认应答机制">确认应答机制</h5>
-<p>接收方接收到一个正确分组时，需要回复一个带确认号和ACK位为1的确认报文给发送方。此时发送方就知道分组已到达；</p>
+<h5 id="确认应答机制" class="headerLink">
+    <a href="#%e7%a1%ae%e8%ae%a4%e5%ba%94%e7%ad%94%e6%9c%ba%e5%88%b6" class="header-mark"></a>确认应答机制</h5><p>接收方接收到一个正确分组时，需要回复一个带确认号和ACK位为1的确认报文给发送方。此时发送方就知道分组已到达；</p>
 <p>分组由于比特差错被接收方检测到会被直接丢弃，不发送ACK报文（在TCP协议中即使一个分组发生比特错误，对端也会发送ACK，但确认的是出错报文之前的报文）；</p>
 <p>分组由于丢失无法到达接收方则不发送ACK报文；</p>
-<h5 id="停等机制">停等机制</h5>
-<p>指发送方每发送完一个分组就停止发送，等待对方确认，收到确认后再发下一个分组。</p>
-<h5 id="自动超时重传机制arq">自动超时重传机制（ARQ）</h5>
-<p>发送方为每个分组设置一个超时计时器（TCP中是为每个窗口设置一个超时计时器），超过指定重传时间（RTO）未收到接收方的ACK报文，发送方就会重发报文。</p>
+<h5 id="停等机制" class="headerLink">
+    <a href="#%e5%81%9c%e7%ad%89%e6%9c%ba%e5%88%b6" class="header-mark"></a>停等机制</h5><p>指发送方每发送完一个分组就停止发送，等待对方确认，收到确认后再发下一个分组。</p>
+<h5 id="自动超时重传机制arq" class="headerLink">
+    <a href="#%e8%87%aa%e5%8a%a8%e8%b6%85%e6%97%b6%e9%87%8d%e4%bc%a0%e6%9c%ba%e5%88%b6arq" class="header-mark"></a>自动超时重传机制（ARQ）</h5><p>发送方为每个分组设置一个超时计时器（TCP中是为每个窗口设置一个超时计时器），超过指定重传时间（RTO）未收到接收方的ACK报文，发送方就会重发报文。</p>
 <p>ARQ的意思是不用接收方请求重传，而是发送方通过计时器计时来自动重传。</p>
 <p>这里需要注意3点：</p>
 <ul>
@@ -461,14 +593,15 @@
 <p><strong>另一个问题</strong>：假设发生了重传，并且收到了确认报文，如何确定该ACK报文是对先发送的报文的确认还是重传报文的确认？</p>
 <blockquote>
 <p>这个问题对RTTS的计算很重要（假设时间戳选项没开启）。如果该ACK是对重传报文的确认，却被误认为是对原来报文的确认，则更新后的RTTS和RTO会偏大。该问题不解决，RTO会因为重传越变越大。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>答：Karn算法提出，如果报文段重传收到ACK，无需判断ACK是之前报文的确认还是重传报文的确认，直接不更新本次的RTTS和RTO即可。</p>
 <p>这会带来新的问题：如果一段时间内TCP会重传很多报文，采用上述做法会导致RTO失去多次更新，变得不准确。</p>
 <p>修正的Karn算法提出，报文段每重传一次就把RTO增大一点：</p>
@@ -481,19 +614,20 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div></blockquote>
-<h5 id="举例">举例</h5>
-<p>停止等待协议下的通信会出现如下情况</p>
-<h6 id="无差错的情况">无差错的情况</h6>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png"
-        title="img" /></p>
-<h6 id="有差错的情况分组丢失或差错">有差错的情况（分组丢失或差错）</h6>
-<p>在接收⽅ B 会出现两种情况：</p>
+<h5 id="举例" class="headerLink">
+    <a href="#%e4%b8%be%e4%be%8b" class="header-mark"></a>举例</h5><p>停止等待协议下的通信会出现如下情况</p>
+<h6 id="无差错的情况" class="headerLink">
+    <a href="#%e6%97%a0%e5%b7%ae%e9%94%99%e7%9a%84%e6%83%85%e5%86%b5" class="header-mark"></a>无差错的情况</h6><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h6 id="有差错的情况分组丢失或差错" class="headerLink">
+    <a href="#%e6%9c%89%e5%b7%ae%e9%94%99%e7%9a%84%e6%83%85%e5%86%b5%e5%88%86%e7%bb%84%e4%b8%a2%e5%a4%b1%e6%88%96%e5%b7%ae%e9%94%99" class="header-mark"></a>有差错的情况（分组丢失或差错）</h6><p>在接收⽅ B 会出现两种情况：</p>
 <ul>
 <li>B 接收 M1 时检测出了差错，就丢弃 M1，其他什么也不做；</li>
 <li>M1 在传输过程中丢失了，这时 B 当然什么都不知道，也什么都不做。</li>
@@ -502,50 +636,53 @@
 <ul>
 <li>A 为每⼀个已发送的分组都设置超时计时器，A由于重传时间RTO内（略大于RTT）没收到M1的确认因此会重发M1；A 在超时计时器到期之前收到了相应的确认，撤销该超时计时器，继续发送下⼀个分组 M2 。</li>
 </ul>
-<h6 id="确认报文丢失或迟到">确认报文丢失或迟到</h6>
-<p>假设B收到了报文（发送端的报文没丢失）而且报文没有错误，但是B的确认报文丢失或过了很久才到达A。</p>
+<h6 id="确认报文丢失或迟到" class="headerLink">
+    <a href="#%e7%a1%ae%e8%ae%a4%e6%8a%a5%e6%96%87%e4%b8%a2%e5%a4%b1%e6%88%96%e8%bf%9f%e5%88%b0" class="header-mark"></a>确认报文丢失或迟到</h6><p>假设B收到了报文（发送端的报文没丢失）而且报文没有错误，但是B的确认报文丢失或过了很久才到达A。</p>
 <ul>
 <li>
 <p>子情况1：确认报文丢失。</p>
 <p>由于A收不到 M1 的确认报文，A 在超时计时器到期后重传 M1。 B ⼜收到了重传的分组 M1，所以丢弃这个重复的分组 M1（通过序号和时间戳选项判断分组是否重复），不向上层交付，并向 A 发送确认。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 </li>
 <li>
 <p>子情况2：确认报文迟到</p>
 <p>由于A收不到 M1 的确认报文，A 在超时计时器到期后重传 M1。 B ⼜收到了重传的分组 M1，所以丢弃这个重复的分组 M1，并向 A 发送确认。A由于会收到2个ACK号相同的确认报文，A会丢弃其中晚到达的一个。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 </li>
 </ul>
 <p>结论：<strong>停等协议可以保证可靠传输的实现，但通信效率不高</strong></p>
-<h4 id="连续arq协议">连续ARQ协议</h4>
-<p>在一定限度k内，发送方连续发出k个包后停下，如果ACK报文返回则可以继续发送；如果一定时间内没有返回ack则重传；</p>
+<h4 id="连续arq协议" class="headerLink">
+    <a href="#%e8%bf%9e%e7%bb%adarq%e5%8d%8f%e8%ae%ae" class="header-mark"></a>连续ARQ协议</h4><p>在一定限度k内，发送方连续发出k个包后停下，如果ACK报文返回则可以继续发送；如果一定时间内没有返回ack则重传；</p>
 <p>连续ARQ协议在停止等待协议的基础之上提升了信道利用率，它除了要遵循确认应答机制和自动超时重传机制外，还包括以下机制：</p>
-<h5 id="流水线传输机制">流水线传输机制</h5>
-<p>指发送方可以连续发送多个分组不必每发一个分组就等待对方的确认，与停止等待协议对立，可以提高信道利用率和链路的吞吐量。当然连续发送的分组数量是有限的，这取决于滑动窗口的大小。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png"
-        title="img" /></p>
-<h5 id="累积确认机制">累积确认机制</h5>
-<p>指接收方不必为每个到达的分组都发送确认，而是收到若干个分组后对按序到达的最后一个分组发送确认。当然TCP协议既可能出现累积确认，也可能出现对单个分组确认。</p>
+<h5 id="流水线传输机制" class="headerLink">
+    <a href="#%e6%b5%81%e6%b0%b4%e7%ba%bf%e4%bc%a0%e8%be%93%e6%9c%ba%e5%88%b6" class="header-mark"></a>流水线传输机制</h5><p>指发送方可以连续发送多个分组不必每发一个分组就等待对方的确认，与停止等待协议对立，可以提高信道利用率和链路的吞吐量。当然连续发送的分组数量是有限的，这取决于滑动窗口的大小。</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h5 id="累积确认机制" class="headerLink">
+    <a href="#%e7%b4%af%e7%a7%af%e7%a1%ae%e8%ae%a4%e6%9c%ba%e5%88%b6" class="header-mark"></a>累积确认机制</h5><p>指接收方不必为每个到达的分组都发送确认，而是收到若干个分组后对按序到达的最后一个分组发送确认。当然TCP协议既可能出现累积确认，也可能出现对单个分组确认。</p>
 <p>确认的时机（这里也是TCP确认的时机）：</p>
 <ul>
 <li>收到 2*MSS 长度的数据就做确认应答（有些系统是不管数据长度，而是收到2个报文就确认）；</li>
@@ -554,46 +691,48 @@
 <li>若干分组到达后，累计确认</li>
 </ul>
 <p>累积确认是为了提高信道的利用率，提升系统性能，能少发报文就少发报文。当然如果延迟确认的时间长了可能引发发送端重传，也会降低传输效率。</p>
-<h5 id="捎带确认机制">捎带确认机制</h5>
-<p>如果接收方发送确认时刚好也要发送自己的数据报文，那么这个ACK确认可能会捎带到这个数据报文中，此时就减少了一个报文头部的开销，这叫做<strong>捎带确认</strong>。</p>
-<h5 id="回退n机制">回退N机制</h5>
-<p>指当报文乱序到达接收端，接收端收到的分组不是连续的，而是缺了某些分组，此时接收端只确认第一个空缺分组之前的分组，空缺分组以及其之后的n个分组都要发送方重传，这就是回退N。</p>
+<h5 id="捎带确认机制" class="headerLink">
+    <a href="#%e6%8d%8e%e5%b8%a6%e7%a1%ae%e8%ae%a4%e6%9c%ba%e5%88%b6" class="header-mark"></a>捎带确认机制</h5><p>如果接收方发送确认时刚好也要发送自己的数据报文，那么这个ACK确认可能会捎带到这个数据报文中，此时就减少了一个报文头部的开销，这叫做<strong>捎带确认</strong>。</p>
+<h5 id="回退n机制" class="headerLink">
+    <a href="#%e5%9b%9e%e9%80%80n%e6%9c%ba%e5%88%b6" class="header-mark"></a>回退N机制</h5><p>指当报文乱序到达接收端，接收端收到的分组不是连续的，而是缺了某些分组，此时接收端只确认第一个空缺分组之前的分组，空缺分组以及其之后的n个分组都要发送方重传，这就是回退N。</p>
 <p>B收到1 2 4 5号分组但由于3号分组未收到就到达确认时机，只能选择确认1和2分组，发送端A需要重发 3~5 号分组。</p>
 <p><strong>为了避免回退N机制重复发送已经发过的报文，可以使用TCP选项中的“选择确认SACK功能”。其机制如下：</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>上图空缺的序号是 1000~1500 和 3001~3501。</p>
 <p>SACK的原理是，把乱序到达的分组先暂存在接收缓冲区，并且把空缺分组相邻分组的左右边界序号（必须是成对边界，在本例子中有3个边界0~999 / 1501~3000 / 3501~4500，共 6 * 4字节=24字节）放到头部的SACK选项告诉发送方，发送方就会只重传空缺的数据给接收方，而无需回退N步。</p>
 <p>⾸部选项的⻓度最⼤有 40 字节，指明⼀个对序号⽤掉 8 字节，因此在选项中最多只能指明 4 对序号的边界信息，也就是指明最多3个空缺范围（4对序号用掉 32字节，还需要2个字节指明选项类型和长度）。</p>
 <p>SACK文档并未有指明发送方应该怎样响应SACK，所以大多数的实现还是会回退N，重传所有未确认的数据块1000~4500。</p>
-<h4 id="对比">对比</h4>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png"
-        title="img" /></p>
-<h4 id="tcp可靠传输的实现">TCP可靠传输的实现</h4>
-<p>TCP的可靠传输以上述连续ARQ协议为基础做出了一些变动，并研究更多的细节如滑动窗口的实现、超时计时器如何设置超时时间、选择确认、流量控制和拥塞控制。</p>
+<h4 id="对比" class="headerLink">
+    <a href="#%e5%af%b9%e6%af%94" class="header-mark"></a>对比</h4><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h4 id="tcp可靠传输的实现" class="headerLink">
+    <a href="#tcp%e5%8f%af%e9%9d%a0%e4%bc%a0%e8%be%93%e7%9a%84%e5%ae%9e%e7%8e%b0" class="header-mark"></a>TCP可靠传输的实现</h4><p>TCP的可靠传输以上述连续ARQ协议为基础做出了一些变动，并研究更多的细节如滑动窗口的实现、超时计时器如何设置超时时间、选择确认、流量控制和拥塞控制。</p>
 <p>TCP可靠传输基于4点：<strong>窗口、序号、确认和重传</strong>。其中后3点实现了可靠传输，第1点提高TCP传输效率。</p>
-<h3 id="tcp的发送时机">TCP的发送时机</h3>
-<p>为了保证TCP传输效率，TCP不会在发送缓冲区一有数据就立刻发送，而是会遵循一些发送的时机，当满足以下3个条件中的一个才会发送数据：</p>
+<h3 id="tcp的发送时机" class="headerLink">
+    <a href="#tcp%e7%9a%84%e5%8f%91%e9%80%81%e6%97%b6%e6%9c%ba" class="header-mark"></a>TCP的发送时机</h3><p>为了保证TCP传输效率，TCP不会在发送缓冲区一有数据就立刻发送，而是会遵循一些发送的时机，当满足以下3个条件中的一个才会发送数据：</p>
 <ol>
 <li>TCP维持一个MSS变量，当缓存中的数据到达MSS字节时，就组装成一个报文段发送；</li>
 <li>当发送方进程指明要求推送报文段（PSH=1）或者是发送紧急数据（URG=1）</li>
 <li>发送方设置一个<strong>TCP发送报文计时器</strong>，如果到时了，即便发送缓存中的数据量不够MSS也要发送出去。</li>
 </ol>
 <p>当然<strong>情况1和3要在发送方的可用窗口大于0</strong>的情况下才能发送出去。</p>
-<h3 id="nagle算法">Nagle算法</h3>
-<p>Nagle算法用于发送方比较空闲，没有什么数据要发送的情况下，为提高传输效率的一种算法。假设发送方的应用层是逐字节发送数据给协议栈的缓冲区，则Nagle会这样处理：</p>
+<h3 id="nagle算法" class="headerLink">
+    <a href="#nagle%e7%ae%97%e6%b3%95" class="header-mark"></a>Nagle算法</h3><p>Nagle算法用于发送方比较空闲，没有什么数据要发送的情况下，为提高传输效率的一种算法。假设发送方的应用层是逐字节发送数据给协议栈的缓冲区，则Nagle会这样处理：</p>
 <ol>
 <li>若进程要把发送的数据逐个字节的发送到TCP的发送缓存，则发送⽅先发送第⼀个数据字节，缓存后⾯到达的数据字节；</li>
 <li>发送⽅收到对第⼀个数据字符的确认后，把发送缓存中的所有数据组装成⼀个报⽂段（不超过MSS）发送出去，继续对随后到达的数据进⾏缓存；</li>
@@ -602,8 +741,8 @@
 <li>接收方此时应该适当延迟回发确认报文，并尽量使用捎带确认。</li>
 </ol>
 <p>该算法总结一下就是，在应用进程的数据到达发送缓冲区的速度比较慢的时候就<strong>退化成停等协议</strong>，比较快且快到满足上述第4点的时候就立刻发送报文。</p>
-<h3 id="重传机制">重传机制</h3>
-<p>TCP 实现可靠传输的方式之一，是通过序列号与确认应答。</p>
+<h3 id="重传机制" class="headerLink">
+    <a href="#%e9%87%8d%e4%bc%a0%e6%9c%ba%e5%88%b6" class="header-mark"></a>重传机制</h3><p>TCP 实现可靠传输的方式之一，是通过序列号与确认应答。</p>
 <p>在 TCP 中，当发送端的数据到达接收主机时，接收端主机会返回一个确认应答消息，表示已收到消息。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121217925.png" alt="正常的数据传输" style="zoom:50%;" />
 <p>但在错综复杂的网络，并不一定能如上图那么顺利能正常的数据传输，万一数据在传输过程中丢失了呢？</p>
@@ -615,8 +754,8 @@
 <li>SACK</li>
 <li>D-SACK</li>
 </ul>
-<h4 id="超时重传">超时重传</h4>
-<p>重传机制的其中一个方式，就是在发送数据时，设定一个定时器，当超过指定的时间后，没有收到对方的 <code>ACK</code> 确认应答报文，就会重发该数据，也就是我们常说的<strong>超时重传</strong>。</p>
+<h4 id="超时重传" class="headerLink">
+    <a href="#%e8%b6%85%e6%97%b6%e9%87%8d%e4%bc%a0" class="header-mark"></a>超时重传</h4><p>重传机制的其中一个方式，就是在发送数据时，设定一个定时器，当超过指定的时间后，没有收到对方的 <code>ACK</code> 确认应答报文，就会重发该数据，也就是我们常说的<strong>超时重传</strong>。</p>
 <p>TCP 会在以下两种情况发生超时重传：</p>
 <ul>
 <li>数据包丢失</li>
@@ -657,8 +796,8 @@
 <p>也就是<strong>每当遇到一次超时重传的时候，都会将下一次超时时间间隔设为先前值的两倍。两次超时，就说明网络环境差，不宜频繁反复发送。</strong></p>
 <p>超时触发重传存在的问题是，超时周期可能相对较长。那是不是可以有更快的方式呢？</p>
 <p>于是就可以用「快速重传」机制来解决超时重发的时间等待。</p>
-<h4 id="快速重传">快速重传</h4>
-<p>TCP 还有另外一种<strong>快速重传（Fast Retransmit）机制</strong>，它<strong>不以时间为驱动，而是以数据驱动重传</strong>。</p>
+<h4 id="快速重传" class="headerLink">
+    <a href="#%e5%bf%ab%e9%80%9f%e9%87%8d%e4%bc%a0" class="header-mark"></a>快速重传</h4><p>TCP 还有另外一种<strong>快速重传（Fast Retransmit）机制</strong>，它<strong>不以时间为驱动，而是以数据驱动重传</strong>。</p>
 <p>快速重传机制，是如何工作的呢？其实很简单，一图胜千言。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121225922.png" alt="快速重传机制" style="zoom:50%;" />
 <p>在上图，发送方发出了 1，2，3，4，5 份数据：</p>
@@ -678,14 +817,14 @@
 </ul>
 <p>可以看到，不管是重传一个报文，还是重传已发送的报文，都存在问题。</p>
 <p>为了解决不知道该重传哪些 TCP 报文，于是就有 <code>SACK</code> 方法。</p>
-<h4 id="sack-方法">SACK 方法</h4>
-<p>还有一种实现重传机制的方式叫：<code>SACK</code>（ Selective Acknowledgment）， <strong>选择性确认</strong>。</p>
+<h4 id="sack-方法" class="headerLink">
+    <a href="#sack-%e6%96%b9%e6%b3%95" class="header-mark"></a>SACK 方法</h4><p>还有一种实现重传机制的方式叫：<code>SACK</code>（ Selective Acknowledgment）， <strong>选择性确认</strong>。</p>
 <p>这种方式需要在 TCP 头部「选项」字段里加一个 <code>SACK</code> 的东西，它<strong>可以将已收到的数据的信息发送给「发送方」</strong>，这样发送方就可以知道哪些数据收到了，哪些数据没收到，知道了这些信息，就可以<strong>只重传丢失的数据</strong>。</p>
 <p>如下图，发送方收到了三次同样的 ACK 确认报文，于是就会触发快速重发机制，通过 <code>SACK</code> 信息发现只有 <code>200~299</code> 这段数据丢失，则重发时，就只选择了这个 TCP 段进行重复。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121229035.png" alt="选择性确认" style="zoom:50%;" />
 <p>如果要支持 <code>SACK</code>，必须双方都要支持。在 Linux 下，可以通过 <code>net.ipv4.tcp_sack</code> 参数打开这个功能（Linux 2.4 后默认打开）。</p>
-<h4 id="duplicate-sack">Duplicate SACK</h4>
-<p>Duplicate SACK 又称 <code>D-SACK</code>，其主要<strong>使用了 SACK 来告诉「发送方」有哪些数据被重复接收了。</strong></p>
+<h4 id="duplicate-sack" class="headerLink">
+    <a href="#duplicate-sack" class="header-mark"></a>Duplicate SACK</h4><p>Duplicate SACK 又称 <code>D-SACK</code>，其主要<strong>使用了 SACK 来告诉「发送方」有哪些数据被重复接收了。</strong></p>
 <p>下面举例两个栗子，来说明 <code>D-SACK</code> 的作用。</p>
 <p><em>栗子一号：ACK 丢包</em></p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121229966.png" alt="ACK 丢包" style="zoom:50%;" />
@@ -709,8 +848,8 @@
 <li>可以知道网络中是不是把「发送方」的数据包给复制了;</li>
 </ol>
 <p>在 Linux 下可以通过 <code>net.ipv4.tcp_dsack</code> 参数开启/关闭这个功能（Linux 2.4 后默认打开）。</p>
-<h3 id="滑动窗口">滑动窗口</h3>
-<p>通信过程中一个传输方向上所有的字节的序号（seq）可以看做一个序列（这些序列在socket的缓冲区中），而窗口则是序列中的一个子集。该窗口用于做流量控制以及拥塞控制。</p>
+<h3 id="滑动窗口" class="headerLink">
+    <a href="#%e6%bb%91%e5%8a%a8%e7%aa%97%e5%8f%a3" class="header-mark"></a>滑动窗口</h3><p>通信过程中一个传输方向上所有的字节的序号（seq）可以看做一个序列（这些序列在socket的缓冲区中），而窗口则是序列中的一个子集。该窗口用于做流量控制以及拥塞控制。</p>
 <p>滑动窗口的单位是字节而不是分组。一个连接的两端都各有一对窗口分别是发送窗口和接收窗口，因此一个连接有4个窗口，且是动态变化的。</p>
 <ul>
 <li>
@@ -724,89 +863,96 @@
 </ul>
 <p>窗口指针保存在套接字中。在不考虑拥塞的情况，发送端A的发送窗口和接收方B的接收窗口大小从整个传输过程来看是一致的（但不是强一致，并不总是一样大）。</p>
 <p>发送窗口越大，发送方在收到确认前能连续发送的数据越多，在不考虑网络拥塞因素下传输效率越高。</p>
-<h4 id="滑动窗口的工作过程">滑动窗口的工作过程</h4>
-<p><strong>只观察发送方的发送缓冲区和接收方的接收缓冲区</strong>:</p>
+<h4 id="滑动窗口的工作过程" class="headerLink">
+    <a href="#%e6%bb%91%e5%8a%a8%e7%aa%97%e5%8f%a3%e7%9a%84%e5%b7%a5%e4%bd%9c%e8%bf%87%e7%a8%8b" class="header-mark"></a>滑动窗口的工作过程</h4><p><strong>只观察发送方的发送缓冲区和接收方的接收缓冲区</strong>:</p>
 <p>1、某一时刻，A 收到了 B 的确认报⽂段：报文携带的窗口值 20 字节，确认号为 31。A 可以把落⼊发送窗⼝中的序号字节⼀次连续性全部发送出去：边发送边接收确认。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>2、下一刻A发送了31~41号字节，<strong>在确认前会保留在窗口中以便超时重传时使用</strong>。</p>
 <p>B的接收窗口显示，B没有收到31，32~33是未按需到达的数据，要临时存放在接收窗口，不能上交给应用进程。B的接收窗口也不能移动。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>3、下一刻B收到了31，B将31~33字节交付应用层，并从接收缓冲区中删除，且B接收窗口右移3个字节，发送ack=33的确认报文（假设确认报文的窗口大小字段仍是20）。A收到确认后窗口右移3字节。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>4、当P2=P3时，可用窗口为0，会停止发送。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png"
-        title="img" /></p>
-<h4 id="缓冲区与窗口的关联">缓冲区与窗口的关联</h4>
-<h5 id="发送方的发送缓存与发送窗口">发送方的发送缓存与发送窗口</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h4 id="缓冲区与窗口的关联" class="headerLink">
+    <a href="#%e7%bc%93%e5%86%b2%e5%8c%ba%e4%b8%8e%e7%aa%97%e5%8f%a3%e7%9a%84%e5%85%b3%e8%81%94" class="header-mark"></a>缓冲区与窗口的关联</h4><h5 id="发送方的发送缓存与发送窗口" class="headerLink">
+    <a href="#%e5%8f%91%e9%80%81%e6%96%b9%e7%9a%84%e5%8f%91%e9%80%81%e7%bc%93%e5%ad%98%e4%b8%8e%e5%8f%91%e9%80%81%e7%aa%97%e5%8f%a3" class="header-mark"></a>发送方的发送缓存与发送窗口</h5><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>发送窗⼝通常只是 发送缓存的⼀部分，具体来说 发送缓存 = 发送应用程序最后写入发送缓冲区的最后一个字节 - 发送窗口P1字节。缓冲区中，p1指针之前的数据由于已经发送和收到确认，因此被释放出缓冲区。</p>
-<h5 id="接受方的接收缓存与接收窗口">接受方的接收缓存与接收窗口</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png"
-        title="img" /></p>
-<h3 id="流量控制">流量控制</h3>
-<p>流量控制是指<strong>动态控制滑动窗口的大小使得发送方发送数据的速率略小于或等于接收方接收的速率</strong>（接收速率其实又由应用程序取走接收缓冲区的速率决定），防止接收方的接收缓存溢出造成分组丢失。</p>
+<h5 id="接受方的接收缓存与接收窗口" class="headerLink">
+    <a href="#%e6%8e%a5%e5%8f%97%e6%96%b9%e7%9a%84%e6%8e%a5%e6%94%b6%e7%bc%93%e5%ad%98%e4%b8%8e%e6%8e%a5%e6%94%b6%e7%aa%97%e5%8f%a3" class="header-mark"></a>接受方的接收缓存与接收窗口</h5><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h3 id="流量控制" class="headerLink">
+    <a href="#%e6%b5%81%e9%87%8f%e6%8e%a7%e5%88%b6" class="header-mark"></a>流量控制</h3><p>流量控制是指<strong>动态控制滑动窗口的大小使得发送方发送数据的速率略小于或等于接收方接收的速率</strong>（接收速率其实又由应用程序取走接收缓冲区的速率决定），防止接收方的接收缓存溢出造成分组丢失。</p>
 <p>流量控制的实现是通过在接收方的ACK报文携带窗口大小（假设大小X，X=接收方的接收缓冲区的空闲空间大小）同步给发送方，使发送方调整自己的可用窗口（P3-P2部分）为X。</p>
 <p>需要注意的是发送窗口的p2-p1取决于ack号，P3-P2取决于ACK报文中的窗口大小。</p>
 <p>下面是一个流量控制的过程（不考虑拥塞的情况下）：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <blockquote>
 <p>图中<code>rwnd</code>(receiver window)表示容许的接收方窗口。</p>
 </blockquote>
-<h4 id="持续计时器">持续计时器</h4>
-<p>考虑一种情况，如果B向A发送了一个零窗口报文后，A停止向B发数据，后来B又向A发送了一个<code>rwnd=400</code>的ACK报文M。但M丢失了，A一直在等B的非零窗口通知，B也在等A发过来的数据，陷入死锁局面。</p>
+<h4 id="持续计时器" class="headerLink">
+    <a href="#%e6%8c%81%e7%bb%ad%e8%ae%a1%e6%97%b6%e5%99%a8" class="header-mark"></a>持续计时器</h4><p>考虑一种情况，如果B向A发送了一个零窗口报文后，A停止向B发数据，后来B又向A发送了一个<code>rwnd=400</code>的ACK报文M。但M丢失了，A一直在等B的非零窗口通知，B也在等A发过来的数据，陷入死锁局面。</p>
 <p>解决方法：</p>
 <blockquote>
 <p>TCP为每个连接设有一个<strong>持续计时器</strong>，只要一端A收到零窗口通知就启动该计时器，时间到期，A就发送一个仅携带1字节的“零窗口探测报文”。对端B就会确认这个报文的时候携带新的<code>rwnd</code>值。如果<code>rwnd</code>仍为0则重新启动持续计时器，否则A开始发送数据。</p>
 </blockquote>
-<h3 id="拥塞控制">拥塞控制</h3>
-<p><strong>什么情况下叫做拥塞？</strong></p>
+<h3 id="拥塞控制" class="headerLink">
+    <a href="#%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6" class="header-mark"></a>拥塞控制</h3><p><strong>什么情况下叫做拥塞？</strong></p>
 <blockquote>
 <p>网络中，链路容量（带宽）、交换机和路由器中的缓存和处理机都是网络的资源，在某段时间，若对网络中某一资源的需求超过了该资源能提供的部分，导致分组在链路中丢失，这种情况就叫<strong>拥塞</strong>。</p>
 </blockquote>
@@ -832,16 +978,17 @@
 <li>流量控制是解决端与端的发送与接收速率不匹配的问题，需要发送方同步接收方的接收速度；</li>
 <li>拥塞控制是解决端系统的通信量与网络链路资源不匹配引起的路由器和链路过载问题，需要控制端系统注入到网络的数据量和速度。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png"
-        title="img" /></p>
-<h4 id="拥塞控制的方法">拥塞控制的方法</h4>
-<p><strong>拥塞控制需要解决的三个问题</strong></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h4 id="拥塞控制的方法" class="headerLink">
+    <a href="#%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6%e7%9a%84%e6%96%b9%e6%b3%95" class="header-mark"></a>拥塞控制的方法</h4><p><strong>拥塞控制需要解决的三个问题</strong></p>
 <ol>
 <li>
 <p>TCP 发送方如何限制它向其他连接发送报文段的速率呢？</p>
@@ -858,55 +1005,58 @@
 <p>慢开始、拥塞避免、快重传和快恢复。这4种方法的基本思路是，只要网络没有拥塞，拥塞窗口就可以增大些，出现拥塞就减小些。</p>
 </li>
 </ol>
-<h5 id="慢开始算法慢启动">慢开始算法（慢启动）</h5>
-<p>慢开始的思路是从小到大以指数方式增加拥塞窗口的数值。慢开始发生在刚建立连接后的数据收发。</p>
+<h5 id="慢开始算法慢启动" class="headerLink">
+    <a href="#%e6%85%a2%e5%bc%80%e5%a7%8b%e7%ae%97%e6%b3%95%e6%85%a2%e5%90%af%e5%8a%a8" class="header-mark"></a>慢开始算法（慢启动）</h5><p>慢开始的思路是从小到大以指数方式增加拥塞窗口的数值。慢开始发生在刚建立连接后的数据收发。</p>
 <p>一开始发送方并不清楚网络的拥塞情况，就先将cwnd初始值设置为1~2个SMSS（发送方MSS），新的RFC标准则把初始<code>cwnd</code>设置为2~4，至于取2还是3还是4，取决于SMSS有多大。</p>
 <p>在每收到⼀个对新的报⽂段的确认（重传的确认不算）后，发送方的拥塞窗⼝就增加⼀个 SMSS 的数值，因此<code>cwnd</code>会呈指数级别增长。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>慢启动的窗口增长速度其实不慢（指数级别），之所以叫慢启动是因为它的初始<code>cwnd</code>值很小。</p>
 <p>顺带一提 ，新建立的连接会用到慢启动，TCP 还实现了 <strong>慢启动重启</strong> （SSR） 机制。这种机制会在持久连接空闲一定时间后重置拥塞窗口为初始cwnd值。道理很简单， 在连接空闲的同时，网络状况也可能发生了变化，为了避免拥塞，理应将拥塞窗 口重置回“安全的”默认值。</p>
 <p>为了不让窗口无限的指数增长，提出了慢开始门限，当窗口大小超过了慢开始门限 <code>ssthresh</code> 则使用拥塞避免算法线性增长窗口。</p>
 <p>慢开始⻔限 <code>ssthresh</code> ：</p>
 <p>当 <code>cwnd &lt; ssthresh</code> 时，使⽤慢开始算法；</p>
 <p>当 <code>cwnd &gt;= ssthresh</code> 时，停⽌使⽤慢开始算法⽽改⽤拥塞避免算法；</p>
-<h5 id="拥塞避免算法">拥塞避免算法</h5>
-<p>该算法是指：当<code>cwnd</code>超过慢开始门限后，每经过一个RTT，拥塞窗口就线性增长 <code>cwnd = cwnd + 1</code>。</p>
-<h5 id="快速重传算法">快速重传算法</h5>
-<p>该算法是指：如果发送方连续收到3个重复ack号的确认，说明接收方收到了乱序的报文（某个中间报文丢失或者迟到），发送方会立即进行重传，而不是等到超时时间用完才重传，避免发送方误认为发生了网络拥塞。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png"
-        title="img" /></p>
+<h5 id="拥塞避免算法" class="headerLink">
+    <a href="#%e6%8b%a5%e5%a1%9e%e9%81%bf%e5%85%8d%e7%ae%97%e6%b3%95" class="header-mark"></a>拥塞避免算法</h5><p>该算法是指：当<code>cwnd</code>超过慢开始门限后，每经过一个RTT，拥塞窗口就线性增长 <code>cwnd = cwnd + 1</code>。</p>
+<h5 id="快速重传算法" class="headerLink">
+    <a href="#%e5%bf%ab%e9%80%9f%e9%87%8d%e4%bc%a0%e7%ae%97%e6%b3%95" class="header-mark"></a>快速重传算法</h5><p>该算法是指：如果发送方连续收到3个重复ack号的确认，说明接收方收到了乱序的报文（某个中间报文丢失或者迟到），发送方会立即进行重传，而不是等到超时时间用完才重传，避免发送方误认为发生了网络拥塞。</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>中间报文的丢失或迟到极可能是意外丢失或迟到，而不是因为网络拥塞导致的丢失，但不排除拥塞的可能性。快速重传可以使网络的吞吐量提高20%。</p>
-<h5 id="快恢复算法">快恢复算法</h5>
-<p><strong>拥塞惩罚</strong>是指端系统检测到网络拥塞时（即发生重传时），降低自己<code>cwnd</code>窗口的行为。拥塞惩罚按超时重传和快速重传分为两种惩罚方式：</p>
+<h5 id="快恢复算法" class="headerLink">
+    <a href="#%e5%bf%ab%e6%81%a2%e5%a4%8d%e7%ae%97%e6%b3%95" class="header-mark"></a>快恢复算法</h5><p><strong>拥塞惩罚</strong>是指端系统检测到网络拥塞时（即发生重传时），降低自己<code>cwnd</code>窗口的行为。拥塞惩罚按超时重传和快速重传分为两种惩罚方式：</p>
 <ul>
 <li>当发生超时重传时，发送方会认为网络出现拥塞，拥塞窗口<code>cwnd</code>会变成1。</li>
 <li>当发生快速重传时，该分组很可能是意外丢失或迟到，但不排除拥塞的可能，因此<code>cwnd</code>会变为 <code>cwnd/2</code>。</li>
 </ul>
 <p><strong>快恢复算法</strong>是指当发生快速重传时，当前拥塞窗口大小减小一半，之后直接执行拥塞避免算法线性增长<code>cwnd</code>，而不是执行慢开始算法指数增长<code>cwnd</code>。</p>
 <p>下面是TCP拥塞控制流程图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png"
-        title="img" /></p>
-<h4 id="拥塞惩罚机制">拥塞惩罚机制</h4>
-<p>整个拥塞惩罚机制逻辑如下：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h4 id="拥塞惩罚机制" class="headerLink">
+    <a href="#%e6%8b%a5%e5%a1%9e%e6%83%a9%e7%bd%9a%e6%9c%ba%e5%88%b6" class="header-mark"></a>拥塞惩罚机制</h4><p>整个拥塞惩罚机制逻辑如下：</p>
 <p>超时重传的情况下：</p>
 <p>• 慢开始⻔限 ssthresh = max(cwnd/2，2)；</p>
 <p>• cwnd = 1；</p>
@@ -916,17 +1066,18 @@
 <p>• 新拥塞窗⼝ cwnd = 慢开始⻔限 ssthresh ；</p>
 <p>• 开始执⾏拥塞避免算法，使拥塞窗⼝缓慢地线性增⼤。</p>
 <p>无论是超时重传还是快速重传，都会导致慢开始门限减半，这会导致多次惩罚后，不再会执行指数增长，而是全变成线性增长。</p>
-<h4 id="tcp拥塞控制动态流程图">TCP拥塞控制动态流程图</h4>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png"
-        title="img" /></p>
-<h4 id="主动队列管理-aqm">主动队列管理 AQM</h4>
-<p>对TCP拥塞控制影响最大的网络层策略是分组丢弃策略。该策略的内容为，到达路由器的分组会按先进先出原则放入到缓存队列中，一旦队列已满，后到达的分组会被丢弃。</p>
+<h4 id="tcp拥塞控制动态流程图" class="headerLink">
+    <a href="#tcp%e6%8b%a5%e5%a1%9e%e6%8e%a7%e5%88%b6%e5%8a%a8%e6%80%81%e6%b5%81%e7%a8%8b%e5%9b%be" class="header-mark"></a>TCP拥塞控制动态流程图</h4><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h4 id="主动队列管理-aqm" class="headerLink">
+    <a href="#%e4%b8%bb%e5%8a%a8%e9%98%9f%e5%88%97%e7%ae%a1%e7%90%86-aqm" class="header-mark"></a>主动队列管理 AQM</h4><p>对TCP拥塞控制影响最大的网络层策略是分组丢弃策略。该策略的内容为，到达路由器的分组会按先进先出原则放入到缓存队列中，一旦队列已满，后到达的分组会被丢弃。</p>
 <p>这种丢弃策略会导致<strong>一连串分组的丢失和超时重传，这一方向的所有TCP连接都进入慢开始状态，这种情况叫做全局同步</strong>，全局同步会导致通信量突然下降，不一会儿通信量又突然增大（因为报文指数增长）。</p>
 <p>为了避免全局同步，我们可以在队列长度到达某个警戒线时主动丢弃部分分组，而不是在分组数量达到最大队列长度时被动丢弃所有分组，这就是<strong>主动队列管理AQM</strong>。</p>
 <p>AQM有不同的实现方式，比较主流的是随机早期检测RED。</p>
@@ -934,62 +1085,67 @@
 <p>队列⻓度L ⼩于最⼩⻔限 THmin，将新到达的分组放⼊队 列进⾏排队；</p>
 <p>队列⻓度L 超过最⼤⻔限 THmax，将新到达的分组丢弃；</p>
 <p>队列⻓度L 在最⼩⻔限 THmin 和最⼤⻔限 THmax 之间，按 照概率 p 丢弃新到达的分组。而且随着队列长度L的增加，p也会变大。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png"
-        title="img" /></p>
-<h3 id="连接管理">连接管理</h3>
-<p>TCP连接要解决3个问题：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h3 id="连接管理" class="headerLink">
+    <a href="#%e8%bf%9e%e6%8e%a5%e7%ae%a1%e7%90%86" class="header-mark"></a>连接管理</h3><p>TCP连接要解决3个问题：</p>
 <ol>
 <li>使对方知道自己的存在，且确认双方能发送能接收；</li>
 <li>允许双方协商一些参数（如最大窗口值，是否用窗口扩大选项和时间戳选项等）；</li>
 <li>分配运输资源（缓存大小，连接表中的项目）；</li>
 </ol>
-<h4 id="三次握手建立连接">三次握手建立连接</h4>
-<p>需要3个报文：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png"
-        title="img" /></p>
+<h4 id="三次握手建立连接" class="headerLink">
+    <a href="#%e4%b8%89%e6%ac%a1%e6%8f%a1%e6%89%8b%e5%bb%ba%e7%ab%8b%e8%bf%9e%e6%8e%a5" class="header-mark"></a>三次握手建立连接</h4><p>需要3个报文：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>下面是连接的状态变化</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>在连接之前，A和B会先创建传输控制块TCB，存储了连接相关的重要信息如 TCP连接表，指向发送和接收缓存的指针，指向重传队列的指针，seq和ack等。</p>
 <p>SYN不能携带数据，但需要消耗一个序号。ACK报文是可以携带数据的。</p>
 <p><strong>为什么建立连接是三次握手而不是两次？</strong></p>
 <p>是为了防止已失效的连接请求报文段传到了B产生错误。具体情境如下：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png"
-        title="img" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>A 发送的SYN报文丢失，A又重发了一个SYN报文，并建立连接成功，后来关闭了连接，通信结束。但丢失的SYN报文此时到达B，B发送第二次握手的报文（ACK报文）后直接进入连接状态，而A没有发起建立连接的请求，不会理睬这个ACK报文，但B会一直等待A发送数据报文段过来，B的资源白白浪费。</p>
-<h4 id="四次挥手断开连接">四次挥手断开连接</h4>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png"
-        title="img" /></p>
+<h4 id="四次挥手断开连接" class="headerLink">
+    <a href="#%e5%9b%9b%e6%ac%a1%e6%8c%a5%e6%89%8b%e6%96%ad%e5%bc%80%e8%bf%9e%e6%8e%a5" class="header-mark"></a>四次挥手断开连接</h4><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
 <p>需要注意：</p>
 <p>通信双方都可以主动发起关闭连接的请求报文。</p>
 <p>FIN可以携带数据，但如果不携带数据也会消耗一个序号。</p>
@@ -999,50 +1155,54 @@
 <p>1、防止第四次挥手的ACK丢失后B无法进入CLOSED状态。</p>
 <p>假设A在第三次挥手之后直接进入CLOSED，而且最后一个ACK丢失，B会重发第三次挥手，假设A之前的端口是X，这时有两个情况：一个是A之前的端口又开始建立新的连接，那么A收到该FIN报文之后，会回应一个RST报文给B；一个是A之前的端口没有再开启过了，那么B的FIN报文不会得到ACK回应，B会不停的重传。</p>
 <p>2、保证本次连接产生的所有报文（FIN、SYN和数据报文）在这2MSL内从网络中消失，不会和新连接的报文发生混淆（尤其是新连接和旧连接的客户端端口是相同的情况下）。</p>
-<h5 id="tcp半关闭">TCP半关闭</h5>
-<p>半关闭是指建立连接的两端只有其中一端发送FIN报文，关闭双向连接的某一个方向。主动发送FIN的一端之后就无法向对端发送数据，只能接受对端发送的数据和发送ACK报文段。</p>
+<h5 id="tcp半关闭" class="headerLink">
+    <a href="#tcp%e5%8d%8a%e5%85%b3%e9%97%ad" class="header-mark"></a>TCP半关闭</h5><p>半关闭是指建立连接的两端只有其中一端发送FIN报文，关闭双向连接的某一个方向。主动发送FIN的一端之后就无法向对端发送数据，只能接受对端发送的数据和发送ACK报文段。</p>
 <p>一端发送FIN报文之后，另一端发送FIN报文之前的连接状态称为“半关闭状态”。</p>
 <p>套接字的close()提供了全关闭操作，而shutdown()则提供了半关闭操作，实际应用中半关闭很少用到。</p>
-<h5 id="tcp同时打开与关闭">TCP同时打开与关闭</h5>
-<p>同时打开是指通信双方A和B，A发送SYN报文给B，并在报文段到达B之前，B也发送SYN报文给A。同时打开只会出现在A和B都是服务器端的情况下。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png"
-        data-srcset="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png, https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png 1.5x, https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png 2x"
-        data-sizes="auto"
-        alt="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png"
-        title="img" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png"
-        data-srcset="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png, https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png 1.5x, https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png 2x"
-        data-sizes="auto"
-        alt="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png"
-        title="img" /></p>
-<h5 id="连接建立超时">连接建立超时</h5>
-<p>如果一个客户端发起连接请求时，服务器是关闭的，那么客户端会在连接等待超时后再重新发送SYN报文，并且每次超时，超时时间都会翻倍。这一行为被称为指数回退。</p>
+<h5 id="tcp同时打开与关闭" class="headerLink">
+    <a href="#tcp%e5%90%8c%e6%97%b6%e6%89%93%e5%bc%80%e4%b8%8e%e5%85%b3%e9%97%ad" class="header-mark"></a>TCP同时打开与关闭</h5><p>同时打开是指通信双方A和B，A发送SYN报文给B，并在报文段到达B之前，B也发送SYN报文给A。同时打开只会出现在A和B都是服务器端的情况下。</p>
+<p><figure><a class="lightgallery" href="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png" title="img" data-thumbnail="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png">
+        <img
+            
+            loading="lazy"
+            src="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png"
+            srcset="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png, https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png 1.5x, https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<p><figure><a class="lightgallery" href="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png" title="img" data-thumbnail="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png">
+        <img
+            
+            loading="lazy"
+            src="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png"
+            srcset="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png, https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png 1.5x, https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h5 id="连接建立超时" class="headerLink">
+    <a href="#%e8%bf%9e%e6%8e%a5%e5%bb%ba%e7%ab%8b%e8%b6%85%e6%97%b6" class="header-mark"></a>连接建立超时</h5><p>如果一个客户端发起连接请求时，服务器是关闭的，那么客户端会在连接等待超时后再重新发送SYN报文，并且每次超时，超时时间都会翻倍。这一行为被称为指数回退。</p>
 <p>在Linux中net.ipv4.tcp_syn_retries参数可以配置重发SYN的次数，而net.ipv4.tcp_synack_retries则是第二次握手的SYN报文的重发次数。这两个参数通常选择一个较小值5。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png"
-        title="img" /></p>
-<h5 id="tcp有限状态机">TCP有限状态机</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png"
-        title="img" /></p>
-<h3 id="计时器">计时器</h3>
-<ul>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h5 id="tcp有限状态机" class="headerLink">
+    <a href="#tcp%e6%9c%89%e9%99%90%e7%8a%b6%e6%80%81%e6%9c%ba" class="header-mark"></a>TCP有限状态机</h5><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png 2x"
+            sizes="auto"
+            alt="img">
+    </a></figure></p>
+<h3 id="计时器" class="headerLink">
+    <a href="#%e8%ae%a1%e6%97%b6%e5%99%a8" class="header-mark"></a>计时器</h3><ul>
 <li>超时重传计时器：略；</li>
 <li>零窗口持续计时器：零窗口时发送探测报文的计时器；</li>
 <li>Time-Wait计时器：time-wait等待2MSL的计时器；</li>
@@ -1053,20 +1213,21 @@
 <p>PS: 保活计时器⽤来防⽌在TCP连接出现⻓时期的空闲以及判断对方是否故障下线。</p>
 <p>保活计时器 通常设置为2⼩时 。若服务器过了2⼩时还没 有收到客户的信息，它就发送探测报⽂段。若发送了10个 探测报⽂段（每⼀个相隔75秒）还没有响应，就假定客户 出了故障，因⽽就终⽌该连接。</p>
 </blockquote>
-<h3 id="heading"></h3>
-</div><div class="post-footer" id="post-footer">
+<h3 id="heading" class="headerLink">
+    <a href="#heading" class="header-mark"></a></h3></div>
+
+        <div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2023-07-11</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" data-title="计算机网络之运输层"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" data-title="计算机网络之运输层"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
             </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
+                    </span></div>
+            <div class="post-info-share"><button title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" data-title="计算机网络之运输层"><span class="fab fa-weibo fa-fw"></span></button><button title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" data-title="计算机网络之运输层"><span data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></span></button></div>
         </div>
     </div>
 
@@ -1077,21 +1238,26 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" class="prev" rel="prev" title="计算机网络之网络层"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>计算机网络之网络层</a>
-            <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" class="next" rel="next" title="计算机网络之应用层">计算机网络之应用层<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" class="prev" rel="prev" title="计算机网络之网络层"><i class="fas fa-angle-left fa-fw"></i>计算机网络之网络层</a>
+            <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" class="next" rel="next" title="计算机网络之应用层">计算机网络之应用层<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id="comments"><div id="gitalk" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
             </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
 
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-07-11T17:36:16+08:00","owner":"cold-bin","repo":"blog-comment","title":"计算机网络之运输层"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="Back to Top">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.b38ee65d6456beb2d034bf554505f4ca47e421548b7cd26e8a7805fd2673b6c3.css" integrity="sha256-s47mXWRWvrLQNL9VRQX0ykfkIVSLfNJuingF/SZztsM="><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr&#43;QR0SQDNfgglgtcM="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc=">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18&#43;2anxsuaz3pWYyVWi&#43;bTvTH8Q="><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-07-11T17:36:16+08:00","owner":"cold-bin","repo":"blog-comment","title":"计算机网络之运输层"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"},"sharerjs":true};</script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.0c4d9db673dd19489cfa134ab15ef8b9237ae72aaa65d8490d55658442b3a2d3.js" integrity="sha256-DE2dtnPdGUic&#43;hNKsV74uSN65yqqZdhJDVVlhEKzotM="></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.72ceb0f87691041e9e0bea2f2468b9aa3ed544e8f7f6dc9f76d8c8f997699e41.js" integrity="sha256-cs6w&#43;HaRBB6eC&#43;ovJGi5qj7VROj39tyfdtjI&#43;ZdpnkE="></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.5b0e82e9a1ae0b52d07a52da1eb4640da77eb3ca7e78c3a428c1f3b712858d3c.js" integrity="sha256-Ww6C6aGuC1LQelLaHrRkDad&#43;s8p&#43;eMOkKMHztxKFjTw="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.11be927cda59c8b6019ebbea838285c5beaf21183ea4b83dbd4e4fbf9413ce4a.js" integrity="sha256-Eb6SfNpZyLYBnrvqg4KFxb6vIRg&#43;pLg9vU5Pv5QTzko="></script><script type="text/javascript" src="/lib/sharer/sharer.min.8fe10eb615eb163a20f795484430a012805ec7c8c11df52df54ddb7a46084254.js" integrity="sha256-j&#43;EOthXrFjog95VIRDCgEoBex8jBHfUt9U3bekYIQlQ="></script><script type="text/javascript" src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw&#43;iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y&#43;KzPOwaJ0PYhsf7R6c=" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54&#43;rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn&#43;yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script></div>
+</body>
+
 </html>

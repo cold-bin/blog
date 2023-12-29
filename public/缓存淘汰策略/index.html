@@ -1,11 +1,14 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>缓存淘汰策略 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="缓存淘汰策略" />
-<meta property="og:description" content="[toc] 缓存淘汰 背景 不论是进程内缓存，还是分布式缓存，都无法避免这样一个问题：当我们需要缓存的数据大于物理内存时，那么就需要通过操作系统虚拟内存管" />
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>缓存淘汰策略 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="缓存淘汰策略" />
+<meta property="og:description" content="[toc] 缓存淘汰 背景不论是进程内缓存，还是分布式缓存，都无法避免这样一个问题：当我们需要缓存的数据大于物理内存时，那么就需要通过操作系统虚拟内存管" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-05-31T22:53:14+08:00" />
@@ -15,11 +18,14 @@
 <meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
 
 <meta name="twitter:title" content="缓存淘汰策略"/>
-<meta name="twitter:description" content="[toc] 缓存淘汰 背景 不论是进程内缓存，还是分布式缓存，都无法避免这样一个问题：当我们需要缓存的数据大于物理内存时，那么就需要通过操作系统虚拟内存管"/>
+<meta name="twitter:description" content="[toc] 缓存淘汰 背景不论是进程内缓存，还是分布式缓存，都无法避免这样一个问题：当我们需要缓存的数据大于物理内存时，那么就需要通过操作系统虚拟内存管"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%A6%82%E8%BF%B0/" />
+<link rel="stylesheet" href="/css/main.d5cb6f29e0750a13b17688d628b04d50f9fbbd32e0629ccc0dcf796a299ae226.css" integrity="sha256-1ctvKeB1ChOxdojWKLBNUPn7vTLgYpzMDc95aima4iY="><link rel="stylesheet" href="/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css" integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH&#43;KuXHiZWODptY5K8NF4="><link rel="stylesheet" href="/css/color.b0a0f8c429ce52dfa2805b5f9e99ccdae1e8fbfd9adf4f3ddb409d8201fc0c5a.css" integrity="sha256-sKD4xCnOUt&#43;igFtfnpnM2uHo&#43;/2a308920CdggH8DFo="><link rel="stylesheet" href="/css/style.min.5963810f80932dd0408e0fe2003ab30dbccfb3400fe079d989aad753741320e0.css" integrity="sha256-WWOBD4CTLdBAjg/iADqzDbzPs0AP4HnZiarXU3QTIOA="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc=">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc="></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -27,13 +33,13 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  6855 ,
-        "url": "https:\/\/blog.coldbin.top\/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5\/","datePublished": "2023-05-31T22:53:14+08:00","dateModified": "2023-08-25T16:34:14+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@id": "https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/"
+        },"image": ["https://blog.coldbin.top/favicon.ico"],"genre": "posts","wordcount":  6855 ,
+        "url": "https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/","datePublished": "2023-05-31T22:53:14+08:00","dateModified": "2023-08-25T16:34:14+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
             "@type": "Organization",
             "name": "阿冰","logo": {
                     "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "url": "https://blog.coldbin.top/images/avatar.png",
                     "width":  396 ,
                     "height":  396 
                 }},"author": {
@@ -42,34 +48,43 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
             <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
+        class="logo"
+        loading="lazy"
+        src="/favicon.ico"
+        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+        title="/favicon.ico" >阿冰的小屋</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search fa-fw"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle fa-fw"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                    <i class="fas fa-adjust fa-fw"></i>
                 </a></div>
         </div>
     </div>
@@ -78,13 +93,13 @@
         <div class="header-wrapper">
             <div class="header-title">
                 <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
+        class="logo"
+        loading="lazy"
+        src="/favicon.ico"
+        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+        title="/favicon.ico" >阿冰的小屋</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -94,39 +109,67 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search fa-fw"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle fa-fw"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
-</header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">缓存淘汰策略</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>缓存系统</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-05-31">2023-05-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;6855 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;14 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">Contents</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#缓存淘汰">缓存淘汰</a>
+      <ul>
+        <li><a href="#背景">背景</a></li>
+        <li><a href="#几种缓存淘汰策略及实现">几种缓存淘汰策略及实现</a>
+          <ul>
+            <li><a href="#fifo先进先出淘汰">FIFO先进先出淘汰</a></li>
+            <li><a href="#lfu最不经常使用">LFU最不经常使用</a></li>
+            <li><a href="#lru最近最少使用">LRU最近最少使用</a></li>
+            <li><a href="#lru-k">LRU-K</a></li>
+            <li><a href="#2q">2Q</a></li>
+          </ul>
+        </li>
+        <li><a href="#应用与举例">应用与举例</a>
+          <ul>
+            <li><a href="#redis中的近似lru策略">redis中的近似LRU策略</a></li>
+            <li><a href="#bigcache中的fifo策略">bigcache中的fifo策略</a></li>
+            <li><a href="#memcached中的lru策略">memcached中的lru策略</a></li>
+          </ul>
+        </li>
+        <li><a href="#总结">总结</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">缓存淘汰策略</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">阿冰</a>
+                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw"></i>缓存系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-05-31">2023-05-31</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-25">2023-08-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;6855 words&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;14 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -155,18 +198,18 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>[toc]</p>
-<h1 id="缓存淘汰">缓存淘汰</h1>
-<h2 id="背景">背景</h2>
-<p>不论是进程内缓存，还是分布式缓存，都无法避免这样一个问题：当我们需要缓存的数据大于物理内存时，那么就需要通过操作系统虚拟内存管理不断地在硬盘和内存中进行页面置换。设想一下：缓存数据越大，那么缺页中断的就越多，导致页面置换就越多，从而磁盘IO增加，从而大大拖垮缓存的性能。所以，虽然操作系统允许我们运行比物理内存更大更多的进程，但是为了兼具缓存性能，我们<strong>依然需要适当的控制，来保证我们缓存数据的大小不能超过物理内存，一旦超过就可能会发生页面置换中的磁盘IO</strong></p>
+<h1 id="缓存淘汰" class="headerLink">
+    <a href="#%e7%bc%93%e5%ad%98%e6%b7%98%e6%b1%b0" class="header-mark"></a>缓存淘汰</h1><h2 id="背景" class="headerLink">
+    <a href="#%e8%83%8c%e6%99%af" class="header-mark"></a>背景</h2><p>不论是进程内缓存，还是分布式缓存，都无法避免这样一个问题：当我们需要缓存的数据大于物理内存时，那么就需要通过操作系统虚拟内存管理不断地在硬盘和内存中进行页面置换。设想一下：缓存数据越大，那么缺页中断的就越多，导致页面置换就越多，从而磁盘IO增加，从而大大拖垮缓存的性能。所以，虽然操作系统允许我们运行比物理内存更大更多的进程，但是为了兼具缓存性能，我们<strong>依然需要适当的控制，来保证我们缓存数据的大小不能超过物理内存，一旦超过就可能会发生页面置换中的磁盘IO</strong></p>
 <p>所以，我们可以采取如下一些策略。</p>
 <ul>
 <li>内存足够时，我们也可以进一步减轻内存负担，例如过期删除、主动清理等</li>
 <li>内存不足够时，需要通过一些好的策略来做内存数据的淘汰，避免物理内存不足后发生页面置换现象；或者我们直接加内存</li>
 </ul>
 <p>在缓存数据的淘汰中，我们需要将数据分为两类：高频热数据和低频冷数据。我们应该尽可能地避免高频热数据被缓存淘汰掉，这样会降低缓存的命中率。所以，我们需要采取一些好的缓存策略来保证我们的缓存命中率。</p>
-<h2 id="几种缓存淘汰策略及实现">几种缓存淘汰策略及实现</h2>
-<h3 id="fifo先进先出淘汰">FIFO先进先出淘汰</h3>
-<p>缓存满了之后，自动删除较早放入的缓存数据。</p>
+<h2 id="几种缓存淘汰策略及实现" class="headerLink">
+    <a href="#%e5%87%a0%e7%a7%8d%e7%bc%93%e5%ad%98%e6%b7%98%e6%b1%b0%e7%ad%96%e7%95%a5%e5%8f%8a%e5%ae%9e%e7%8e%b0" class="header-mark"></a>几种缓存淘汰策略及实现</h2><h3 id="fifo先进先出淘汰" class="headerLink">
+    <a href="#fifo%e5%85%88%e8%bf%9b%e5%85%88%e5%87%ba%e6%b7%98%e6%b1%b0" class="header-mark"></a>FIFO先进先出淘汰</h3><p>缓存满了之后，自动删除较早放入的缓存数据。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -327,8 +370,8 @@
 <li>优点：实现很简单</li>
 <li>缺点：先进来的数据可能是热点数据，淘汰掉热点数据，会导致缓存的命中率降低。</li>
 </ul>
-<h3 id="lfu最不经常使用">LFU最不经常使用</h3>
-<p>LFU最不经常使用算法，是基于数据的访问频次来对缓存数据进行淘汰的算法。</p>
+<h3 id="lfu最不经常使用" class="headerLink">
+    <a href="#lfu%e6%9c%80%e4%b8%8d%e7%bb%8f%e5%b8%b8%e4%bd%bf%e7%94%a8" class="header-mark"></a>LFU最不经常使用</h3><p>LFU最不经常使用算法，是基于数据的访问频次来对缓存数据进行淘汰的算法。</p>
 <p>其淘汰数据依据两点：访问频次</p>
 <p>核心：如果数据过去被访问多次，那么将来被访问的频率也就更高，当内存超过最大容量时，<strong>淘汰掉访问次数较少</strong>的数据。</p>
 <p>依然使用队列实现，淘汰部分淘汰掉访问次数最低即可</p>
@@ -607,8 +650,8 @@
 </ul>
 </li>
 </ul>
-<h3 id="lru最近最少使用">LRU最近最少使用</h3>
-<p>最近最少使用缓存淘汰算法，其淘汰最近一段时间最少被访问的缓存数据。我们使用队列可以实现这种淘汰算法，对于访问的元素，移动到链表尾，这样链表头为较旧的元素，当容量满时，淘汰掉链表头元素即可。</p>
+<h3 id="lru最近最少使用" class="headerLink">
+    <a href="#lru%e6%9c%80%e8%bf%91%e6%9c%80%e5%b0%91%e4%bd%bf%e7%94%a8" class="header-mark"></a>LRU最近最少使用</h3><p>最近最少使用缓存淘汰算法，其淘汰最近一段时间最少被访问的缓存数据。我们使用队列可以实现这种淘汰算法，对于访问的元素，移动到链表尾，这样链表头为较旧的元素，当容量满时，淘汰掉链表头元素即可。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
@@ -839,11 +882,11 @@
 <p>操作系统在访问内存数据的时候，如果数据不在内存里，会从磁盘里去加载数据，又因为空间局部性原理，会加载连续的多个块，此时，只有一个块里有热点数据，其余块都没有热点数据，然而还会把lru链表最后的热点数据挤出去。另外几个没有热点数据的块，当然也就预读失效了。</p>
 </li>
 </ul>
-<p><a href="https://xiaolincoding.com/os/3_memory/cache_lru.html" target="_blank" rel="noopener noreffer ">如何解决lru的缓存污染和预读污染问题？</a></p>
+<p><a href="https://xiaolincoding.com/os/3_memory/cache_lru.html" target="_blank" rel="noopener noreferrer">如何解决lru的缓存污染和预读污染问题？</a></p>
 </li>
 </ul>
-<h3 id="lru-k">LRU-K</h3>
-<p>lru-1</p>
+<h3 id="lru-k" class="headerLink">
+    <a href="#lru-k" class="header-mark"></a>LRU-K</h3><p>lru-1</p>
 <p>数据第一次被访问，加入到访问历史列表；</p>
 <p>如果数据在访问历史列表里后没有达到K次访问，则按照LRU淘汰；</p>
 <p>当访问历史队列中的数据访问次数达到K次后，将数据索引从历史队列删除，将数据移到缓存队列中，并缓存此数据，缓存队列重新按照时间排序；</p>
@@ -1188,8 +1231,8 @@
 <blockquote>
 <p>其实linux操作系统中page cache的缓存淘汰策略里也是通过将将lru算法改进为lru-2算法提高进入active list的lru缓存的门槛，从而降低了缓存污染严重性。</p>
 </blockquote>
-<h3 id="2q">2Q</h3>
-<p>2Q（Two Queue）缓存淘汰算法是一种基于 LRU（Least Recently Used）和 FIFO（First In First Out）算法的混合算法。其主要思想是将缓存分为两个队列：Q1 和 Q2。</p>
+<h3 id="2q" class="headerLink">
+    <a href="#2q" class="header-mark"></a>2Q</h3><p>2Q（Two Queue）缓存淘汰算法是一种基于 LRU（Least Recently Used）和 FIFO（First In First Out）算法的混合算法。其主要思想是将缓存分为两个队列：Q1 和 Q2。</p>
 <p>当数据第一次访问时，2Q算法将数据缓存在FIFO队列里面，当数据第二次被访问时，则将数据从FIFO队列移到LRU队列里面，两个队列各自按照自己的方法淘汰数据。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1481,9 +1524,9 @@
 <li>优点：更快，一般来说可以实现O(1)级别的淘汰</li>
 <li>缺点：belady现象：物理内存增加反而导致缓存命中率下降</li>
 </ul>
-<h2 id="应用与举例">应用与举例</h2>
-<h3 id="redis中的近似lru策略">redis中的近似LRU策略</h3>
-<p>当实际内存超出 <code>maxmemory</code> 时，就会执行一次内存淘汰策略，具体何种内存淘汰策略，可在<code>maxmemory-policy</code> 中进行配置。Redis 提供了如下几种策略：</p>
+<h2 id="应用与举例" class="headerLink">
+    <a href="#%e5%ba%94%e7%94%a8%e4%b8%8e%e4%b8%be%e4%be%8b" class="header-mark"></a>应用与举例</h2><h3 id="redis中的近似lru策略" class="headerLink">
+    <a href="#redis%e4%b8%ad%e7%9a%84%e8%bf%91%e4%bc%bclru%e7%ad%96%e7%95%a5" class="header-mark"></a>redis中的近似LRU策略</h3><p>当实际内存超出 <code>maxmemory</code> 时，就会执行一次内存淘汰策略，具体何种内存淘汰策略，可在<code>maxmemory-policy</code> 中进行配置。Redis 提供了如下几种策略：</p>
 <ol>
 <li><code>noeviction</code>：不会继续服务写请求 (DEL 请求可以继续服务)，读请求可以继续进行。这样可以保证不会丢失数据，但是会让线上的业务不能持续进行。<strong>这是默认的淘汰策略</strong>。</li>
 <li><code>volatile-lru</code>：尝试淘汰设置了过期时间的 key，最少使用的 key 优先被淘汰。<strong>没有设置过期时间的 key 不会被淘汰，这样可以保证需要持久化的数据不会突然丢失。</strong></li>
@@ -1516,18 +1559,19 @@
 <p>Redis LRU 算法有一个重要的点在于，它可以更改样本数量（修改 <code>maxmemory-samples</code> 属性值）来调整算法的精度，使其近似接近真实的 LRU 算法，同时又避免了内存的消耗，因为每次只需要采样少量样本，而不是全部数据。</p>
 </li>
 </ol>
-<h3 id="bigcache中的fifo策略">bigcache中的fifo策略</h3>
-<p>完完全全的fifo策略，淘汰的时候会淘汰掉最早的数据，但是容易出现缓存命中率不高的问题。总而言之，fifo只考虑了时间维度因素，并没有考虑到访问频率因素。</p>
+<h3 id="bigcache中的fifo策略" class="headerLink">
+    <a href="#bigcache%e4%b8%ad%e7%9a%84fifo%e7%ad%96%e7%95%a5" class="header-mark"></a>bigcache中的fifo策略</h3><p>完完全全的fifo策略，淘汰的时候会淘汰掉最早的数据，但是容易出现缓存命中率不高的问题。总而言之，fifo只考虑了时间维度因素，并没有考虑到访问频率因素。</p>
 <p>当然选取fifo策略，相较于lru、lfu等策略实现起来更简单，而且也更快，内存占用也更低</p>
-<h3 id="memcached中的lru策略">memcached中的lru策略</h3>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://memcached.org/blog/modern-lru/img/state_machine.png"
-        data-srcset="https://memcached.org/blog/modern-lru/img/state_machine.png, https://memcached.org/blog/modern-lru/img/state_machine.png 1.5x, https://memcached.org/blog/modern-lru/img/state_machine.png 2x"
-        data-sizes="auto"
-        alt="https://memcached.org/blog/modern-lru/img/state_machine.png"
-        title="LRU 状态机" /></p>
+<h3 id="memcached中的lru策略" class="headerLink">
+    <a href="#memcached%e4%b8%ad%e7%9a%84lru%e7%ad%96%e7%95%a5" class="header-mark"></a>memcached中的lru策略</h3><p><figure><a class="lightgallery" href="https://memcached.org/blog/modern-lru/img/state_machine.png" title="LRU 状态机" data-thumbnail="https://memcached.org/blog/modern-lru/img/state_machine.png">
+        <img
+            
+            loading="lazy"
+            src="https://memcached.org/blog/modern-lru/img/state_machine.png"
+            srcset="https://memcached.org/blog/modern-lru/img/state_machine.png, https://memcached.org/blog/modern-lru/img/state_machine.png 1.5x, https://memcached.org/blog/modern-lru/img/state_machine.png 2x"
+            sizes="auto"
+            alt="LRU 状态机">
+    </a></figure></p>
 <p>memcached的缓存淘汰策略是受2Q设计影响的修改LRU（Segmented LRU，分段LRU）。主要是借鉴了2q策略中的数据分类，memcached将数据分为以下几类：</p>
 <ul>
 <li>HOT queue：如果一个 item 的过期时间（TTL）很短，会进入该队列，在 HOT queue 中不会发生 bump，如果一个 item 到达了 queue 的 tail，那么会进入到 WARM 队列（如果 item 是 ACTIVE 状态）或者 COLD 队列（如果 item 处于不活跃状态）。</li>
@@ -1538,27 +1582,28 @@
 <blockquote>
 <p>“bump”是memcached中的一个标记，用于标记某个键值对不应该被淘汰。</p>
 </blockquote>
-<h2 id="总结">总结</h2>
-<ol>
+<h2 id="总结" class="headerLink">
+    <a href="#%e6%80%bb%e7%bb%93" class="header-mark"></a>总结</h2><ol>
 <li>根据业务需求选择合适的算法。不同的业务场景对缓存的需求不同，因此需要根据实际情况选择合适的缓存淘汰算法。</li>
 <li>避免频繁清除缓存。频繁清除缓存会导致缓存命中率降低，从而影响系统的性能。因此，在选择缓存淘汰算法时，需要考虑清除缓存的频率。</li>
 <li>配置合适的缓存容量。缓存容量过小会导致缓存命中率降低，而缓存容量过大会浪费系统资源。因此，需要根据实际情况配置合适的缓存容量。</li>
 <li>考虑多级缓存。多级缓存可以提高缓存命中率，从而提高系统的性能。例如，可以比如bigcache+redis的方式构建多级缓存。</li>
 <li>使用缓存预热技术。缓存预热技术可以在系统启动时将常用的数据预先加载到缓存中，从而提高缓存命中率。</li>
 </ol>
-</div><div class="post-footer" id="post-footer">
+</div>
+
+        <div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2023-08-25</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/" data-title="缓存淘汰策略"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/" data-title="缓存淘汰策略"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
             </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
+                    </span></div>
+            <div class="post-info-share"><button title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/" data-title="缓存淘汰策略"><span class="fab fa-weibo fa-fw"></span></button><button title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/" data-title="缓存淘汰策略"><span data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></span></button></div>
         </div>
     </div>
 
@@ -1569,21 +1614,26 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" class="prev" rel="prev" title="操作系统之输入输出管理"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>操作系统之输入输出管理</a>
-            <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="next" rel="next" title="计算机网络之概述">计算机网络之概述<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" class="prev" rel="prev" title="操作系统之输入输出管理"><i class="fas fa-angle-left fa-fw"></i>操作系统之输入输出管理</a>
+            <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="next" rel="next" title="计算机网络之概述">计算机网络之概述<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id="comments"><div id="gitalk" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
             </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
 
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-05-31T22:53:14+08:00","owner":"cold-bin","repo":"blog-comment","title":"缓存淘汰策略"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="Back to Top">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.b38ee65d6456beb2d034bf554505f4ca47e421548b7cd26e8a7805fd2673b6c3.css" integrity="sha256-s47mXWRWvrLQNL9VRQX0ykfkIVSLfNJuingF/SZztsM="><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr&#43;QR0SQDNfgglgtcM="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc=">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18&#43;2anxsuaz3pWYyVWi&#43;bTvTH8Q="><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-05-31T22:53:14+08:00","owner":"cold-bin","repo":"blog-comment","title":"缓存淘汰策略"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"},"sharerjs":true};</script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.0c4d9db673dd19489cfa134ab15ef8b9237ae72aaa65d8490d55658442b3a2d3.js" integrity="sha256-DE2dtnPdGUic&#43;hNKsV74uSN65yqqZdhJDVVlhEKzotM="></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.72ceb0f87691041e9e0bea2f2468b9aa3ed544e8f7f6dc9f76d8c8f997699e41.js" integrity="sha256-cs6w&#43;HaRBB6eC&#43;ovJGi5qj7VROj39tyfdtjI&#43;ZdpnkE="></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.5b0e82e9a1ae0b52d07a52da1eb4640da77eb3ca7e78c3a428c1f3b712858d3c.js" integrity="sha256-Ww6C6aGuC1LQelLaHrRkDad&#43;s8p&#43;eMOkKMHztxKFjTw="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.11be927cda59c8b6019ebbea838285c5beaf21183ea4b83dbd4e4fbf9413ce4a.js" integrity="sha256-Eb6SfNpZyLYBnrvqg4KFxb6vIRg&#43;pLg9vU5Pv5QTzko="></script><script type="text/javascript" src="/lib/sharer/sharer.min.8fe10eb615eb163a20f795484430a012805ec7c8c11df52df54ddb7a46084254.js" integrity="sha256-j&#43;EOthXrFjog95VIRDCgEoBex8jBHfUt9U3bekYIQlQ="></script><script type="text/javascript" src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw&#43;iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y&#43;KzPOwaJ0PYhsf7R6c=" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54&#43;rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn&#43;yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script></div>
+</body>
+
 </html>

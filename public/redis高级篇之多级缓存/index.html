@@ -1,11 +1,14 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>Redis高级篇之多级缓存 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Redis高级篇之多级缓存" />
-<meta property="og:description" content="[toc] 多级缓存 1.什么是多级缓存 传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图： 存在下面的问题： 请求" />
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>Redis高级篇之多级缓存 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Redis高级篇之多级缓存" />
+<meta property="og:description" content="[toc] 多级缓存 1.什么是多级缓存传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图： 存在下面的问题： 请求" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-01-24T16:08:44+08:00" />
@@ -15,11 +18,14 @@
 <meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
 
 <meta name="twitter:title" content="Redis高级篇之多级缓存"/>
-<meta name="twitter:description" content="[toc] 多级缓存 1.什么是多级缓存 传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图： 存在下面的问题： 请求"/>
+<meta name="twitter:description" content="[toc] 多级缓存 1.什么是多级缓存传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图： 存在下面的问题： 请求"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/" /><link rel="prev" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" /><link rel="next" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%86%85%E4%B8%AD%E6%96%AD/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/" /><link rel="prev" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" /><link rel="next" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%86%85%E4%B8%AD%E6%96%AD/" />
+<link rel="stylesheet" href="/css/main.d5cb6f29e0750a13b17688d628b04d50f9fbbd32e0629ccc0dcf796a299ae226.css" integrity="sha256-1ctvKeB1ChOxdojWKLBNUPn7vTLgYpzMDc95aima4iY="><link rel="stylesheet" href="/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css" integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH&#43;KuXHiZWODptY5K8NF4="><link rel="stylesheet" href="/css/color.b0a0f8c429ce52dfa2805b5f9e99ccdae1e8fbfd9adf4f3ddb409d8201fc0c5a.css" integrity="sha256-sKD4xCnOUt&#43;igFtfnpnM2uHo&#43;/2a308920CdggH8DFo="><link rel="stylesheet" href="/css/style.min.5963810f80932dd0408e0fe2003ab30dbccfb3400fe079d989aad753741320e0.css" integrity="sha256-WWOBD4CTLdBAjg/iADqzDbzPs0AP4HnZiarXU3QTIOA="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc=">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc="></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -27,13 +33,13 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "lua","wordcount":  14058 ,
-        "url": "https:\/\/blog.coldbin.top\/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98\/","datePublished": "2023-01-24T16:08:44+08:00","dateModified": "2023-01-24T16:08:44+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@id": "https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/"
+        },"image": ["https://blog.coldbin.top/favicon.ico"],"genre": "posts","keywords": "lua","wordcount":  14077 ,
+        "url": "https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/","datePublished": "2023-01-24T16:08:44+08:00","dateModified": "2023-01-24T16:08:44+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
             "@type": "Organization",
             "name": "阿冰","logo": {
                     "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "url": "https://blog.coldbin.top/images/avatar.png",
                     "width":  396 ,
                     "height":  396 
                 }},"author": {
@@ -42,34 +48,43 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
             <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
+        class="logo"
+        loading="lazy"
+        src="/favicon.ico"
+        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+        title="/favicon.ico" >阿冰的小屋</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search fa-fw"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle fa-fw"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                    <i class="fas fa-adjust fa-fw"></i>
                 </a></div>
         </div>
     </div>
@@ -78,13 +93,13 @@
         <div class="header-wrapper">
             <div class="header-title">
                 <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
+        class="logo"
+        loading="lazy"
+        src="/favicon.ico"
+        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+        title="/favicon.ico" >阿冰的小屋</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -94,39 +109,144 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search fa-fw"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle fa-fw"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
-</header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis高级篇之多级缓存</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/redis/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>redis</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-01-24">2023-01-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;14058 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;29 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">Contents</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#多级缓存">多级缓存</a></li>
+    <li><a href="#1什么是多级缓存">1.什么是多级缓存</a></li>
+    <li><a href="#2jvm进程缓存">2.JVM进程缓存</a>
+      <ul>
+        <li><a href="#21导入案例">2.1.导入案例</a></li>
+        <li><a href="#22初识caffeine">2.2.初识Caffeine</a></li>
+        <li><a href="#23实现jvm进程缓存">2.3.实现JVM进程缓存</a>
+          <ul>
+            <li><a href="#231需求">2.3.1.需求</a></li>
+            <li><a href="#232实现">2.3.2.实现</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3lua语法入门">3.Lua语法入门</a>
+      <ul>
+        <li><a href="#31初识lua">3.1.初识Lua</a></li>
+        <li><a href="#31helloworld">3.1.HelloWorld</a></li>
+        <li><a href="#32变量和循环">3.2.变量和循环</a>
+          <ul>
+            <li><a href="#321lua的数据类型">3.2.1.Lua的数据类型</a></li>
+            <li><a href="#322声明变量">3.2.2.声明变量</a></li>
+            <li><a href="#323循环">3.2.3.循环</a></li>
+          </ul>
+        </li>
+        <li><a href="#33条件控制函数">3.3.条件控制、函数</a>
+          <ul>
+            <li><a href="#331函数">3.3.1.函数</a></li>
+            <li><a href="#332条件控制">3.3.2.条件控制</a></li>
+            <li><a href="#333案例">3.3.3.案例</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4实现多级缓存">4.实现多级缓存</a>
+      <ul>
+        <li><a href="#41安装openresty">4.1.安装OpenResty</a></li>
+        <li><a href="#42openresty快速入门">4.2.OpenResty快速入门</a>
+          <ul>
+            <li><a href="#421反向代理流程">4.2.1.反向代理流程</a></li>
+            <li><a href="#422openresty监听请求">4.2.2.OpenResty监听请求</a></li>
+            <li><a href="#423编写itemlua">4.2.3.编写item.lua</a></li>
+          </ul>
+        </li>
+        <li><a href="#43请求参数处理">4.3.请求参数处理</a>
+          <ul>
+            <li><a href="#431获取参数的api">4.3.1.获取参数的API</a></li>
+            <li><a href="#432获取参数并返回">4.3.2.获取参数并返回</a></li>
+          </ul>
+        </li>
+        <li><a href="#44查询tomcat">4.4.查询Tomcat</a>
+          <ul>
+            <li><a href="#441发送http请求的api">4.4.1.发送http请求的API</a></li>
+            <li><a href="#442封装http工具">4.4.2.封装http工具</a></li>
+            <li><a href="#443cjson工具类">4.4.3.CJSON工具类</a></li>
+            <li><a href="#444实现tomcat查询">4.4.4.实现Tomcat查询</a></li>
+            <li><a href="#445基于id负载均衡">4.4.5.基于ID负载均衡</a>
+              <ul>
+                <li><a href="#1原理">1）原理</a></li>
+                <li><a href="#2实现">2）实现</a></li>
+                <li><a href="#3测试">3）测试</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#45redis缓存预热">4.5.Redis缓存预热</a></li>
+        <li><a href="#46查询redis缓存">4.6.查询Redis缓存</a>
+          <ul>
+            <li><a href="#461封装redis工具">4.6.1.封装Redis工具</a></li>
+            <li><a href="#462实现redis查询">4.6.2.实现Redis查询</a></li>
+          </ul>
+        </li>
+        <li><a href="#47nginx本地缓存">4.7.Nginx本地缓存</a>
+          <ul>
+            <li><a href="#471本地缓存api">4.7.1.本地缓存API</a></li>
+            <li><a href="#472实现本地缓存查询">4.7.2.实现本地缓存查询</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5缓存同步">5.缓存同步</a>
+      <ul>
+        <li><a href="#51数据同步策略">5.1.数据同步策略</a></li>
+        <li><a href="#52安装canal">5.2.安装Canal</a>
+          <ul>
+            <li><a href="#521认识canal">5.2.1.认识Canal</a></li>
+            <li><a href="#522安装canal">5.2.2.安装Canal</a></li>
+          </ul>
+        </li>
+        <li><a href="#53监听canal">5.3.监听Canal</a>
+          <ul>
+            <li><a href="#531引入依赖">5.3.1.引入依赖：</a></li>
+            <li><a href="#532编写配置">5.3.2.编写配置：</a></li>
+            <li><a href="#533修改item实体类">5.3.3.修改Item实体类</a></li>
+            <li><a href="#534编写监听器">5.3.4.编写监听器</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis高级篇之多级缓存</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">阿冰</a>
+                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/redis/"><i class="far fa-folder fa-fw"></i>redis</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-01-24">2023-01-24</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-01-24">2023-01-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;14077 words&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;29 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -232,17 +352,18 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>[toc]</p>
-<h1 id="多级缓存">多级缓存</h1>
-<h1 id="1什么是多级缓存">1.什么是多级缓存</h1>
-<p>传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png"
-        title="image-20210821075259137" /></p>
+<h1 id="多级缓存" class="headerLink">
+    <a href="#%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98" class="header-mark"></a>多级缓存</h1><h1 id="1什么是多级缓存" class="headerLink">
+    <a href="#1%e4%bb%80%e4%b9%88%e6%98%af%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98" class="header-mark"></a>1.什么是多级缓存</h1><p>传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png" title="image-20210821075259137" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075259137.png 2x"
+            sizes="auto"
+            alt="image-20210821075259137">
+    </a></figure></p>
 <p>存在下面的问题：</p>
 <ul>
 <li>请求要经过Tomcat处理，Tomcat的性能成为整个系统的瓶颈</li>
@@ -258,33 +379,36 @@
 <li>请求进入Tomcat后，优先查询JVM进程缓存</li>
 <li>如果JVM进程缓存未命中，则查询数据库</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png"
-        title="image-20210821075558137" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png" title="image-20210821075558137" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821075558137.png 2x"
+            sizes="auto"
+            alt="image-20210821075558137">
+    </a></figure></p>
 <p>在多级缓存架构中，Nginx内部需要编写本地缓存查询、Redis查询、Tomcat查询的业务逻辑，因此这样的nginx服务不再是一个<strong>反向代理服务器</strong>，而是一个编写<strong>业务的Web服务器了</strong>。</p>
 <p>因此这样的业务Nginx服务也需要搭建集群来提高并发，再有专门的nginx服务来做反向代理，如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png"
-        title="image-20210821080511581" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png" title="image-20210821080511581" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080511581.png 2x"
+            sizes="auto"
+            alt="image-20210821080511581">
+    </a></figure></p>
 <p>另外，我们的Tomcat服务将来也会部署为集群模式：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png"
-        title="image-20210821080954947" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png" title="image-20210821080954947" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821080954947.png 2x"
+            sizes="auto"
+            alt="image-20210821080954947">
+    </a></figure></p>
 <p>可见，多级缓存的关键有两个：</p>
 <ul>
 <li>
@@ -295,11 +419,11 @@
 </li>
 </ul>
 <p>其中Nginx编程则会用到OpenResty框架结合Lua这样的语言。</p>
-<h1 id="2jvm进程缓存">2.JVM进程缓存</h1>
-<p>为了演示多级缓存的案例，我们先准备一个商品查询的业务。</p>
-<h2 id="21导入案例">2.1.导入案例</h2>
-<h2 id="22初识caffeine">2.2.初识Caffeine</h2>
-<p>缓存在日常开发中启动至关重要的作用，由于是存储在内存中，数据的读取速度是非常快的，能大量减少对数据库的访问，减少数据库的压力。我们把缓存分为两类：</p>
+<h1 id="2jvm进程缓存" class="headerLink">
+    <a href="#2jvm%e8%bf%9b%e7%a8%8b%e7%bc%93%e5%ad%98" class="header-mark"></a>2.JVM进程缓存</h1><p>为了演示多级缓存的案例，我们先准备一个商品查询的业务。</p>
+<h2 id="21导入案例" class="headerLink">
+    <a href="#21%e5%af%bc%e5%85%a5%e6%a1%88%e4%be%8b" class="header-mark"></a>2.1.导入案例</h2><h2 id="22初识caffeine" class="headerLink">
+    <a href="#22%e5%88%9d%e8%af%86caffeine" class="header-mark"></a>2.2.初识Caffeine</h2><p>缓存在日常开发中启动至关重要的作用，由于是存储在内存中，数据的读取速度是非常快的，能大量减少对数据库的访问，减少数据库的压力。我们把缓存分为两类：</p>
 <ul>
 <li>分布式缓存，例如Redis：
 <ul>
@@ -319,14 +443,15 @@
 <p>我们今天会利用Caffeine框架来实现JVM进程缓存。</p>
 <p><strong>Caffeine</strong>是一个基于Java8开发的，提供了近乎最佳命中率的高性能的本地缓存库。目前Spring内部的缓存使用的就是Caffeine。GitHub地址：https://github.com/ben-manes/caffeine</p>
 <p>Caffeine的性能非常好，下图是官方给出的性能对比：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png"
-        title="image-20210821081826399" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png" title="image-20210821081826399" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821081826399.png 2x"
+            sizes="auto"
+            alt="image-20210821081826399">
+    </a></figure></p>
 <p>可以看到Caffeine的性能遥遥领先！</p>
 <p>缓存使用的基本API：</p>
 <div class="highlight"><div class="chroma">
@@ -425,17 +550,17 @@
 <blockquote>
 <p><strong>注意</strong>：在默认情况下，当一个缓存元素过期的时候，Caffeine不会自动立即将其清理和驱逐。而是在一次读或写操作后，或者在空闲时间完成对失效数据的驱逐。</p>
 </blockquote>
-<h2 id="23实现jvm进程缓存">2.3.实现JVM进程缓存</h2>
-<h3 id="231需求">2.3.1.需求</h3>
-<p>利用Caffeine实现下列需求：</p>
+<h2 id="23实现jvm进程缓存" class="headerLink">
+    <a href="#23%e5%ae%9e%e7%8e%b0jvm%e8%bf%9b%e7%a8%8b%e7%bc%93%e5%ad%98" class="header-mark"></a>2.3.实现JVM进程缓存</h2><h3 id="231需求" class="headerLink">
+    <a href="#231%e9%9c%80%e6%b1%82" class="header-mark"></a>2.3.1.需求</h3><p>利用Caffeine实现下列需求：</p>
 <ul>
 <li>给根据id查询商品的业务添加缓存，缓存未命中时查询数据库</li>
 <li>给根据id查询商品库存的业务添加缓存，缓存未命中时查询数据库</li>
 <li>缓存初始大小为100</li>
 <li>缓存上限为10000</li>
 </ul>
-<h3 id="232实现">2.3.2.实现</h3>
-<p>首先，我们需要定义两个Caffeine的缓存对象，分别保存商品、库存的缓存数据。</p>
+<h3 id="232实现" class="headerLink">
+    <a href="#232%e5%ae%9e%e7%8e%b0" class="header-mark"></a>2.3.2.实现</h3><p>首先，我们需要定义两个Caffeine的缓存对象，分别保存商品、库存的缓存数据。</p>
 <p>在item-service的<code>com.heima.item.config</code>包下定义<code>CaffeineConfig</code>类：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -564,31 +689,33 @@
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="3lua语法入门">3.Lua语法入门</h1>
-<p>Nginx编程需要用到Lua语言，因此我们必须先入门Lua的基本语法。</p>
-<h2 id="31初识lua">3.1.初识Lua</h2>
-<p>Lua 是一种轻量小巧的脚本语言，用标准C语言编写并以源代码形式开放， 其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。官网：https://www.lua.org/</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png"
-        title="image-20210821091437975" /></p>
+</div><h1 id="3lua语法入门" class="headerLink">
+    <a href="#3lua%e8%af%ad%e6%b3%95%e5%85%a5%e9%97%a8" class="header-mark"></a>3.Lua语法入门</h1><p>Nginx编程需要用到Lua语言，因此我们必须先入门Lua的基本语法。</p>
+<h2 id="31初识lua" class="headerLink">
+    <a href="#31%e5%88%9d%e8%af%86lua" class="header-mark"></a>3.1.初识Lua</h2><p>Lua 是一种轻量小巧的脚本语言，用标准C语言编写并以源代码形式开放， 其设计目的是为了嵌入应用程序中，从而为应用程序提供灵活的扩展和定制功能。官网：https://www.lua.org/</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png" title="image-20210821091437975" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091437975.png 2x"
+            sizes="auto"
+            alt="image-20210821091437975">
+    </a></figure></p>
 <p>Lua经常嵌入到C语言开发的程序中，例如游戏开发、游戏插件等。</p>
 <p>Nginx本身也是C语言开发，因此也允许基于Lua做拓展。</p>
-<h2 id="31helloworld">3.1.HelloWorld</h2>
-<p>CentOS7默认已经安装了Lua语言环境，所以可以直接运行Lua代码。</p>
+<h2 id="31helloworld" class="headerLink">
+    <a href="#31helloworld" class="header-mark"></a>3.1.HelloWorld</h2><p>CentOS7默认已经安装了Lua语言环境，所以可以直接运行Lua代码。</p>
 <p>1）在Linux虚拟机的任意目录下，新建一个hello.lua文件</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png"
-        title="image-20210821091621308" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png" title="image-20210821091621308" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091621308.png 2x"
+            sizes="auto"
+            alt="image-20210821091621308">
+    </a></figure></p>
 <p>2）添加下面的内容</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -599,37 +726,40 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>3）运行</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png"
-        title="image-20210821091638140" /></p>
-<h2 id="32变量和循环">3.2.变量和循环</h2>
-<p>学习任何语言必然离不开变量，而变量的声明必须先知道数据的类型。</p>
-<h3 id="321lua的数据类型">3.2.1.Lua的数据类型</h3>
-<p>Lua中支持的常见数据类型包括：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png"
-        title="image-20210821091835406" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png" title="image-20210821091638140" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091638140.png 2x"
+            sizes="auto"
+            alt="image-20210821091638140">
+    </a></figure></p>
+<h2 id="32变量和循环" class="headerLink">
+    <a href="#32%e5%8f%98%e9%87%8f%e5%92%8c%e5%be%aa%e7%8e%af" class="header-mark"></a>3.2.变量和循环</h2><p>学习任何语言必然离不开变量，而变量的声明必须先知道数据的类型。</p>
+<h3 id="321lua的数据类型" class="headerLink">
+    <a href="#321lua%e7%9a%84%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b" class="header-mark"></a>3.2.1.Lua的数据类型</h3><p>Lua中支持的常见数据类型包括：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png" title="image-20210821091835406" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091835406.png 2x"
+            sizes="auto"
+            alt="image-20210821091835406">
+    </a></figure></p>
 <p>另外，Lua提供了type()函数来判断一个变量的数据类型：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png"
-        title="image-20210821091904332" /></p>
-<h3 id="322声明变量">3.2.2.声明变量</h3>
-<p>Lua声明变量的时候无需指定数据类型，而是用local来声明变量为局部变量：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png" title="image-20210821091904332" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821091904332.png 2x"
+            sizes="auto"
+            alt="image-20210821091904332">
+    </a></figure></p>
+<h3 id="322声明变量" class="headerLink">
+    <a href="#322%e5%a3%b0%e6%98%8e%e5%8f%98%e9%87%8f" class="header-mark"></a>3.2.2.声明变量</h3><p>Lua声明变量的时候无需指定数据类型，而是用local来声明变量为局部变量：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -691,8 +821,8 @@
 </span></span><span class="line"><span class="cl"><span class="n">print</span><span class="p">(</span><span class="n">map.name</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="323循环">3.2.3.循环</h3>
-<p>对于table，我们可以利用for循环来遍历。不过数组和普通table遍历略有差异。</p>
+</div><h3 id="323循环" class="headerLink">
+    <a href="#323%e5%be%aa%e7%8e%af" class="header-mark"></a>3.2.3.循环</h3><p>对于table，我们可以利用for循环来遍历。不过数组和普通table遍历略有差异。</p>
 <p>遍历数组：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -731,10 +861,10 @@
 </span></span><span class="line"><span class="cl"><span class="kr">end</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="33条件控制函数">3.3.条件控制、函数</h2>
-<p>Lua中的条件控制和函数声明与Java类似。</p>
-<h3 id="331函数">3.3.1.函数</h3>
-<p>定义函数的语法：</p>
+</div><h2 id="33条件控制函数" class="headerLink">
+    <a href="#33%e6%9d%a1%e4%bb%b6%e6%8e%a7%e5%88%b6%e5%87%bd%e6%95%b0" class="header-mark"></a>3.3.条件控制、函数</h2><p>Lua中的条件控制和函数声明与Java类似。</p>
+<h3 id="331函数" class="headerLink">
+    <a href="#331%e5%87%bd%e6%95%b0" class="header-mark"></a>3.3.1.函数</h3><p>定义函数的语法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -766,8 +896,8 @@
 </span></span><span class="line"><span class="cl"><span class="kr">end</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="332条件控制">3.3.2.条件控制</h3>
-<p>类似Java的条件控制，例如if、else语法：</p>
+</div><h3 id="332条件控制" class="headerLink">
+    <a href="#332%e6%9d%a1%e4%bb%b6%e6%8e%a7%e5%88%b6" class="header-mark"></a>3.3.2.条件控制</h3><p>类似Java的条件控制，例如if、else语法：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -787,16 +917,17 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>与java不同，布尔表达式中的逻辑运算是基于英文单词：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png"
-        title="image-20210821092657918" /></p>
-<h3 id="333案例">3.3.3.案例</h3>
-<p>需求：自定义一个函数，可以打印table，当参数为nil时，打印错误信息</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png" title="image-20210821092657918" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092657918.png 2x"
+            sizes="auto"
+            alt="image-20210821092657918">
+    </a></figure></p>
+<h3 id="333案例" class="headerLink">
+    <a href="#333%e6%a1%88%e4%be%8b" class="header-mark"></a>3.3.3.案例</h3><p>需求：自定义一个函数，可以打印table，当参数为nil时，打印错误信息</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -819,34 +950,36 @@
 </span></span><span class="line"><span class="cl"><span class="kr">end</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="4实现多级缓存">4.实现多级缓存</h1>
-<p>多级缓存的实现离不开Nginx编程，而Nginx编程又离不开OpenResty。</p>
-<h2 id="41安装openresty">4.1.安装OpenResty</h2>
-<p>OpenResty® 是一个基于 Nginx的高性能 Web 平台，用于方便地搭建能够处理超高并发、扩展性极高的动态 Web 应用、Web 服务和动态网关。具备下列特点：</p>
+</div><h1 id="4实现多级缓存" class="headerLink">
+    <a href="#4%e5%ae%9e%e7%8e%b0%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98" class="header-mark"></a>4.实现多级缓存</h1><p>多级缓存的实现离不开Nginx编程，而Nginx编程又离不开OpenResty。</p>
+<h2 id="41安装openresty" class="headerLink">
+    <a href="#41%e5%ae%89%e8%a3%85openresty" class="header-mark"></a>4.1.安装OpenResty</h2><p>OpenResty® 是一个基于 Nginx的高性能 Web 平台，用于方便地搭建能够处理超高并发、扩展性极高的动态 Web 应用、Web 服务和动态网关。具备下列特点：</p>
 <ul>
 <li>具备Nginx的完整功能</li>
 <li>基于Lua语言进行扩展，集成了大量精良的 Lua 库、第三方模块</li>
 <li>允许使用Lua<strong>自定义业务逻辑</strong>、<strong>自定义库</strong></li>
 </ul>
-<p>官方网站： <a href="https://openresty.org/cn/" target="_blank" rel="noopener noreffer ">https://openresty.org/cn/</a></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png"
-        title="image-20210821092902946" /></p>
-<h2 id="42openresty快速入门">4.2.OpenResty快速入门</h2>
-<p>我们希望达到的多级缓存架构如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png"
-        title="yeVDlwtfMx" /></p>
+<p>官方网站： <a href="https://openresty.org/cn/" target="_blank" rel="noopener noreferrer">https://openresty.org/cn/</a></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png" title="image-20210821092902946" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821092902946.png 2x"
+            sizes="auto"
+            alt="image-20210821092902946">
+    </a></figure></p>
+<h2 id="42openresty快速入门" class="headerLink">
+    <a href="#42openresty%e5%bf%ab%e9%80%9f%e5%85%a5%e9%97%a8" class="header-mark"></a>4.2.OpenResty快速入门</h2><p>我们希望达到的多级缓存架构如图：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png" title="yeVDlwtfMx" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/yeVDlwtfMx.png 2x"
+            sizes="auto"
+            alt="yeVDlwtfMx">
+    </a></figure></p>
 <p>其中：</p>
 <ul>
 <li>
@@ -856,30 +989,32 @@
 <p>OpenResty集群用来编写多级缓存业务</p>
 </li>
 </ul>
-<h3 id="421反向代理流程">4.2.1.反向代理流程</h3>
-<p>现在，商品详情页使用的是假的商品数据。不过在浏览器中，可以看到页面有发起ajax请求查询真实商品数据。</p>
+<h3 id="421反向代理流程" class="headerLink">
+    <a href="#421%e5%8f%8d%e5%90%91%e4%bb%a3%e7%90%86%e6%b5%81%e7%a8%8b" class="header-mark"></a>4.2.1.反向代理流程</h3><p>现在，商品详情页使用的是假的商品数据。不过在浏览器中，可以看到页面有发起ajax请求查询真实商品数据。</p>
 <p>这个请求如下：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png"
-        title="image-20210821093144700" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png" title="image-20210821093144700" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821093144700.png 2x"
+            sizes="auto"
+            alt="image-20210821093144700">
+    </a></figure></p>
 <p>请求地址是localhost，端口是80，就被windows上安装的Nginx服务给接收到了。然后代理给了OpenResty集群：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png"
-        title="image-20210821094447709" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png" title="image-20210821094447709" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821094447709.png 2x"
+            sizes="auto"
+            alt="image-20210821094447709">
+    </a></figure></p>
 <p>我们需要在OpenResty中编写业务，查询商品数据并返回到浏览器。</p>
 <p>但是这次，我们先在OpenResty接收请求，返回假的商品数据。</p>
-<h3 id="422openresty监听请求">4.2.2.OpenResty监听请求</h3>
-<p>OpenResty的很多功能都依赖于其目录下的Lua库，需要在nginx.conf中指定依赖库的目录，并导入依赖：</p>
+<h3 id="422openresty监听请求" class="headerLink">
+    <a href="#422openresty%e7%9b%91%e5%90%ac%e8%af%b7%e6%b1%82" class="header-mark"></a>4.2.2.OpenResty监听请求</h3><p>OpenResty的很多功能都依赖于其目录下的Lua库，需要在nginx.conf中指定依赖库的目录，并导入依赖：</p>
 <p>1）添加对OpenResty的Lua模块的加载</p>
 <p>修改<code>/usr/local/openresty/nginx/conf/nginx.conf</code>文件，在其中的http下面，添加下面代码：</p>
 <div class="highlight"><div class="chroma">
@@ -918,25 +1053,27 @@
 </div>
 </div><p>这个监听，就类似于SpringMVC中的<code>@GetMapping(&quot;/api/item&quot;)</code>做路径映射。</p>
 <p>而<code>content_by_lua_file lua/item.lua</code>则相当于调用item.lua这个文件，执行其中的业务，把结果返回给用户。相当于java中调用service。</p>
-<h3 id="423编写itemlua">4.2.3.编写item.lua</h3>
-<p>1）在<code>/usr/loca/openresty/nginx</code>目录创建文件夹：lua</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png"
-        title="image-20210821100755080" /></p>
+<h3 id="423编写itemlua" class="headerLink">
+    <a href="#423%e7%bc%96%e5%86%99itemlua" class="header-mark"></a>4.2.3.编写item.lua</h3><p>1）在<code>/usr/loca/openresty/nginx</code>目录创建文件夹：lua</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png" title="image-20210821100755080" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100755080.png 2x"
+            sizes="auto"
+            alt="image-20210821100755080">
+    </a></figure></p>
 <p>2）在<code>/usr/loca/openresty/nginx/lua</code>文件夹下，新建文件：item.lua</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png"
-        title="image-20210821100801756" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png" title="image-20210821100801756" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821100801756.png 2x"
+            sizes="auto"
+            alt="image-20210821100801756">
+    </a></figure></p>
 <p>3）编写item.lua，返回假数据</p>
 <p>item.lua中，利用ngx.say()函数返回数据到Response中</p>
 <div class="highlight"><div class="chroma">
@@ -957,38 +1094,41 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>刷新商品页面：http://localhost/item.html?id=1001，即可看到效果：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png"
-        title="image-20210821101217089" /></p>
-<h2 id="43请求参数处理">4.3.请求参数处理</h2>
-<p>上一节中，我们在OpenResty接收前端请求，但是返回的是假数据。</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png" title="image-20210821101217089" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101217089.png 2x"
+            sizes="auto"
+            alt="image-20210821101217089">
+    </a></figure></p>
+<h2 id="43请求参数处理" class="headerLink">
+    <a href="#43%e8%af%b7%e6%b1%82%e5%8f%82%e6%95%b0%e5%a4%84%e7%90%86" class="header-mark"></a>4.3.请求参数处理</h2><p>上一节中，我们在OpenResty接收前端请求，但是返回的是假数据。</p>
 <p>要返回真实数据，必须根据前端传递来的商品id，查询商品信息才可以。</p>
 <p>那么如何获取前端传递的商品参数呢？</p>
-<h3 id="431获取参数的api">4.3.1.获取参数的API</h3>
-<p>OpenResty中提供了一些API用来获取不同类型的前端请求参数：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png"
-        title="image-20210821101433528" /></p>
-<h3 id="432获取参数并返回">4.3.2.获取参数并返回</h3>
-<p>在前端发起的ajax请求如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png"
-        title="image-20210821101721649" /></p>
+<h3 id="431获取参数的api" class="headerLink">
+    <a href="#431%e8%8e%b7%e5%8f%96%e5%8f%82%e6%95%b0%e7%9a%84api" class="header-mark"></a>4.3.1.获取参数的API</h3><p>OpenResty中提供了一些API用来获取不同类型的前端请求参数：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png" title="image-20210821101433528" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101433528.png 2x"
+            sizes="auto"
+            alt="image-20210821101433528">
+    </a></figure></p>
+<h3 id="432获取参数并返回" class="headerLink">
+    <a href="#432%e8%8e%b7%e5%8f%96%e5%8f%82%e6%95%b0%e5%b9%b6%e8%bf%94%e5%9b%9e" class="header-mark"></a>4.3.2.获取参数并返回</h3><p>在前端发起的ajax请求如图：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png" title="image-20210821101721649" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821101721649.png 2x"
+            sizes="auto"
+            alt="image-20210821101721649">
+    </a></figure></p>
 <p>可以看到商品id是以路径占位符方式传递的，因此可以利用正则表达式匹配的方式来获取ID</p>
 <p>1）获取商品id</p>
 <p>修改<code>/usr/loca/openresty/nginx/nginx.conf</code>文件中监听/api/item的代码，利用正则表达式获取ID：</p>
@@ -1037,35 +1177,38 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>刷新页面可以看到结果中已经带上了ID：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png"
-        title="image-20210821102235467" /></p>
-<h2 id="44查询tomcat">4.4.查询Tomcat</h2>
-<p>拿到商品ID后，本应去缓存中查询商品信息，不过目前我们还未建立nginx、redis缓存。因此，这里我们先根据商品id去tomcat查询商品信息。我们实现如图部分：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png"
-        title="image-20210821102610167" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png" title="image-20210821102235467" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102235467.png 2x"
+            sizes="auto"
+            alt="image-20210821102235467">
+    </a></figure></p>
+<h2 id="44查询tomcat" class="headerLink">
+    <a href="#44%e6%9f%a5%e8%af%a2tomcat" class="header-mark"></a>4.4.查询Tomcat</h2><p>拿到商品ID后，本应去缓存中查询商品信息，不过目前我们还未建立nginx、redis缓存。因此，这里我们先根据商品id去tomcat查询商品信息。我们实现如图部分：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png" title="image-20210821102610167" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102610167.png 2x"
+            sizes="auto"
+            alt="image-20210821102610167">
+    </a></figure></p>
 <p>需要注意的是，我们的OpenResty是在虚拟机，Tomcat是在Windows电脑上。两者IP一定不要搞错了。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png"
-        title="image-20210821102959829" /></p>
-<h3 id="441发送http请求的api">4.4.1.发送http请求的API</h3>
-<p>nginx提供了内部API用以发送http请求：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png" title="image-20210821102959829" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821102959829.png 2x"
+            sizes="auto"
+            alt="image-20210821102959829">
+    </a></figure></p>
+<h3 id="441发送http请求的api" class="headerLink">
+    <a href="#441%e5%8f%91%e9%80%81http%e8%af%b7%e6%b1%82%e7%9a%84api" class="header-mark"></a>4.4.1.发送http请求的API</h3><p>nginx提供了内部API用以发送http请求：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -1103,16 +1246,17 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>原理如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png"
-        title="image-20210821104149061" /></p>
-<h3 id="442封装http工具">4.4.2.封装http工具</h3>
-<p>下面，我们封装一个发送Http请求的工具，基于ngx.location.capture来实现查询tomcat。</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png" title="image-20210821104149061" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821104149061.png 2x"
+            sizes="auto"
+            alt="image-20210821104149061">
+    </a></figure></p>
+<h3 id="442封装http工具" class="headerLink">
+    <a href="#442%e5%b0%81%e8%a3%85http%e5%b7%a5%e5%85%b7" class="header-mark"></a>4.4.2.封装http工具</h3><p>下面，我们封装一个发送Http请求的工具，基于ngx.location.capture来实现查询tomcat。</p>
 <p>1）添加反向代理，到windows的Java服务</p>
 <p>因为item-service中的接口都是/item开头，所以我们监听/item路径，代理到windows上的tomcat服务。</p>
 <p>修改 <code>/usr/local/openresty/nginx/conf/nginx.conf</code>文件，添加一个location：</p>
@@ -1131,14 +1275,15 @@
 </div><p>以后，只要我们调用<code>ngx.location.capture(&quot;/item&quot;)</code>，就一定能发送请求到windows的tomcat服务。</p>
 <p>2）封装工具类</p>
 <p>之前我们说过，OpenResty启动时会加载以下两个目录中的工具文件：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png"
-        data-srcset="C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png, C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png 1.5x, C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png 2x"
-        data-sizes="auto"
-        alt="C:/Users/cold-bin/Desktop/Redis笔记/03-高级篇/讲义/02-多级缓存/assets/image-20210821104857413.png"
-        title="image-20210821104857413" /></p>
+<p><figure><a class="lightgallery" href="C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png" title="image-20210821104857413" data-thumbnail="C:/Users/cold-bin/Desktop/Redis笔记/03-高级篇/讲义/02-多级缓存/assets/image-20210821104857413.png">
+        <img
+            
+            loading="lazy"
+            src="C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png"
+            srcset="C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png, C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png 1.5x, C:/Users/cold-bin/Desktop/Redis%e7%ac%94%e8%ae%b0/03-%e9%ab%98%e7%ba%a7%e7%af%87/%e8%ae%b2%e4%b9%89/02-%e5%a4%9a%e7%ba%a7%e7%bc%93%e5%ad%98/assets/image-20210821104857413.png 2x"
+            sizes="auto"
+            alt="image-20210821104857413">
+    </a></figure></p>
 <p>所以，自定义的http工具也需要放到这个目录下。</p>
 <p>在<code>/usr/local/openresty/lualib</code>目录下，新建一个common.lua文件：</p>
 <div class="highlight"><div class="chroma">
@@ -1223,18 +1368,19 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里查询到的结果是json字符串，并且包含商品、库存两个json字符串，页面最终需要的是把两个json拼接为一个json：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png"
-        title="image-20210821110441222" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png" title="image-20210821110441222" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821110441222.png 2x"
+            sizes="auto"
+            alt="image-20210821110441222">
+    </a></figure></p>
 <p>这就需要我们先把JSON变为lua的table，完成数据整合后，再转为JSON。</p>
-<h3 id="443cjson工具类">4.4.3.CJSON工具类</h3>
-<p>OpenResty提供了一个cjson的模块用来处理JSON的序列化和反序列化。</p>
-<p>官方地址： <a href="https://github.com/openresty/lua-cjson/" target="_blank" rel="noopener noreffer ">https://github.com/openresty/lua-cjson/</a></p>
+<h3 id="443cjson工具类" class="headerLink">
+    <a href="#443cjson%e5%b7%a5%e5%85%b7%e7%b1%bb" class="header-mark"></a>4.4.3.CJSON工具类</h3><p>OpenResty提供了一个cjson的模块用来处理JSON的序列化和反序列化。</p>
+<p>官方地址： <a href="https://github.com/openresty/lua-cjson/" target="_blank" rel="noopener noreferrer">https://github.com/openresty/lua-cjson/</a></p>
 <p>1）引入cjson模块：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1278,8 +1424,8 @@
 </span></span><span class="line"><span class="cl"><span class="n">print</span><span class="p">(</span><span class="n">obj.name</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="444实现tomcat查询">4.4.4.实现Tomcat查询</h3>
-<p>下面，我们修改之前的item.lua中的业务，添加json处理功能：</p>
+</div><h3 id="444实现tomcat查询" class="headerLink">
+    <a href="#444%e5%ae%9e%e7%8e%b0tomcat%e6%9f%a5%e8%af%a2" class="header-mark"></a>4.4.4.实现Tomcat查询</h3><p>下面，我们修改之前的item.lua中的业务，添加json处理功能：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1332,16 +1478,17 @@
 </span></span><span class="line"><span class="cl"><span class="n">ngx.say</span><span class="p">(</span><span class="n">cjson.encode</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="445基于id负载均衡">4.4.5.基于ID负载均衡</h3>
-<p>刚才的代码中，我们的tomcat是单机部署。而实际开发中，tomcat一定是集群模式：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png"
-        title="image-20210821111023255" /></p>
+</div><h3 id="445基于id负载均衡" class="headerLink">
+    <a href="#445%e5%9f%ba%e4%ba%8eid%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1" class="header-mark"></a>4.4.5.基于ID负载均衡</h3><p>刚才的代码中，我们的tomcat是单机部署。而实际开发中，tomcat一定是集群模式：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png" title="image-20210821111023255" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821111023255.png 2x"
+            sizes="auto"
+            alt="image-20210821111023255">
+    </a></figure></p>
 <p>因此，OpenResty需要对tomcat集群做负载均衡。</p>
 <p>而默认的负载均衡规则是轮询模式，当我们查询/item/10001时：</p>
 <ul>
@@ -1353,8 +1500,8 @@
 <p>怎么办？</p>
 <p>如果能让同一个商品，每次查询时都访问同一个tomcat服务，那么JVM缓存就一定能生效了。</p>
 <p>也就是说，我们需要根据商品id做负载均衡，而不是轮询。</p>
-<h4 id="1原理">1）原理</h4>
-<p>nginx提供了基于请求路径做负载均衡的算法：</p>
+<h4 id="1原理" class="headerLink">
+    <a href="#1%e5%8e%9f%e7%90%86" class="header-mark"></a>1）原理</h4><p>nginx提供了基于请求路径做负载均衡的算法：</p>
 <p>nginx根据请求路径做hash运算，把得到的数值对tomcat服务的数量取余，余数是几，就访问第几个服务，实现负载均衡。</p>
 <p>例如：</p>
 <ul>
@@ -1364,8 +1511,8 @@
 <li>则访问第一个tomcat服务，也就是8081</li>
 </ul>
 <p>只要id不变，每次hash运算结果也不会变，那就可以保证同一个商品，一直访问同一个tomcat服务，确保JVM缓存生效。</p>
-<h4 id="2实现">2）实现</h4>
-<p>修改<code>/usr/local/openresty/nginx/conf/nginx.conf</code>文件，实现基于ID做负载均衡。</p>
+<h4 id="2实现" class="headerLink">
+    <a href="#2%e5%ae%9e%e7%8e%b0" class="header-mark"></a>2）实现</h4><p>修改<code>/usr/local/openresty/nginx/conf/nginx.conf</code>文件，实现基于ID做负载均衡。</p>
 <p>首先，定义tomcat集群，并设置基于路径做负载均衡：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1405,44 +1552,48 @@
 <pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">nginx -s reload
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="3测试">3）测试</h4>
-<p>启动两台tomcat服务：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png"
-        title="image-20210821112420464" /></p>
+</div><h4 id="3测试" class="headerLink">
+    <a href="#3%e6%b5%8b%e8%af%95" class="header-mark"></a>3）测试</h4><p>启动两台tomcat服务：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png" title="image-20210821112420464" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112420464.png 2x"
+            sizes="auto"
+            alt="image-20210821112420464">
+    </a></figure></p>
 <p>同时启动：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png"
-        title="image-20210821112444482" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png" title="image-20210821112444482" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112444482.png 2x"
+            sizes="auto"
+            alt="image-20210821112444482">
+    </a></figure></p>
 <p>清空日志后，再次访问页面，可以看到不同id的商品，访问到了不同的tomcat服务：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png"
-        title="image-20210821112559965" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png"
-        title="image-20210821112637430" /></p>
-<h2 id="45redis缓存预热">4.5.Redis缓存预热</h2>
-<p>Redis缓存会面临冷启动问题：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png" title="image-20210821112559965" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112559965.png 2x"
+            sizes="auto"
+            alt="image-20210821112559965">
+    </a></figure></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png" title="image-20210821112637430" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821112637430.png 2x"
+            sizes="auto"
+            alt="image-20210821112637430">
+    </a></figure></p>
+<h2 id="45redis缓存预热" class="headerLink">
+    <a href="#45redis%e7%bc%93%e5%ad%98%e9%a2%84%e7%83%ad" class="header-mark"></a>4.5.Redis缓存预热</h2><p>Redis缓存会面临冷启动问题：</p>
 <p><strong>冷启动</strong>：服务刚刚启动时，Redis中并没有缓存，如果所有商品数据都在第一次查询时添加缓存，可能会给数据库带来较大压力。</p>
 <p><strong>缓存预热</strong>：在实际开发中，我们可以利用大数据统计用户访问的热点数据，在项目启动时将这些热点数据提前查询并保存到Redis中。</p>
 <p>我们数据量较少，并且没有数据统计相关功能，目前可以在启动时将所有数据都放入缓存中。</p>
@@ -1596,23 +1747,24 @@
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="46查询redis缓存">4.6.查询Redis缓存</h2>
-<p>现在，Redis缓存已经准备就绪，我们可以再OpenResty中实现查询Redis的逻辑了。如下图红框所示：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png"
-        title="image-20210821113340111" /></p>
+</div><h2 id="46查询redis缓存" class="headerLink">
+    <a href="#46%e6%9f%a5%e8%af%a2redis%e7%bc%93%e5%ad%98" class="header-mark"></a>4.6.查询Redis缓存</h2><p>现在，Redis缓存已经准备就绪，我们可以再OpenResty中实现查询Redis的逻辑了。如下图红框所示：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png" title="image-20210821113340111" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821113340111.png 2x"
+            sizes="auto"
+            alt="image-20210821113340111">
+    </a></figure></p>
 <p>当请求进入OpenResty之后：</p>
 <ul>
 <li>优先查询Redis缓存</li>
 <li>如果Redis缓存未命中，再查询Tomcat</li>
 </ul>
-<h3 id="461封装redis工具">4.6.1.封装Redis工具</h3>
-<p>OpenResty提供了操作Redis的模块，我们只要引入该模块就能直接使用。但是为了方便，我们将Redis操作封装到之前的common.lua工具库中。</p>
+<h3 id="461封装redis工具" class="headerLink">
+    <a href="#461%e5%b0%81%e8%a3%85redis%e5%b7%a5%e5%85%b7" class="header-mark"></a>4.6.1.封装Redis工具</h3><p>OpenResty提供了操作Redis的模块，我们只要引入该模块就能直接使用。但是为了方便，我们将Redis操作封装到之前的common.lua工具库中。</p>
 <p>修改<code>/usr/local/openresty/lualib/common.lua</code>文件：</p>
 <p>1）引入Redis模块，并初始化Redis对象</p>
 <div class="highlight"><div class="chroma">
@@ -1849,8 +2001,8 @@
 </span></span><span class="line"><span class="cl"><span class="kr">return</span> <span class="n">_M</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="462实现redis查询">4.6.2.实现Redis查询</h3>
-<p>接下来，我们就可以去修改item.lua文件，实现对Redis的查询了。</p>
+</div><h3 id="462实现redis查询" class="headerLink">
+    <a href="#462%e5%ae%9e%e7%8e%b0redis%e6%9f%a5%e8%af%a2" class="header-mark"></a>4.6.2.实现Redis查询</h3><p>接下来，我们就可以去修改item.lua文件，实现对Redis的查询了。</p>
 <p>查询逻辑是：</p>
 <ul>
 <li>根据id查询Redis</li>
@@ -1899,14 +2051,15 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>2）而后修改商品查询、库存查询的业务：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png"
-        title="image-20210821114528954" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png" title="image-20210821114528954" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114528954.png 2x"
+            sizes="auto"
+            alt="image-20210821114528954">
+    </a></figure></p>
 <p>3）完整的item.lua代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1990,18 +2143,19 @@
 </span></span><span class="line"><span class="cl"><span class="n">ngx.say</span><span class="p">(</span><span class="n">cjson.encode</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="47nginx本地缓存">4.7.Nginx本地缓存</h2>
-<p>现在，整个多级缓存中只差最后一环，也就是nginx的本地缓存了。如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png"
-        title="image-20210821114742950" /></p>
-<h3 id="471本地缓存api">4.7.1.本地缓存API</h3>
-<p>OpenResty为Nginx提供了<strong>shard dict</strong>的功能，可以在nginx的多个worker之间共享数据，实现缓存功能。</p>
+</div><h2 id="47nginx本地缓存" class="headerLink">
+    <a href="#47nginx%e6%9c%ac%e5%9c%b0%e7%bc%93%e5%ad%98" class="header-mark"></a>4.7.Nginx本地缓存</h2><p>现在，整个多级缓存中只差最后一环，也就是nginx的本地缓存了。如图：</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png" title="image-20210821114742950" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821114742950.png 2x"
+            sizes="auto"
+            alt="image-20210821114742950">
+    </a></figure></p>
+<h3 id="471本地缓存api" class="headerLink">
+    <a href="#471%e6%9c%ac%e5%9c%b0%e7%bc%93%e5%ad%98api" class="header-mark"></a>4.7.1.本地缓存API</h3><p>OpenResty为Nginx提供了<strong>shard dict</strong>的功能，可以在nginx的多个worker之间共享数据，实现缓存功能。</p>
 <p>1）开启共享字典，在nginx.conf的http下添加配置：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2032,8 +2186,8 @@
 </span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">val</span> <span class="o">=</span> <span class="n">item_cache</span><span class="p">:</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="472实现本地缓存查询">4.7.2.实现本地缓存查询</h3>
-<p>1）修改<code>/usr/local/openresty/lua/item.lua</code>文件，修改read_data查询函数，添加本地缓存逻辑：</p>
+</div><h3 id="472实现本地缓存查询" class="headerLink">
+    <a href="#472%e5%ae%9e%e7%8e%b0%e6%9c%ac%e5%9c%b0%e7%bc%93%e5%ad%98%e6%9f%a5%e8%af%a2" class="header-mark"></a>4.7.2.实现本地缓存查询</h3><p>1）修改<code>/usr/local/openresty/lua/item.lua</code>文件，修改read_data查询函数，添加本地缓存逻辑：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -2087,14 +2241,15 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>2）修改item.lua中查询商品和库存的业务，实现最新的read_data函数：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png"
-        title="image-20210821115108528" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png" title="image-20210821115108528" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115108528.png 2x"
+            sizes="auto"
+            alt="image-20210821115108528">
+    </a></figure></p>
 <p>其实就是多了缓存时间参数，过期后nginx缓存会自动删除，下次访问即可更新缓存。</p>
 <p>这里给商品基本信息设置超时时间为30分钟，库存为1分钟。</p>
 <p>因为库存更新频率较高，如果缓存时间过长，可能与数据库差异较大。</p>
@@ -2199,11 +2354,11 @@
 </span></span><span class="line"><span class="cl"><span class="n">ngx.say</span><span class="p">(</span><span class="n">cjson.encode</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="5缓存同步">5.缓存同步</h1>
-<p>大多数情况下，浏览器查询到的都是缓存数据，如果缓存数据与数据库数据存在较大差异，可能会产生比较严重的后果。</p>
+</div><h1 id="5缓存同步" class="headerLink">
+    <a href="#5%e7%bc%93%e5%ad%98%e5%90%8c%e6%ad%a5" class="header-mark"></a>5.缓存同步</h1><p>大多数情况下，浏览器查询到的都是缓存数据，如果缓存数据与数据库数据存在较大差异，可能会产生比较严重的后果。</p>
 <p>所以我们必须保证数据库数据、缓存数据的一致性，这就是缓存与数据库的同步。</p>
-<h2 id="51数据同步策略">5.1.数据同步策略</h2>
-<p>缓存数据同步的常见方式有三种：</p>
+<h2 id="51数据同步策略" class="headerLink">
+    <a href="#51%e6%95%b0%e6%8d%ae%e5%90%8c%e6%ad%a5%e7%ad%96%e7%95%a5" class="header-mark"></a>5.1.数据同步策略</h2><p>缓存数据同步的常见方式有三种：</p>
 <p><strong>设置有效期</strong>：给缓存设置有效期，到期后自动删除。再次查询时更新</p>
 <ul>
 <li>优势：简单、方便</li>
@@ -2224,14 +2379,15 @@
 </ul>
 <p>而异步实现又可以基于MQ或者Canal来实现：</p>
 <p>1）基于MQ的异步通知：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png"
-        title="image-20210821115552327" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png" title="image-20210821115552327" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115552327.png 2x"
+            sizes="auto"
+            alt="image-20210821115552327">
+    </a></figure></p>
 <p>解读：</p>
 <ul>
 <li>商品服务完成对数据的修改后，只需要发送一条消息到MQ中。</li>
@@ -2239,14 +2395,15 @@
 </ul>
 <p>依然有少量的代码侵入</p>
 <p>2）基于Canal的通知</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png"
-        title="image-20210821115719363" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png" title="image-20210821115719363" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115719363.png 2x"
+            sizes="auto"
+            alt="image-20210821115719363">
+    </a></figure></p>
 <p>解读：</p>
 <ul>
 <li>商品服务完成商品修改后，业务直接结束，没有任何代码侵入</li>
@@ -2254,48 +2411,51 @@
 <li>缓存服务接收到canal通知，更新缓存</li>
 </ul>
 <p>代码零侵入</p>
-<h2 id="52安装canal">5.2.安装Canal</h2>
-<h3 id="521认识canal">5.2.1.认识Canal</h3>
-<p><strong>Canal [kə&rsquo;næl]</strong>，译意为水道/管道/沟渠，canal是阿里巴巴旗下的一款开源项目，基于Java开发。基于数据库增量日志解析，提供增量数据订阅&amp;消费。GitHub的地址：https://github.com/alibaba/canal</p>
+<h2 id="52安装canal" class="headerLink">
+    <a href="#52%e5%ae%89%e8%a3%85canal" class="header-mark"></a>5.2.安装Canal</h2><h3 id="521认识canal" class="headerLink">
+    <a href="#521%e8%ae%a4%e8%af%86canal" class="header-mark"></a>5.2.1.认识Canal</h3><p><strong>Canal [kə&rsquo;næl]</strong>，译意为水道/管道/沟渠，canal是阿里巴巴旗下的一款开源项目，基于Java开发。基于数据库增量日志解析，提供增量数据订阅&amp;消费。GitHub的地址：https://github.com/alibaba/canal</p>
 <p>Canal是基于mysql的主从同步来实现的，MySQL主从同步的原理如下：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png"
-        title="image-20210821115914748" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png" title="image-20210821115914748" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115914748.png 2x"
+            sizes="auto"
+            alt="image-20210821115914748">
+    </a></figure></p>
 <ol>
 <li>MySQL master 将数据变更写入二进制日志( binary log），其中记录的数据叫做binary log events</li>
 <li>MySQL slave 将 master 的 binary log events拷贝到它的中继日志(relay log)</li>
 <li>MySQL slave 重放 relay log 中事件，将数据变更反映它自己的数据</li>
 </ol>
 <p>而Canal就是把自己伪装成MySQL的一个slave节点，从而监听master的binary log变化。再把得到的变化信息通知给Canal的客户端，进而完成对其它数据库的同步。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png"
-        title="image-20210821115948395" /></p>
-<h3 id="522安装canal">5.2.2.安装Canal</h3>
-<h2 id="53监听canal">5.3.监听Canal</h2>
-<p>Canal提供了各种语言的客户端，当Canal监听到binlog变化时，会通知Canal的客户端。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png"
-        title="image-20210821120049024" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png" title="image-20210821115948395" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821115948395.png 2x"
+            sizes="auto"
+            alt="image-20210821115948395">
+    </a></figure></p>
+<h3 id="522安装canal" class="headerLink">
+    <a href="#522%e5%ae%89%e8%a3%85canal" class="header-mark"></a>5.2.2.安装Canal</h3><h2 id="53监听canal" class="headerLink">
+    <a href="#53%e7%9b%91%e5%90%accanal" class="header-mark"></a>5.3.监听Canal</h2><p>Canal提供了各种语言的客户端，当Canal监听到binlog变化时，会通知Canal的客户端。</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png" title="image-20210821120049024" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210821120049024.png 2x"
+            sizes="auto"
+            alt="image-20210821120049024">
+    </a></figure></p>
 <p>我们可以利用Canal提供的Java客户端，监听Canal通知消息。当收到变化的消息时，完成对缓存的更新。</p>
 <p>不过这里我们会使用GitHub上的第三方开源的canal-starter客户端。地址：https://github.com/NormanGyllenhaal/canal-client</p>
 <p>与SpringBoot完美整合，自动装配，比官方客户端要简单好用很多。</p>
-<h3 id="531引入依赖">5.3.1.引入依赖：</h3>
-<div class="highlight"><div class="chroma">
+<h3 id="531引入依赖" class="headerLink">
+    <a href="#531%e5%bc%95%e5%85%a5%e4%be%9d%e8%b5%96" class="header-mark"></a>5.3.1.引入依赖：</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2311,8 +2471,8 @@
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="532编写配置">5.3.2.编写配置：</h3>
-<div class="highlight"><div class="chroma">
+</div><h3 id="532编写配置" class="headerLink">
+    <a href="#532%e7%bc%96%e5%86%99%e9%85%8d%e7%bd%ae" class="header-mark"></a>5.3.2.编写配置：</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2324,8 +2484,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">server</span><span class="p">:</span><span class="w"> </span><span class="m">192.168.150.101</span><span class="p">:</span><span class="m">11111</span><span class="w"> </span><span class="c"># canal服务地址</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="533修改item实体类">5.3.3.修改Item实体类</h3>
-<p>通过@Id、@Column、等注解完成Item与数据库表字段的映射：</p>
+</div><h3 id="533修改item实体类" class="headerLink">
+    <a href="#533%e4%bf%ae%e6%94%b9item%e5%ae%9e%e4%bd%93%e7%b1%bb" class="header-mark"></a>5.3.3.修改Item实体类</h3><p>通过@Id、@Column、等注解完成Item与数据库表字段的映射：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -2406,8 +2566,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="534编写监听器">5.3.4.编写监听器</h3>
-<p>通过实现<code>EntryHandler&lt;T&gt;</code>接口编写监听器，监听Canal消息。注意两点：</p>
+</div><h3 id="534编写监听器" class="headerLink">
+    <a href="#534%e7%bc%96%e5%86%99%e7%9b%91%e5%90%ac%e5%99%a8" class="header-mark"></a>5.3.4.编写监听器</h3><p>通过实现<code>EntryHandler&lt;T&gt;</code>接口编写监听器，监听Canal消息。注意两点：</p>
 <ul>
 <li>实现类通过<code>@CanalTable(&quot;tb_item&quot;)</code>指定监听的表信息</li>
 <li>EntryHandler的泛型是与表对应的实体类</li>
@@ -2641,44 +2801,50 @@
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div></div><div class="post-footer" id="post-footer">
+</div></div>
+
+        <div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2023-01-24</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/" data-title="Redis高级篇之多级缓存"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/" data-title="Redis高级篇之多级缓存"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
             </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
+                    </span></div>
+            <div class="post-info-share"><button title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/" data-title="Redis高级篇之多级缓存"><span class="fab fa-weibo fa-fw"></span></button><button title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/" data-title="Redis高级篇之多级缓存"><span data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></span></button></div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/lua/">lua</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/lua/">lua</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" class="prev" rel="prev" title="汇编之标志寄存器"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>汇编之标志寄存器</a>
-            <a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%86%85%E4%B8%AD%E6%96%AD/" class="next" rel="next" title="汇编之内中断">汇编之内中断<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" class="prev" rel="prev" title="汇编之标志寄存器"><i class="fas fa-angle-left fa-fw"></i>汇编之标志寄存器</a>
+            <a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%86%85%E4%B8%AD%E6%96%AD/" class="next" rel="next" title="汇编之内中断">汇编之内中断<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id="comments"><div id="gitalk" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
             </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
 
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-24T16:08:44+08:00","owner":"cold-bin","repo":"blog-comment","title":"Redis高级篇之多级缓存"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="Back to Top">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.b38ee65d6456beb2d034bf554505f4ca47e421548b7cd26e8a7805fd2673b6c3.css" integrity="sha256-s47mXWRWvrLQNL9VRQX0ykfkIVSLfNJuingF/SZztsM="><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr&#43;QR0SQDNfgglgtcM="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc=">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18&#43;2anxsuaz3pWYyVWi&#43;bTvTH8Q="><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-24T16:08:44+08:00","owner":"cold-bin","repo":"blog-comment","title":"Redis高级篇之多级缓存"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"},"sharerjs":true};</script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.0c4d9db673dd19489cfa134ab15ef8b9237ae72aaa65d8490d55658442b3a2d3.js" integrity="sha256-DE2dtnPdGUic&#43;hNKsV74uSN65yqqZdhJDVVlhEKzotM="></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.72ceb0f87691041e9e0bea2f2468b9aa3ed544e8f7f6dc9f76d8c8f997699e41.js" integrity="sha256-cs6w&#43;HaRBB6eC&#43;ovJGi5qj7VROj39tyfdtjI&#43;ZdpnkE="></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.5b0e82e9a1ae0b52d07a52da1eb4640da77eb3ca7e78c3a428c1f3b712858d3c.js" integrity="sha256-Ww6C6aGuC1LQelLaHrRkDad&#43;s8p&#43;eMOkKMHztxKFjTw="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.11be927cda59c8b6019ebbea838285c5beaf21183ea4b83dbd4e4fbf9413ce4a.js" integrity="sha256-Eb6SfNpZyLYBnrvqg4KFxb6vIRg&#43;pLg9vU5Pv5QTzko="></script><script type="text/javascript" src="/lib/sharer/sharer.min.8fe10eb615eb163a20f795484430a012805ec7c8c11df52df54ddb7a46084254.js" integrity="sha256-j&#43;EOthXrFjog95VIRDCgEoBex8jBHfUt9U3bekYIQlQ="></script><script type="text/javascript" src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw&#43;iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y&#43;KzPOwaJ0PYhsf7R6c=" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54&#43;rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn&#43;yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script></div>
+</body>
+
 </html>

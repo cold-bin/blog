@@ -1,11 +1,14 @@
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>计算机网络之物理层 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="计算机网络之物理层" />
-<meta property="og:description" content="[toc] 2.1、物理层的基本概念 2.2、物理层下面的传输媒体 传输媒体也称为传输介质或传输媒介，他就是数据传输系统中在发送器和接收器之间的物理通路。" />
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noodp" />
+    <title>计算机网络之物理层 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="计算机网络之物理层" />
+<meta property="og:description" content="[toc] 2.1、物理层的基本概念 2.2、物理层下面的传输媒体传输媒体也称为传输介质或传输媒介，他就是数据传输系统中在发送器和接收器之间的物理通路。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-06-08T15:16:08+08:00" />
@@ -15,11 +18,14 @@
 <meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
 
 <meta name="twitter:title" content="计算机网络之物理层"/>
-<meta name="twitter:description" content="[toc] 2.1、物理层的基本概念 2.2、物理层下面的传输媒体 传输媒体也称为传输介质或传输媒介，他就是数据传输系统中在发送器和接收器之间的物理通路。"/>
+<meta name="twitter:description" content="[toc] 2.1、物理层的基本概念 2.2、物理层下面的传输媒体传输媒体也称为传输介质或传输媒介，他就是数据传输系统中在发送器和接收器之间的物理通路。"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋">
+
+<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/" />
+<link rel="stylesheet" href="/css/main.d5cb6f29e0750a13b17688d628b04d50f9fbbd32e0629ccc0dcf796a299ae226.css" integrity="sha256-1ctvKeB1ChOxdojWKLBNUPn7vTLgYpzMDc95aima4iY="><link rel="stylesheet" href="/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css" integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH&#43;KuXHiZWODptY5K8NF4="><link rel="stylesheet" href="/css/color.b0a0f8c429ce52dfa2805b5f9e99ccdae1e8fbfd9adf4f3ddb409d8201fc0c5a.css" integrity="sha256-sKD4xCnOUt&#43;igFtfnpnM2uHo&#43;/2a308920CdggH8DFo="><link rel="stylesheet" href="/css/style.min.5963810f80932dd0408e0fe2003ab30dbccfb3400fe079d989aad753741320e0.css" integrity="sha256-WWOBD4CTLdBAjg/iADqzDbzPs0AP4HnZiarXU3QTIOA="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc=">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc="></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -27,13 +33,13 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  3328 ,
-        "url": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82\/","datePublished": "2023-06-08T15:16:08+08:00","dateModified": "2023-06-08T15:16:08+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@id": "https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/"
+        },"image": ["https://blog.coldbin.top/favicon.ico"],"genre": "posts","wordcount":  3331 ,
+        "url": "https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/","datePublished": "2023-06-08T15:16:08+08:00","dateModified": "2023-06-08T15:16:08+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
             "@type": "Organization",
             "name": "阿冰","logo": {
                     "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+                    "url": "https://blog.coldbin.top/images/avatar.png",
                     "width":  396 ,
                     "height":  396 
                 }},"author": {
@@ -42,34 +48,43 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
+        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
+        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
+        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
+        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
+        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
+        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
+        window.switchThemeEventSet = new Set()
+    </script>
+    <div id="back-to-top"></div>
+    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
             <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
+        class="logo"
+        loading="lazy"
+        src="/favicon.ico"
+        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+        title="/favicon.ico" >阿冰的小屋</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search fa-fw"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle fa-fw"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                    <i class="fas fa-adjust fa-fw"></i>
                 </a></div>
         </div>
     </div>
@@ -78,13 +93,13 @@
         <div class="header-wrapper">
             <div class="header-title">
                 <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
+        class="logo"
+        loading="lazy"
+        src="/favicon.ico"
+        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+        title="/favicon.ico" >阿冰的小屋</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -94,39 +109,95 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-search fa-fw"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
+                            <i class="fas fa-times-circle fa-fw"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
+                <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
-</header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">计算机网络之物理层</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>计算机网络</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-06-08">2023-06-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;3328 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+            <div class="container"><div class="toc" id="toc-auto">
+        <h2 class="toc-title">Contents</h2>
+        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#21物理层的基本概念">2.1、物理层的基本概念</a></li>
+    <li><a href="#22物理层下面的传输媒体">2.2、物理层下面的传输媒体</a>
+      <ul>
+        <li><a href="#导引型传输媒体">导引型传输媒体</a>
+          <ul>
+            <li><a href="#同轴电缆">同轴电缆</a></li>
+            <li><a href="#双绞线">双绞线</a></li>
+            <li><a href="#光纤">光纤</a></li>
+            <li><a href="#电力线">电力线</a></li>
+          </ul>
+        </li>
+        <li><a href="#非导引型传输媒体">非导引型传输媒体</a>
+          <ul>
+            <li><a href="#无线电波">无线电波</a></li>
+            <li><a href="#微波">微波</a></li>
+            <li><a href="#红外线">红外线</a></li>
+            <li><a href="#可见光">可见光</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#23传输方式">2.3、传输方式</a>
+      <ul>
+        <li><a href="#串行传输和并行传输">串行传输和并行传输</a></li>
+        <li><a href="#同步传输和异步传输">同步传输和异步传输</a></li>
+        <li><a href="#单向通信单工双向交替通信半双工和双向同时通信全双工">单向通信（单工）、双向交替通信（半双工）和双向同时通信（全双工）</a></li>
+      </ul>
+    </li>
+    <li><a href="#24编码与调制">2.4、编码与调制</a>
+      <ul>
+        <li><a href="#传输媒体与信道的关系">传输媒体与信道的关系</a></li>
+        <li><a href="#常用编码">常用编码</a></li>
+        <li><a href="#调制">调制</a></li>
+        <li><a href="#码元">码元</a></li>
+      </ul>
+    </li>
+    <li><a href="#25信道的极限容量">2.5、信道的极限容量</a>
+      <ul>
+        <li><a href="#奈氏准则">奈氏准则</a></li>
+        <li><a href="#香农公式">香农公式</a></li>
+        <li><a href="#对比">对比</a></li>
+      </ul>
+    </li>
+    <li><a href="#补充信道复用技术">补充：信道复用技术</a>
+      <ul>
+        <li><a href="#频分复用时分复用和统计时分复用">频分复用、时分复用和统计时分复用</a></li>
+        <li><a href="#波分复用">波分复用</a></li>
+        <li><a href="#码分复用">码分复用</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">计算机网络之物理层</h1><div class="post-meta">
+            <div class="post-meta-line">
+                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">阿冰</a>
+                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="far fa-folder fa-fw"></i>计算机网络</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-06-08">2023-06-08</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-06-08">2023-06-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3331 words&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -183,56 +254,61 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>[toc]</p>
-<h1 id="21物理层的基本概念">2.1、物理层的基本概念</h1>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png"
-        title="image-20201008130211749" /></p>
+<h1 id="21物理层的基本概念" class="headerLink">
+    <a href="#21%e7%89%a9%e7%90%86%e5%b1%82%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" class="header-mark"></a>2.1、物理层的基本概念</h1><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png" title="image-20201008130211749" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008130211749.png 2x"
+            sizes="auto"
+            alt="image-20201008130211749">
+    </a></figure></p>
 <hr>
-<h1 id="22物理层下面的传输媒体">2.2、物理层下面的传输媒体</h1>
-<p><strong>传输媒体</strong>也称为传输介质或传输媒介，他就是数据传输系统中在发送器和接收器之间的物理通路。<strong>传输媒体</strong>可分为两大类，即<strong>导引型传输媒体</strong>和<strong>非导引型传输媒体</strong></p>
+<h1 id="22物理层下面的传输媒体" class="headerLink">
+    <a href="#22%e7%89%a9%e7%90%86%e5%b1%82%e4%b8%8b%e9%9d%a2%e7%9a%84%e4%bc%a0%e8%be%93%e5%aa%92%e4%bd%93" class="header-mark"></a>2.2、物理层下面的传输媒体</h1><p><strong>传输媒体</strong>也称为传输介质或传输媒介，他就是数据传输系统中在发送器和接收器之间的物理通路。<strong>传输媒体</strong>可分为两大类，即<strong>导引型传输媒体</strong>和<strong>非导引型传输媒体</strong></p>
 <p>传输媒体不属于计算机网络体系结构的任何一层。如果非要将它添加到体系结构中，那只能将其放置到物理层之下。</p>
-<h2 id="导引型传输媒体">导引型传输媒体</h2>
-<p>在导引型传输媒体中，电磁波被导引沿着固体媒体传播。</p>
-<h3 id="同轴电缆">同轴电缆</h3>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png"
-        title="image-20201008132050917" /></p>
-<h3 id="双绞线">双绞线</h3>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png"
-        title="image-20201008132225715" /></p>
-<h3 id="光纤">光纤</h3>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png"
-        title="image-20201008132403903" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png"
-        title="image-20201011001240573" /></p>
+<h2 id="导引型传输媒体" class="headerLink">
+    <a href="#%e5%af%bc%e5%bc%95%e5%9e%8b%e4%bc%a0%e8%be%93%e5%aa%92%e4%bd%93" class="header-mark"></a>导引型传输媒体</h2><p>在导引型传输媒体中，电磁波被导引沿着固体媒体传播。</p>
+<h3 id="同轴电缆" class="headerLink">
+    <a href="#%e5%90%8c%e8%bd%b4%e7%94%b5%e7%bc%86" class="header-mark"></a>同轴电缆</h3><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png" title="image-20201008132050917" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132050917.png 2x"
+            sizes="auto"
+            alt="image-20201008132050917">
+    </a></figure></p>
+<h3 id="双绞线" class="headerLink">
+    <a href="#%e5%8f%8c%e7%bb%9e%e7%ba%bf" class="header-mark"></a>双绞线</h3><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png" title="image-20201008132225715" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132225715.png 2x"
+            sizes="auto"
+            alt="image-20201008132225715">
+    </a></figure></p>
+<h3 id="光纤" class="headerLink">
+    <a href="#%e5%85%89%e7%ba%a4" class="header-mark"></a>光纤</h3><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png" title="image-20201008132403903" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132403903.png 2x"
+            sizes="auto"
+            alt="image-20201008132403903">
+    </a></figure></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png" title="image-20201011001240573" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201011001240573.png 2x"
+            sizes="auto"
+            alt="image-20201011001240573">
+    </a></figure></p>
 <blockquote>
 <p><strong>多模光纤</strong></p>
 <ul>
@@ -243,81 +319,89 @@
 <li>若光纤的直径减小到只有一个光的波长，则光纤就像一根波导那样，它可使光线一直向前传播，而不会产生多次反射。这样的光纤称为<strong>单模光纤</strong>。</li>
 </ul>
 </blockquote>
-<h3 id="电力线">电力线</h3>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png"
-        title="image-20201008132709015" /></p>
-<h2 id="非导引型传输媒体">非导引型传输媒体</h2>
-<p>非导引型传输媒体是指自由空间。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png"
-        title="image-20201008132857833" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png"
-        title="image-20201008132943176" /></p>
-<h3 id="无线电波">无线电波</h3>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png"
-        title="image-20201008133135659" /></p>
-<h3 id="微波">微波</h3>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png"
-        title="image-20201008133317293" /></p>
-<h3 id="红外线">红外线</h3>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png"
-        title="image-20201008133421986" /></p>
-<h3 id="可见光">可见光</h3>
-<p><a href="https://baike.baidu.com/item/%E5%8F%AF%E8%A7%81%E5%85%89%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1/16268518?fromtitle=LiFi&amp;fromid=5675729&amp;fr=aladdin" target="_blank" rel="noopener noreffer ">LIFI</a></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png"
-        title="image-20201008133718810" /></p>
+<h3 id="电力线" class="headerLink">
+    <a href="#%e7%94%b5%e5%8a%9b%e7%ba%bf" class="header-mark"></a>电力线</h3><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png" title="image-20201008132709015" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132709015.png 2x"
+            sizes="auto"
+            alt="image-20201008132709015">
+    </a></figure></p>
+<h2 id="非导引型传输媒体" class="headerLink">
+    <a href="#%e9%9d%9e%e5%af%bc%e5%bc%95%e5%9e%8b%e4%bc%a0%e8%be%93%e5%aa%92%e4%bd%93" class="header-mark"></a>非导引型传输媒体</h2><p>非导引型传输媒体是指自由空间。</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png" title="image-20201008132857833" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132857833.png 2x"
+            sizes="auto"
+            alt="image-20201008132857833">
+    </a></figure></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png" title="image-20201008132943176" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008132943176.png 2x"
+            sizes="auto"
+            alt="image-20201008132943176">
+    </a></figure></p>
+<h3 id="无线电波" class="headerLink">
+    <a href="#%e6%97%a0%e7%ba%bf%e7%94%b5%e6%b3%a2" class="header-mark"></a>无线电波</h3><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png" title="image-20201008133135659" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514595.png 2x"
+            sizes="auto"
+            alt="image-20201008133135659">
+    </a></figure></p>
+<h3 id="微波" class="headerLink">
+    <a href="#%e5%be%ae%e6%b3%a2" class="header-mark"></a>微波</h3><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png" title="image-20201008133317293" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514994.png 2x"
+            sizes="auto"
+            alt="image-20201008133317293">
+    </a></figure></p>
+<h3 id="红外线" class="headerLink">
+    <a href="#%e7%ba%a2%e5%a4%96%e7%ba%bf" class="header-mark"></a>红外线</h3><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png" title="image-20201008133421986" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081514968.png 2x"
+            sizes="auto"
+            alt="image-20201008133421986">
+    </a></figure></p>
+<h3 id="可见光" class="headerLink">
+    <a href="#%e5%8f%af%e8%a7%81%e5%85%89" class="header-mark"></a>可见光</h3><p><a href="https://baike.baidu.com/item/%E5%8F%AF%E8%A7%81%E5%85%89%E6%97%A0%E7%BA%BF%E9%80%9A%E4%BF%A1/16268518?fromtitle=LiFi&amp;fromid=5675729&amp;fr=aladdin" target="_blank" rel="noopener noreferrer">LIFI</a></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png" title="image-20201008133718810" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008133718810.png 2x"
+            sizes="auto"
+            alt="image-20201008133718810">
+    </a></figure></p>
 <hr>
-<h1 id="23传输方式">2.3、传输方式</h1>
-<h2 id="串行传输和并行传输">串行传输和并行传输</h2>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png"
-        title="image-20201008135603009" /></p>
+<h1 id="23传输方式" class="headerLink">
+    <a href="#23%e4%bc%a0%e8%be%93%e6%96%b9%e5%bc%8f" class="header-mark"></a>2.3、传输方式</h1><h2 id="串行传输和并行传输" class="headerLink">
+    <a href="#%e4%b8%b2%e8%a1%8c%e4%bc%a0%e8%be%93%e5%92%8c%e5%b9%b6%e8%a1%8c%e4%bc%a0%e8%be%93" class="header-mark"></a>串行传输和并行传输</h2><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png" title="image-20201008135603009" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008135603009.png 2x"
+            sizes="auto"
+            alt="image-20201008135603009">
+    </a></figure></p>
 <blockquote>
 <p><strong>串行传输</strong>：</p>
 <ul>
@@ -335,15 +419,16 @@
 <p>数据在传输线路上的传输采用是<strong>串行传输</strong>，计算机内部的数据传输常用<strong>并行传输</strong></p>
 <p>计算机内部往往采用一次性传输一个字长的数据。例如64位计算机，可以一次性传输64位数据。</p>
 </blockquote>
-<h2 id="同步传输和异步传输">同步传输和异步传输</h2>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png"
-        title="image-20201008140209430" /></p>
+<h2 id="同步传输和异步传输" class="headerLink">
+    <a href="#%e5%90%8c%e6%ad%a5%e4%bc%a0%e8%be%93%e5%92%8c%e5%bc%82%e6%ad%a5%e4%bc%a0%e8%be%93" class="header-mark"></a>同步传输和异步传输</h2><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png" title="image-20201008140209430" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140209430.png 2x"
+            sizes="auto"
+            alt="image-20201008140209430">
+    </a></figure></p>
 <blockquote>
 <p><strong>同步传输</strong>：</p>
 <ul>
@@ -353,14 +438,15 @@
 </ul>
 <p>所以要使收发双发时钟保持同步</p>
 </blockquote>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png"
-        title="image-20201008140850958" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png" title="image-20201008140850958" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008140850958.png 2x"
+            sizes="auto"
+            alt="image-20201008140850958">
+    </a></figure></p>
 <blockquote>
 <p><strong>异步传输</strong>：</p>
 <ul>
@@ -369,53 +455,57 @@
 <li>通常在每个字节前后分别加上起始位和结束位</li>
 </ul>
 </blockquote>
-<h2 id="单向通信单工双向交替通信半双工和双向同时通信全双工">单向通信（单工）、双向交替通信（半双工）和双向同时通信（全双工）</h2>
-<p>在许多情况下，我们要使用“<strong>信道（channel）</strong>”这一名词。信道和电路并不等同。</p>
+<h2 id="单向通信单工双向交替通信半双工和双向同时通信全双工" class="headerLink">
+    <a href="#%e5%8d%95%e5%90%91%e9%80%9a%e4%bf%a1%e5%8d%95%e5%b7%a5%e5%8f%8c%e5%90%91%e4%ba%a4%e6%9b%bf%e9%80%9a%e4%bf%a1%e5%8d%8a%e5%8f%8c%e5%b7%a5%e5%92%8c%e5%8f%8c%e5%90%91%e5%90%8c%e6%97%b6%e9%80%9a%e4%bf%a1%e5%85%a8%e5%8f%8c%e5%b7%a5" class="header-mark"></a>单向通信（单工）、双向交替通信（半双工）和双向同时通信（全双工）</h2><p>在许多情况下，我们要使用“<strong>信道（channel）</strong>”这一名词。信道和电路并不等同。</p>
 <p>信道一般都是用来表示向某一个方向传送信息的媒体。因此，一条通信电路往往包含一条发送信道和一条接收信道。</p>
 <p>从通信的双方信息交互的方式来看，可以有以下三种基本方式：</p>
 <p><strong>单向通信</strong>：</p>
 <p>又称为<strong>单工通信</strong>，即只能有一个方向的通信而没有反方向的交互。无线电广播或有线电以及电视广播就属于这种类型</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png"
-        title="image-20201008141345239" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png" title="image-20201008141345239" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141345239.png 2x"
+            sizes="auto"
+            alt="image-20201008141345239">
+    </a></figure></p>
 <p><strong>双向交替通信</strong>：</p>
 <p>又称为<strong>半双工通信</strong>，即通信的双方可以发送信息，但不能双方同时发送（当然也就不能同时接收）。这种通信方式使一方发送另一方接收，过一段时间后可以再反过来</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png"
-        title="image-20201008141921924" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png" title="image-20201008141921924" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008141921924.png 2x"
+            sizes="auto"
+            alt="image-20201008141921924">
+    </a></figure></p>
 <p><strong>双向同时通信</strong>：</p>
 <p>又称为<strong>全双工通信</strong>，即通信的双发可以同时发送和接收信息。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png"
-        title="image-20201008142037846" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png" title="image-20201008142037846" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20201008142037846.png 2x"
+            sizes="auto"
+            alt="image-20201008142037846">
+    </a></figure></p>
 <blockquote>
 <p><strong>单向通信</strong>只需要一条信道，而<strong>双向交替通信</strong>或<strong>双向同时通信</strong>则需要两条信道（每个方向各一条）</p>
 <p><strong>双向同时通信</strong>的传输效率最高</p>
 </blockquote>
-<h1 id="24编码与调制">2.4、编码与调制</h1>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png"
-        title="image-20201008144616896" /></p>
+<h1 id="24编码与调制" class="headerLink">
+    <a href="#24%e7%bc%96%e7%a0%81%e4%b8%8e%e8%b0%83%e5%88%b6" class="header-mark"></a>2.4、编码与调制</h1><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png" title="image-20201008144616896" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062239599.png 2x"
+            sizes="auto"
+            alt="image-20201008144616896">
+    </a></figure></p>
 <blockquote>
 <p><strong>常用术语</strong></p>
 <ul>
@@ -445,16 +535,17 @@
 </ul>
 </blockquote>
 <p>在计算机网络中，常见的是将数字基带信号通过编码或调制的方法在相应信道进行传输</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png"
-        title="image-20201008145747263" /></p>
-<h2 id="传输媒体与信道的关系">传输媒体与信道的关系</h2>
-<blockquote>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png" title="image-20201008145747263" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062241336.png 2x"
+            sizes="auto"
+            alt="image-20201008145747263">
+    </a></figure></p>
+<h2 id="传输媒体与信道的关系" class="headerLink">
+    <a href="#%e4%bc%a0%e8%be%93%e5%aa%92%e4%bd%93%e4%b8%8e%e4%bf%a1%e9%81%93%e7%9a%84%e5%85%b3%e7%b3%bb" class="header-mark"></a>传输媒体与信道的关系</h2><blockquote>
 <p><strong>信道的几个基本概念</strong></p>
 <ul>
 <li><strong>信道</strong> —— 一般用来表示向某一个方向传送信息的媒体。</li>
@@ -465,36 +556,39 @@
 </blockquote>
 <p>严格来说，传输媒体不能和信道划等号</p>
 <p>对于单工传输，传输媒体只包含一个信道，要么是发送信道，要么是接收信道</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png"
-        title="image-20201008145304974" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png" title="image-20201008145304974" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242296.png 2x"
+            sizes="auto"
+            alt="image-20201008145304974">
+    </a></figure></p>
 <p>对于半双工和全双工，传输媒体中要包含两个信道，一个发送信道，另一个是接收信道</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png"
-        title="image-20201008145329540" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png" title="image-20201008145329540" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242539.png 2x"
+            sizes="auto"
+            alt="image-20201008145329540">
+    </a></figure></p>
 <blockquote>
 <p>如果使用信道复用技术，一条传输媒体还可以包含多个信道</p>
 </blockquote>
-<h2 id="常用编码">常用编码</h2>
-<p><strong>不归零编码</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png"
-        title="image-20201008150058039" /></p>
+<h2 id="常用编码" class="headerLink">
+    <a href="#%e5%b8%b8%e7%94%a8%e7%bc%96%e7%a0%81" class="header-mark"></a>常用编码</h2><p><strong>不归零编码</strong></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png" title="image-20201008150058039" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242880.png 2x"
+            sizes="auto"
+            alt="image-20201008150058039">
+    </a></figure></p>
 <blockquote>
 <ul>
 <li>
@@ -507,14 +601,15 @@
 <p>中间的虚线是零电平，所谓不归零编码，就是指在整个码元时间内，电平不会出现零电平</p>
 <p><strong>实际比特1和比特0的表示要看现实怎么规定</strong></p>
 </blockquote>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png"
-        title="image-20201008150528228" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png" title="image-20201008150528228" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242382.png 2x"
+            sizes="auto"
+            alt="image-20201008150528228">
+    </a></figure></p>
 <blockquote>
 <p>这需要发送方的发送与接收方的接收做到严格的同步</p>
 <ul>
@@ -524,27 +619,29 @@
 <p>由于<strong>不归零编码</strong>存在<strong>同步问题</strong>，因此计算机网络中的数据传输不采用这类编码！</p>
 </blockquote>
 <p><strong>归零编码</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png"
-        title="image-20201008195033189" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png" title="image-20201008195033189" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242979.png 2x"
+            sizes="auto"
+            alt="image-20201008195033189">
+    </a></figure></p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242487.png" alt="image-20201008151347028" style="zoom:67%;" />
 <blockquote>
 <p><strong>归零编码</strong>虽然<strong>自同步</strong>，但<strong>编码效率低</strong></p>
 </blockquote>
 <p><strong>曼彻斯特编码</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png"
-        title="image-20201008195148727" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png" title="image-20201008195148727" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062242872.png 2x"
+            sizes="auto"
+            alt="image-20201008195148727">
+    </a></figure></p>
 <blockquote>
 <p>在每个码元时间的中间时刻，信号都会发生跳变</p>
 <ul>
@@ -556,14 +653,15 @@
 <p>传统以太网使用的就是曼切斯特编码</p>
 </blockquote>
 <p><strong>差分曼彻斯特编码</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png"
-        title="image-20201008195235561" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png" title="image-20201008195235561" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243536.png 2x"
+            sizes="auto"
+            alt="image-20201008195235561">
+    </a></figure></p>
 <blockquote>
 <p>在每个码元时间的中间时刻，信号都会发送跳变，但与<strong>曼彻斯特不同</strong></p>
 <ul>
@@ -579,26 +677,28 @@
 <p>比曼彻斯特编码变化少，更适合较高的传输速率</p>
 </blockquote>
 <p><strong>总结</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png"
-        title="image-20201008153522501" /></p>
-<h2 id="调制">调制</h2>
-<p>数字信号转换为模拟信号，在模拟信道中传输，例如WiFi，采用补码键控CCK/直接序列扩频DSSS/正交频分复用OFDM等<strong>调制</strong>方式。</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png" title="image-20201008153522501" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243373.png 2x"
+            sizes="auto"
+            alt="image-20201008153522501">
+    </a></figure></p>
+<h2 id="调制" class="headerLink">
+    <a href="#%e8%b0%83%e5%88%b6" class="header-mark"></a>调制</h2><p>数字信号转换为模拟信号，在模拟信道中传输，例如WiFi，采用补码键控CCK/直接序列扩频DSSS/正交频分复用OFDM等<strong>调制</strong>方式。</p>
 <p>模拟信号转换为另一种模拟信号，在模拟信道中传输，例如，语音数据加载到模拟的载波信号中传输。频分复用FDM技术，充分利用带宽资源。</p>
 <p><strong>基本调制方法</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png"
-        title="image-20201008155429044" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png" title="image-20201008155429044" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062243451.png 2x"
+            sizes="auto"
+            alt="image-20201008155429044">
+    </a></figure></p>
 <blockquote>
 <ul>
 <li><strong>调幅AM</strong>：所调制的信号由两种不同振幅的基本波形构成。每个基本波形只能表示1比特信息量。</li>
@@ -608,64 +708,70 @@
 <p>但是使用基本调制方法，1个码元只能包含1个比特信息</p>
 </blockquote>
 <p><strong>混合调制</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png"
-        title="image-20201008155804617" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png"
-        title="image-20201008155835940" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png"
-        title="image-20201008155955169" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png"
-        title="image-20201008160133748" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png" title="image-20201008155804617" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314504.png 2x"
+            sizes="auto"
+            alt="image-20201008155804617">
+    </a></figure></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png" title="image-20201008155835940" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314985.png 2x"
+            sizes="auto"
+            alt="image-20201008155835940">
+    </a></figure></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png" title="image-20201008155955169" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314474.png 2x"
+            sizes="auto"
+            alt="image-20201008155955169">
+    </a></figure></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png" title="image-20201008160133748" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313778.png 2x"
+            sizes="auto"
+            alt="image-20201008160133748">
+    </a></figure></p>
 <blockquote>
 <p>上图码元所对应的4个比特是错误的，码元不能随便对应4个比特</p>
 </blockquote>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png"
-        title="image-20201008160208060" /></p>
-<h2 id="码元">码元</h2>
-<p>在使用时间域的波形表示数字信号时，代表不同离散数值的基本波形。</p>
-<h1 id="25信道的极限容量">2.5、信道的极限容量</h1>
-<ul>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png" title="image-20201008160208060" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313446.png 2x"
+            sizes="auto"
+            alt="image-20201008160208060">
+    </a></figure></p>
+<h2 id="码元" class="headerLink">
+    <a href="#%e7%a0%81%e5%85%83" class="header-mark"></a>码元</h2><p>在使用时间域的波形表示数字信号时，代表不同离散数值的基本波形。</p>
+<h1 id="25信道的极限容量" class="headerLink">
+    <a href="#25%e4%bf%a1%e9%81%93%e7%9a%84%e6%9e%81%e9%99%90%e5%ae%b9%e9%87%8f" class="header-mark"></a>2.5、信道的极限容量</h1><ul>
 <li>任何实际的信道都不是理想的，在传输信号时会产生各种失真以及带来多种干扰。</li>
 <li>码元传输的速率越高，或信号传输的距离越远，或传输媒体质量越差，在信道的输出端的波形的失真就越严重。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png"
-        title="image-20201010204336400" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png" title="image-20201010204336400" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313792.png 2x"
+            sizes="auto"
+            alt="image-20201010204336400">
+    </a></figure></p>
 <p>失真的原因：</p>
 <ul>
 <li>码元传输的速率越高</li>
@@ -673,59 +779,64 @@
 <li>噪声干扰越大</li>
 <li>传输媒体质量越差</li>
 </ul>
-<h2 id="奈氏准则">奈氏准则</h2>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png"
-        title="image-20201010204818976" /></p>
-<h2 id="香农公式">香农公式</h2>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png"
-        title="image-20201010204928756" /></p>
-<h2 id="对比">对比</h2>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png"
-        title="image-20201010205029346" /></p>
-<h1 id="补充信道复用技术">补充：信道复用技术</h1>
-<p>本节内容视频未讲到，是《计算机网络（第7版）谢希仁》物理层的内容</p>
-<h2 id="频分复用时分复用和统计时分复用">频分复用、时分复用和统计时分复用</h2>
-<p>复用 (multiplexing) 是通信技术中的基本概念。</p>
+<h2 id="奈氏准则" class="headerLink">
+    <a href="#%e5%a5%88%e6%b0%8f%e5%87%86%e5%88%99" class="header-mark"></a>奈氏准则</h2><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png" title="image-20201010204818976" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062313501.png 2x"
+            sizes="auto"
+            alt="image-20201010204818976">
+    </a></figure></p>
+<h2 id="香农公式" class="headerLink">
+    <a href="#%e9%a6%99%e5%86%9c%e5%85%ac%e5%bc%8f" class="header-mark"></a>香农公式</h2><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png" title="image-20201010204928756" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306062314236.png 2x"
+            sizes="auto"
+            alt="image-20201010204928756">
+    </a></figure></p>
+<h2 id="对比" class="headerLink">
+    <a href="#%e5%af%b9%e6%af%94" class="header-mark"></a>对比</h2><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png" title="image-20201010205029346" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081506508.png 2x"
+            sizes="auto"
+            alt="image-20201010205029346">
+    </a></figure></p>
+<h1 id="补充信道复用技术" class="headerLink">
+    <a href="#%e8%a1%a5%e5%85%85%e4%bf%a1%e9%81%93%e5%a4%8d%e7%94%a8%e6%8a%80%e6%9c%af" class="header-mark"></a>补充：信道复用技术</h1><p>本节内容视频未讲到，是《计算机网络（第7版）谢希仁》物理层的内容</p>
+<h2 id="频分复用时分复用和统计时分复用" class="headerLink">
+    <a href="#%e9%a2%91%e5%88%86%e5%a4%8d%e7%94%a8%e6%97%b6%e5%88%86%e5%a4%8d%e7%94%a8%e5%92%8c%e7%bb%9f%e8%ae%a1%e6%97%b6%e5%88%86%e5%a4%8d%e7%94%a8" class="header-mark"></a>频分复用、时分复用和统计时分复用</h2><p>复用 (multiplexing) 是通信技术中的基本概念。</p>
 <p>它允许用户使用一个共享信道进行通信，降低成本，提高利用率。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png"
-        title="image-20201011001949479" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png" title="image-20201011001949479" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081508216.png 2x"
+            sizes="auto"
+            alt="image-20201011001949479">
+    </a></figure></p>
 <p><strong>频分复用 FDM (Frequency Division Multiplexing)</strong></p>
 <ul>
 <li>将整个带宽分为多份，用户在分配到一定的频带后，在通信过程中自始至终都占用这个频带。</li>
 <li><strong>频分复用</strong>的所有用户在同样的时间<strong>占用不同的带宽资源</strong>（请注意，这里的“带宽”是频率带宽而不是数据的发送速率）。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png"
-        title="image-20201011002236208" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png" title="image-20201011002236208" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510250.png 2x"
+            sizes="auto"
+            alt="image-20201011002236208">
+    </a></figure></p>
 <p><strong>时分复用TDM (Time Division Multiplexing)</strong></p>
 <ul>
 <li><strong>时分复用</strong>则是将时间划分为一段段等长的<strong>时分复用帧（TDM帧）</strong>。每一个时分复用的用户在每一个 TDM 帧中占用固定序号的时隙。</li>
@@ -733,14 +844,15 @@
 <li>TDM 信号也称为<strong>等时</strong> (isochronous) 信号。</li>
 <li><strong>时分复用的所有用户在不同的时间占用同样的频带宽度。</strong></li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png"
-        title="image-20201011002540041" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png" title="image-20201011002540041" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081510080.png 2x"
+            sizes="auto"
+            alt="image-20201011002540041">
+    </a></figure></p>
 <ul>
 <li><strong>时分复用可能会造成线路资源的浪费</strong>
 <ul>
@@ -748,53 +860,57 @@
 </ul>
 </li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png"
-        title="image-20201011002842704" /></p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png" title="image-20201011002842704" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081511327.png 2x"
+            sizes="auto"
+            alt="image-20201011002842704">
+    </a></figure></p>
 <p><strong>统计时分复用 STDM  (Statistic TDM)</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png"
-        title="image-20201011002953703" /></p>
-<h2 id="波分复用">波分复用</h2>
-<p>波分复用 WDM(Wavelength Division Multiplexing)</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png"
-        title="image-20201011003214653" /></p>
-<h2 id="码分复用">码分复用</h2>
-<p>码分复用 CDM  (Code Division Multiplexing)</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png" title="image-20201011002953703" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512311.png 2x"
+            sizes="auto"
+            alt="image-20201011002953703">
+    </a></figure></p>
+<h2 id="波分复用" class="headerLink">
+    <a href="#%e6%b3%a2%e5%88%86%e5%a4%8d%e7%94%a8" class="header-mark"></a>波分复用</h2><p>波分复用 WDM(Wavelength Division Multiplexing)</p>
+<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png" title="image-20201011003214653" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png">
+        <img
+            
+            loading="lazy"
+            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png"
+            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202306081512747.png 2x"
+            sizes="auto"
+            alt="image-20201011003214653">
+    </a></figure></p>
+<h2 id="码分复用" class="headerLink">
+    <a href="#%e7%a0%81%e5%88%86%e5%a4%8d%e7%94%a8" class="header-mark"></a>码分复用</h2><p>码分复用 CDM  (Code Division Multiplexing)</p>
 <ul>
 <li>常用的名词是<strong>码分多址</strong> CDMA (Code Division Multiple Access)。</li>
 <li>各用户使用经过特殊挑选的不同码型，因此彼此不会造成干扰。</li>
 <li>这种系统发送的信号有很强的抗干扰能力，其频谱类似于白噪声，不易被敌人发现。</li>
 </ul>
-</div><div class="post-footer" id="post-footer">
+</div>
+
+        <div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2023-06-08</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/" data-title="计算机网络之物理层"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/" data-title="计算机网络之物理层"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
             </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
+                    </span></div>
+            <div class="post-info-share"><button title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/" data-title="计算机网络之物理层"><span class="fab fa-weibo fa-fw"></span></button><button title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/" data-title="计算机网络之物理层"><span data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></span></button></div>
         </div>
     </div>
 
@@ -805,21 +921,26 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="prev" rel="prev" title="计算机网络之概述"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>计算机网络之概述</a>
-            <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/" class="next" rel="next" title="计算机网络之数据链路层">计算机网络之数据链路层<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="prev" rel="prev" title="计算机网络之概述"><i class="fas fa-angle-left fa-fw"></i>计算机网络之概述</a>
+            <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/" class="next" rel="next" title="计算机网络之数据链路层">计算机网络之数据链路层<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 <div id="comments"><div id="gitalk" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
             </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
+        </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+            <div class="footer-line"></div>
+            <div class="footer-line">
+            </div>
+        </div></footer></div>
 
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-06-08T15:16:08+08:00","owner":"cold-bin","repo":"blog-comment","title":"计算机网络之物理层"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="Back to Top">
+            <i class="fas fa-arrow-up fa-fw"></i>
+        </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+            <i class="fas fa-comment fa-fw"></i>
+        </a>
+    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.b38ee65d6456beb2d034bf554505f4ca47e421548b7cd26e8a7805fd2673b6c3.css" integrity="sha256-s47mXWRWvrLQNL9VRQX0ykfkIVSLfNJuingF/SZztsM="><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr&#43;QR0SQDNfgglgtcM="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc=">
+        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18&#43;2anxsuaz3pWYyVWi&#43;bTvTH8Q="><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-06-08T15:16:08+08:00","owner":"cold-bin","repo":"blog-comment","title":"计算机网络之物理层"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"},"sharerjs":true};</script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.0c4d9db673dd19489cfa134ab15ef8b9237ae72aaa65d8490d55658442b3a2d3.js" integrity="sha256-DE2dtnPdGUic&#43;hNKsV74uSN65yqqZdhJDVVlhEKzotM="></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.72ceb0f87691041e9e0bea2f2468b9aa3ed544e8f7f6dc9f76d8c8f997699e41.js" integrity="sha256-cs6w&#43;HaRBB6eC&#43;ovJGi5qj7VROj39tyfdtjI&#43;ZdpnkE="></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.5b0e82e9a1ae0b52d07a52da1eb4640da77eb3ca7e78c3a428c1f3b712858d3c.js" integrity="sha256-Ww6C6aGuC1LQelLaHrRkDad&#43;s8p&#43;eMOkKMHztxKFjTw="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.11be927cda59c8b6019ebbea838285c5beaf21183ea4b83dbd4e4fbf9413ce4a.js" integrity="sha256-Eb6SfNpZyLYBnrvqg4KFxb6vIRg&#43;pLg9vU5Pv5QTzko="></script><script type="text/javascript" src="/lib/sharer/sharer.min.8fe10eb615eb163a20f795484430a012805ec7c8c11df52df54ddb7a46084254.js" integrity="sha256-j&#43;EOthXrFjog95VIRDCgEoBex8jBHfUt9U3bekYIQlQ="></script><script type="text/javascript" src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw&#43;iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y&#43;KzPOwaJ0PYhsf7R6c=" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54&#43;rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn&#43;yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script></div>
+</body>
+
 </html>
