@@ -1,14 +1,11 @@
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noodp" />
-    <title>Mit6.824之lab1 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Mit6.824之lab1" />
-<meta property="og:description" content="lab1——实现简易版的mapreduce框架 论文回顾 mapreduce架构严格来讲，MapReduce是一种分布式计算模型，用于解决大于1" />
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Mit6.824之lab1 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Mit6.824之lab1" />
+<meta property="og:description" content="lab1——实现简易版的mapreduce框架 论文回顾 mapreduce架构 严格来讲，MapReduce是一种分布式计算模型，用于解决大于1" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-08-10T16:32:37+08:00" />
@@ -18,14 +15,11 @@
 <meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
 
 <meta name="twitter:title" content="Mit6.824之lab1"/>
-<meta name="twitter:description" content="lab1——实现简易版的mapreduce框架 论文回顾 mapreduce架构严格来讲，MapReduce是一种分布式计算模型，用于解决大于1"/>
+<meta name="twitter:description" content="lab1——实现简易版的mapreduce框架 论文回顾 mapreduce架构 严格来讲，MapReduce是一种分布式计算模型，用于解决大于1"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋">
-
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/" /><link rel="prev" href="https://blog.coldbin.top/cs144-lab/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%B0%E4%B8%80%E6%AC%A1github%E5%9B%BE%E5%BA%8A%E4%B8%8A%E4%BC%A0%E5%BC%82%E5%B8%B8%E7%9A%84bug/" />
-<link rel="stylesheet" href="/css/main.d5cb6f29e0750a13b17688d628b04d50f9fbbd32e0629ccc0dcf796a299ae226.css" integrity="sha256-1ctvKeB1ChOxdojWKLBNUPn7vTLgYpzMDc95aima4iY="><link rel="stylesheet" href="/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css" integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH&#43;KuXHiZWODptY5K8NF4="><link rel="stylesheet" href="/css/color.b0a0f8c429ce52dfa2805b5f9e99ccdae1e8fbfd9adf4f3ddb409d8201fc0c5a.css" integrity="sha256-sKD4xCnOUt&#43;igFtfnpnM2uHo&#43;/2a308920CdggH8DFo="><link rel="stylesheet" href="/css/style.min.5963810f80932dd0408e0fe2003ab30dbccfb3400fe079d989aad753741320e0.css" integrity="sha256-WWOBD4CTLdBAjg/iADqzDbzPs0AP4HnZiarXU3QTIOA="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc=">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc="></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/" /><link rel="prev" href="https://blog.coldbin.top/cs144-lab/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%B0%E4%B8%80%E6%AC%A1github%E5%9B%BE%E5%BA%8A%E4%B8%8A%E4%BC%A0%E5%BC%82%E5%B8%B8%E7%9A%84bug/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -33,13 +27,13 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/"
-        },"image": ["https://blog.coldbin.top/favicon.ico"],"genre": "posts","keywords": "mit6.824","wordcount":  5669 ,
-        "url": "https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/","datePublished": "2023-08-10T16:32:37+08:00","dateModified": "2023-08-10T16:32:37+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@id": "https:\/\/blog.coldbin.top\/mit6.824%E4%B9%8Blab1\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "mit6.824","wordcount":  5654 ,
+        "url": "https:\/\/blog.coldbin.top\/mit6.824%E4%B9%8Blab1\/","datePublished": "2023-08-10T16:32:37+08:00","dateModified": "2023-08-10T16:32:37+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
             "@type": "Organization",
             "name": "阿冰","logo": {
                     "@type": "ImageObject",
-                    "url": "https://blog.coldbin.top/images/avatar.png",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
                     "width":  396 ,
                     "height":  396 
                 }},"author": {
@@ -48,43 +42,34 @@
             },"description": ""
     }
     </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
-        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
-        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
-        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
-        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
-        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
-        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
-        window.switchThemeEventSet = new Set()
-    </script>
-    <div id="back-to-top"></div>
-    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
             <a href="/" title="阿冰的小屋"><img
-        class="logo"
-        loading="lazy"
-        src="/favicon.ico"
-        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        sizes="auto"
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" >阿冰的小屋</a>
+        title="/favicon.ico" />阿冰的小屋</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw"></i>
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw"></i>
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
                 </a></div>
         </div>
     </div>
@@ -93,13 +78,13 @@
         <div class="header-wrapper">
             <div class="header-title">
                 <a href="/" title="阿冰的小屋"><img
-        class="logo"
-        loading="lazy"
-        src="/favicon.ico"
-        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        sizes="auto"
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" >阿冰的小屋</a>
+        title="/favicon.ico" />阿冰的小屋</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -109,81 +94,39 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw"></i>
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw"></i>
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
-            <div class="container"><div class="toc" id="toc-auto">
-        <h2 class="toc-title">Contents</h2>
-        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#lab1实现简易版的mapreduce框架">lab1——实现简易版的mapreduce框架</a>
-          <ul>
-            <li><a href="#论文回顾">论文回顾</a>
-              <ul>
-                <li><a href="#mapreduce架构">mapreduce架构</a></li>
-                <li><a href="#性能瓶颈">性能瓶颈</a></li>
-                <li><a href="#负载均衡">负载均衡</a></li>
-                <li><a href="#容错">容错</a></li>
-                <li><a href="#其他">其他</a></li>
-              </ul>
-            </li>
-            <li><a href="#实现思路">实现思路</a>
-              <ul>
-                <li><a href="#coordinator">coordinator</a>
-                  <ul>
-                    <li><a href="#coordinator管理过程">coordinator管理过程</a></li>
-                    <li><a href="#coordinator数据结构">coordinator数据结构</a></li>
-                    <li><a href="#coordinator提供的rpc">coordinator提供的rpc</a></li>
-                    <li><a href="#其他-1">其他</a></li>
-                  </ul>
-                </li>
-                <li><a href="#worker">worker</a>
-                  <ul>
-                    <li><a href="#如何执行map任务">如何执行map任务</a></li>
-                    <li><a href="#如何执行reduce任务">如何执行reduce任务</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#感言">感言</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Mit6.824之lab1</h1><div class="post-meta">
-            <div class="post-meta-line">
-                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">阿冰</a>
-                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw"></i>分布式系统</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-08-10">2023-08-10</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-08-10">2023-08-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;5669 words&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;12 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Mit6.824之lab1</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>分布式系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-08-10">2023-08-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;5654 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;12 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -225,24 +168,24 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="lab1实现简易版的mapreduce框架" class="headerLink">
-    <a href="#lab1%e5%ae%9e%e7%8e%b0%e7%ae%80%e6%98%93%e7%89%88%e7%9a%84mapreduce%e6%a1%86%e6%9e%b6" class="header-mark"></a>lab1——实现简易版的mapreduce框架</h2><h3 id="论文回顾" class="headerLink">
-    <a href="#%e8%ae%ba%e6%96%87%e5%9b%9e%e9%a1%be" class="header-mark"></a>论文回顾</h3><h4 id="mapreduce架构" class="headerLink">
-    <a href="#mapreduce%e6%9e%b6%e6%9e%84" class="header-mark"></a>mapreduce架构</h4><p>严格来讲，MapReduce是一种分布式计算模型，用于解决大于1TB数据量的大数据计算处理。著名的开源项目Hadoop和Spark在计算方面都实现的是MapReduce模型。从论文中可以看到花了不少篇幅在讲解这个模型的原理和运行过程，但同时也花了一点篇幅来讲解处理分布式系统实现中可能遇到的问题。</p>
+            </div><div class="content" id="content"><h2 id="lab1实现简易版的mapreduce框架">lab1——实现简易版的mapreduce框架</h2>
+<h3 id="论文回顾">论文回顾</h3>
+<h4 id="mapreduce架构">mapreduce架构</h4>
+<p>严格来讲，MapReduce是一种分布式计算模型，用于解决大于1TB数据量的大数据计算处理。著名的开源项目Hadoop和Spark在计算方面都实现的是MapReduce模型。从论文中可以看到花了不少篇幅在讲解这个模型的原理和运行过程，但同时也花了一点篇幅来讲解处理分布式系统实现中可能遇到的问题。</p>
 <p>MapReduce的模型设计很容易进行水平横向扩展以加强系统的能力，基本分为两种任务：map和reduce，通过map任务完成程序逻辑的并发，通过reduce任务完成并发结果的归约和收集，使用这个框架的开发者的任务就是把自己的业务逻辑先分为这两种任务，然后丢给MapReduce模型去运行。设计上，执行这两种任务的worker可以运行在普通的PC机器上，不需要使用太多资源。当系统整体能力不足时，通过增加worker即可解决。</p>
-<h4 id="性能瓶颈" class="headerLink">
-    <a href="#%e6%80%a7%e8%83%bd%e7%93%b6%e9%a2%88" class="header-mark"></a>性能瓶颈</h4><p>那么什么更容易导致系统性能扩展的瓶颈？CPU？内存？磁盘？还是网络？在2004年这篇文章问世的时候回答还是”网络带宽“最受限，论文想方设法的减少数据在系统内的搬运与传输，而到如今数据中心的内网速度要比当时快多了，因此如今更可能的答案恐怕就是磁盘了，新的架构会减少数据持久化到磁盘的次数，更多的利用内存甚至网络（这正是Spark的设计理念）</p>
+<h4 id="性能瓶颈">性能瓶颈</h4>
+<p>那么什么更容易导致系统性能扩展的瓶颈？CPU？内存？磁盘？还是网络？在2004年这篇文章问世的时候回答还是”网络带宽“最受限，论文想方设法的减少数据在系统内的搬运与传输，而到如今数据中心的内网速度要比当时快多了，因此如今更可能的答案恐怕就是磁盘了，新的架构会减少数据持久化到磁盘的次数，更多的利用内存甚至网络（这正是Spark的设计理念）</p>
 <p>如何处理较慢的网络？参考论文3.4节减少网络带宽资源的浪费，都尽量让输入数据保存在构成集群机器的本地硬盘上，并通过使用分布式文件系统GFS进行本地磁盘的管理。尝试分配map任务到尽量靠近这个任务的输入数据库的机器上执行，这样从GFS读时大部分还是在本地磁盘读出来。中间数据传输（map到reduce）经过网络一次，但是分多个key并行执行</p>
-<h4 id="负载均衡" class="headerLink">
-    <a href="#%e8%b4%9f%e8%bd%bd%e5%9d%87%e8%a1%a1" class="header-mark"></a>负载均衡</h4><p>某个task运行时间比较其他N-1个都长，大家都必须等其结束那就尴尬了，因此参考论文3.5节、3.6节系统设计保证task比worker数量要多，做的快的worker可以继续先执行其他task，减少等待。（框架的任务调度后来发现更值得研究）</p>
-<h4 id="容错" class="headerLink">
-    <a href="#%e5%ae%b9%e9%94%99" class="header-mark"></a>容错</h4><p>参考论文3.3节重新执行那些失败的MR任务即可，因此需要保证MR任务本身是幂等且无状态的。</p>
+<h4 id="负载均衡">负载均衡</h4>
+<p>某个task运行时间比较其他N-1个都长，大家都必须等其结束那就尴尬了，因此参考论文3.5节、3.6节系统设计保证task比worker数量要多，做的快的worker可以继续先执行其他task，减少等待。（框架的任务调度后来发现更值得研究）</p>
+<h4 id="容错">容错</h4>
+<p>参考论文3.3节重新执行那些失败的MR任务即可，因此需要保证MR任务本身是幂等且无状态的。</p>
 <p>更特别一些，worker失效如何处理？将失败任务调配到其他worker重新执行，保证最后输出到GFS上的中间结果过程是原子性操作即可。（减少写错数据的可能）</p>
 <p>Master失效如何处理？因为master是单点，只能人工干预，系统干脆直接终止，让用户重启重新执行这个计算</p>
-<h4 id="其他" class="headerLink">
-    <a href="#%e5%85%b6%e4%bb%96" class="header-mark"></a>其他</h4><p>其实还有部分工程问题，这篇文章中并没有讨论，可能因为这些更偏重工程实践，比如：task任务的状态如何监控、数据如何移动、worker故障后如何恢复等。</p>
-<h3 id="实现思路" class="headerLink">
-    <a href="#%e5%ae%9e%e7%8e%b0%e6%80%9d%e8%b7%af" class="header-mark"></a>实现思路</h3><blockquote>
+<h4 id="其他">其他</h4>
+<p>其实还有部分工程问题，这篇文章中并没有讨论，可能因为这些更偏重工程实践，比如：task任务的状态如何监控、数据如何移动、worker故障后如何恢复等。</p>
+<h3 id="实现思路">实现思路</h3>
+<blockquote>
 <p>lec1中讲到，mapreduce隐藏的细节，我们需要实现下面的这些：</p>
 <ul>
 <li>将应用程序代码发送到服务器</li>
@@ -252,8 +195,8 @@
 <li>从失败中恢复</li>
 </ul>
 </blockquote>
-<h4 id="coordinator" class="headerLink">
-    <a href="#coordinator" class="header-mark"></a>coordinator</h4><p>在lab1中，coordinator类似于论文中提到的master，是集群的管理者，负责分配job的task给worker进程。</p>
+<h4 id="coordinator">coordinator</h4>
+<p>在lab1中，coordinator类似于论文中提到的master，是集群的管理者，负责分配job的task给worker进程。</p>
 <p>task分两种：</p>
 <ul>
 <li>
@@ -286,13 +229,13 @@
 </span></span><span class="line"><span class="cl"><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h5 id="coordinator管理过程" class="headerLink">
-    <a href="#coordinator%e7%ae%a1%e7%90%86%e8%bf%87%e7%a8%8b" class="header-mark"></a>coordinator管理过程</h5><ol>
+</div><h5 id="coordinator管理过程">coordinator管理过程</h5>
+<ol>
 <li>首先将map任务分配给worker，直到所有map任务完成为止</li>
 <li>所有map任务完成后，coordinator才开始分发reduce任务</li>
 </ol>
-<h5 id="coordinator数据结构" class="headerLink">
-    <a href="#coordinator%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84" class="header-mark"></a>coordinator数据结构</h5><blockquote>
+<h5 id="coordinator数据结构">coordinator数据结构</h5>
+<blockquote>
 <p>在上面谈到，lab里并没有要求我们实现一个工业级别的mapreduce，仅仅要求我们实现简易版的demo</p>
 </blockquote>
 <ul>
@@ -390,8 +333,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h5 id="coordinator提供的rpc" class="headerLink">
-    <a href="#coordinator%e6%8f%90%e4%be%9b%e7%9a%84rpc" class="header-mark"></a>coordinator提供的rpc</h5><p>由上面得知，我们不需要提供<code>ping</code>rpc。我们需要提供申请task和完成task这两个rpc。</p>
+</div><h5 id="coordinator提供的rpc">coordinator提供的rpc</h5>
+<p>由上面得知，我们不需要提供<code>ping</code>rpc。我们需要提供申请task和完成task这两个rpc。</p>
 <p><strong>申请task rpc</strong></p>
 <p>task有两种（map和reduce），刚开始我们只能分配map任务，map任务执行完毕过后，才能分配reduce任务。通过<code>sync.Cond</code>来实现”等待“。别忘了落伍者的处理。</p>
 <div class="highlight"><div class="chroma">
@@ -562,8 +505,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h5 id="其他-1" class="headerLink">
-    <a href="#%e5%85%b6%e4%bb%96-1" class="header-mark"></a>其他</h5><p><strong>定时轮询</strong></p>
+</div><h5 id="其他-1">其他</h5>
+<p><strong>定时轮询</strong></p>
 <p>我们其实并不知道何时所有map任务完成或所有reduce任务完成，所以，我们需要轮询去唤醒阻塞，然后检测是否满足条件，不满就继续阻塞等待唤醒</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -592,8 +535,8 @@
 </div><p><strong>原子重命名文件与重命名</strong></p>
 <p>若在<code>mapf</code>或之后要使用的<code>reducef</code>中，进程由于某些原因退出了，这样产生的文件就是不完整的。但<code>reduce</code>任务分不清哪些是成功的<code>map</code>任务输出，哪些不是。所以，我们一开始不使用<code>mr-m-n</code>形式的文件名，而是创建一个命名不确定的<strong>临时文件</strong>。当所有任务成功完成之后，再把这个文件重命名为正确的<code>mr-m-n</code>。</p>
 <p>reduce的输出临时文件与map任务差不多。</p>
-<h4 id="worker" class="headerLink">
-    <a href="#worker" class="header-mark"></a>worker</h4><p>worker的职责就是负责执行map或reduce任务。lab里要求仅仅只是实现一个单机多进程的mapreduce。</p>
+<h4 id="worker">worker</h4>
+<p>worker的职责就是负责执行map或reduce任务。lab里要求仅仅只是实现一个单机多进程的mapreduce。</p>
 <ol>
 <li>首先，worker要去coordinator那里调用拿任务的rpc，刚开始map没执行完毕拿的是map任务；后面执行完毕则拿的是reduce任务；</li>
 <li>然后，拿到任务就执行，执行完毕时，需要调用完成任务的rpc，返回coodinator一些信息</li>
@@ -651,8 +594,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h5 id="如何执行map任务" class="headerLink">
-    <a href="#%e5%a6%82%e4%bd%95%e6%89%a7%e8%a1%8cmap%e4%bb%bb%e5%8a%a1" class="header-mark"></a>如何执行map任务</h5><ol>
+</div><h5 id="如何执行map任务">如何执行map任务</h5>
+<ol>
 <li>首先，打开输入文件，读取所有文件数据（这里lab简单规定一个文件一个分区，对应一个map任务，忽略论文中的分区</li>
 <li>然后，调用map函数得到中间结果</li>
 <li>再将中间结果序列化写入R个临时文件（先通过哈希函数找到key的分区）（一是可以避免文件名重复，二是为了map和reduce的原子性，例如可以避免中途断电时，使得最后只有一部分结果这种情况。</li>
@@ -768,8 +711,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h5 id="如何执行reduce任务" class="headerLink">
-    <a href="#%e5%a6%82%e4%bd%95%e6%89%a7%e8%a1%8creduce%e4%bb%bb%e5%8a%a1" class="header-mark"></a>如何执行reduce任务</h5><ol>
+</div><h5 id="如何执行reduce任务">如何执行reduce任务</h5>
+<ol>
 <li>首先打开map输出的中间文件，并反序列化文件内容，拿到<code>(key,list(values))</code>；</li>
 <li>然后对输入列表排序，让中间 key/value pair 数据的处理顺序是按照 key 值增量顺序处理。方便后面实现随机存取；</li>
 <li>再次，我们还是通过创建临时文件来保存我们的结果，然后开始聚合相同<code>key</code>的数据集；</li>
@@ -887,8 +830,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="感言" class="headerLink">
-    <a href="#%e6%84%9f%e8%a8%80" class="header-mark"></a>感言</h2><p>论文其实大部分还是看得懂，最初的时候实现起来毫无头绪，论文给的是一个参考的、极其模糊的实现，而且还是分布式下的。但是lab里没有要求我们需要通过网络来把map worker的中间结果集输送到reduce worker机子里，仅仅只是实现一个单机多进程版本的mapreduce。</p>
+</div><h2 id="感言">感言</h2>
+<p>论文其实大部分还是看得懂，最初的时候实现起来毫无头绪，论文给的是一个参考的、极其模糊的实现，而且还是分布式下的。但是lab里没有要求我们需要通过网络来把map worker的中间结果集输送到reduce worker机子里，仅仅只是实现一个单机多进程版本的mapreduce。</p>
 <p>这里的实现也是参考了一下lab1 Q&amp;A 才知道我们仅仅只是做一个单机多进程版本的mapreduce，不需要考虑在网络传输map worker的中间结果集。</p>
 <p>实现上有很多有意思的地方：</p>
 <ul>
@@ -896,51 +839,45 @@
 <li>lab并不像论文中描述的：一旦map任务有一个执行完毕了，那么reduce任务就可以开始启动了。而是采取更简单的实现策略：所有map任务都完成了，才可以启动reduce任务。所以，这里需要有一个等待机制，满足“所有map任务执行完毕”的条件时，我们才能分配reduce任务。所以，这里使用<code>sync.Cond</code>来实现。</li>
 <li>如何实现“落伍者”的检测呢？我们可以记录分配任务时和完成任务时的时间差，太长就认为worker超时了。</li>
 </ul>
-<p><a href="https://github.com/cold-bin/mit-6.824-labs.git" target="_blank" rel="noopener noreferrer">代码传输门</a></p>
-</div>
-
-        <div class="post-footer" id="post-footer">
+<p><a href="https://github.com/cold-bin/mit-6.824-labs.git" target="_blank" rel="noopener noreffer ">代码传输门</a></p>
+</div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2023-08-10</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
-            <div class="post-info-md"><span><a class="link-to-mardown" href=/mit6.824%E4%B9%8Blab1/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
-                    </span></div>
-            <div class="post-info-share"><button title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/" data-title="Mit6.824之lab1"><span class="fab fa-weibo fa-fw"></span></button><button title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/" data-title="Mit6.824之lab1"><span data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></span></button></div>
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/mit6.824%E4%B9%8Blab1/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/" data-title="Mit6.824之lab1"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/mit6.824%E4%B9%8Blab1/" data-title="Mit6.824之lab1"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/mit6.824/">mit6.824</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/mit6.824/">mit6.824</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/cs144-lab/" class="prev" rel="prev" title="Cs144 Lab"><i class="fas fa-angle-left fa-fw"></i>Cs144 Lab</a>
-            <a href="/%E8%AE%B0%E4%B8%80%E6%AC%A1github%E5%9B%BE%E5%BA%8A%E4%B8%8A%E4%BC%A0%E5%BC%82%E5%B8%B8%E7%9A%84bug/" class="next" rel="next" title="记一次github图床上传异常的bug">记一次github图床上传异常的bug<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/cs144-lab/" class="prev" rel="prev" title="Cs144 Lab"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Cs144 Lab</a>
+            <a href="/%E8%AE%B0%E4%B8%80%E6%AC%A1github%E5%9B%BE%E5%BA%8A%E4%B8%8A%E4%BC%A0%E5%BC%82%E5%B8%B8%E7%9A%84bug/" class="next" rel="next" title="记一次github图床上传异常的bug">记一次github图床上传异常的bug<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="gitalk" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
             </noscript></div></article></div>
-        </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-            <div class="footer-line"></div>
-            <div class="footer-line">
-            </div>
-        </div></footer></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
 
-    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="Back to Top">
-            <i class="fas fa-arrow-up fa-fw"></i>
-        </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-            <i class="fas fa-comment fa-fw"></i>
-        </a>
-    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.b38ee65d6456beb2d034bf554505f4ca47e421548b7cd26e8a7805fd2673b6c3.css" integrity="sha256-s47mXWRWvrLQNL9VRQX0ykfkIVSLfNJuingF/SZztsM="><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr&#43;QR0SQDNfgglgtcM="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc=">
-        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18&#43;2anxsuaz3pWYyVWi&#43;bTvTH8Q="><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-08-10T16:32:37+08:00","owner":"cold-bin","repo":"blog-comment","title":"Mit6.824之lab1"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"},"sharerjs":true};</script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.0c4d9db673dd19489cfa134ab15ef8b9237ae72aaa65d8490d55658442b3a2d3.js" integrity="sha256-DE2dtnPdGUic&#43;hNKsV74uSN65yqqZdhJDVVlhEKzotM="></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.72ceb0f87691041e9e0bea2f2468b9aa3ed544e8f7f6dc9f76d8c8f997699e41.js" integrity="sha256-cs6w&#43;HaRBB6eC&#43;ovJGi5qj7VROj39tyfdtjI&#43;ZdpnkE="></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.5b0e82e9a1ae0b52d07a52da1eb4640da77eb3ca7e78c3a428c1f3b712858d3c.js" integrity="sha256-Ww6C6aGuC1LQelLaHrRkDad&#43;s8p&#43;eMOkKMHztxKFjTw="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.11be927cda59c8b6019ebbea838285c5beaf21183ea4b83dbd4e4fbf9413ce4a.js" integrity="sha256-Eb6SfNpZyLYBnrvqg4KFxb6vIRg&#43;pLg9vU5Pv5QTzko="></script><script type="text/javascript" src="/lib/sharer/sharer.min.8fe10eb615eb163a20f795484430a012805ec7c8c11df52df54ddb7a46084254.js" integrity="sha256-j&#43;EOthXrFjog95VIRDCgEoBex8jBHfUt9U3bekYIQlQ="></script><script type="text/javascript" src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw&#43;iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y&#43;KzPOwaJ0PYhsf7R6c=" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54&#43;rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn&#43;yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script></div>
-</body>
-
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-08-10T16:32:37+08:00","owner":"cold-bin","repo":"blog-comment","title":"Mit6.824之lab1"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
 </html>

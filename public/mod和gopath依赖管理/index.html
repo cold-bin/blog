@@ -1,14 +1,11 @@
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noodp" />
-    <title>Mod和gopath依赖管理 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Mod和gopath依赖管理" />
-<meta property="og:description" content="彻底搞懂GOROOT、GOPATH、PATH、mod管理和gopath管理项目的区别 1、GOPATH 和 GOROOT不同于其他语言，go中没有" />
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>Mod和gopath依赖管理 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Mod和gopath依赖管理" />
+<meta property="og:description" content="彻底搞懂GOROOT、GOPATH、PATH、mod管理和gopath管理项目的区别 1、GOPATH 和 GOROOT 不同于其他语言，go中没有项目的说法" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-01-09T10:33:48+08:00" />
@@ -18,14 +15,11 @@
 <meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
 
 <meta name="twitter:title" content="Mod和gopath依赖管理"/>
-<meta name="twitter:description" content="彻底搞懂GOROOT、GOPATH、PATH、mod管理和gopath管理项目的区别 1、GOPATH 和 GOROOT不同于其他语言，go中没有"/>
+<meta name="twitter:description" content="彻底搞懂GOROOT、GOPATH、PATH、mod管理和gopath管理项目的区别 1、GOPATH 和 GOROOT 不同于其他语言，go中没有项目的说法"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋">
-
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/leecode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" /><link rel="next" href="https://blog.coldbin.top/redis%E5%BA%94%E7%94%A8/" />
-<link rel="stylesheet" href="/css/main.d5cb6f29e0750a13b17688d628b04d50f9fbbd32e0629ccc0dcf796a299ae226.css" integrity="sha256-1ctvKeB1ChOxdojWKLBNUPn7vTLgYpzMDc95aima4iY="><link rel="stylesheet" href="/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css" integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH&#43;KuXHiZWODptY5K8NF4="><link rel="stylesheet" href="/css/color.b0a0f8c429ce52dfa2805b5f9e99ccdae1e8fbfd9adf4f3ddb409d8201fc0c5a.css" integrity="sha256-sKD4xCnOUt&#43;igFtfnpnM2uHo&#43;/2a308920CdggH8DFo="><link rel="stylesheet" href="/css/style.min.5963810f80932dd0408e0fe2003ab30dbccfb3400fe079d989aad753741320e0.css" integrity="sha256-WWOBD4CTLdBAjg/iADqzDbzPs0AP4HnZiarXU3QTIOA="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc=">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc="></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/leecode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" /><link rel="next" href="https://blog.coldbin.top/redis%E5%BA%94%E7%94%A8/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -33,13 +27,13 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/"
-        },"image": ["https://blog.coldbin.top/favicon.ico"],"genre": "posts","keywords": "go编程技巧","wordcount":  2654 ,
-        "url": "https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/","datePublished": "2023-01-09T10:33:48+08:00","dateModified": "2023-01-09T10:33:48+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@id": "https:\/\/blog.coldbin.top\/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "go编程技巧","wordcount":  2592 ,
+        "url": "https:\/\/blog.coldbin.top\/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86\/","datePublished": "2023-01-09T10:33:48+08:00","dateModified": "2023-01-09T10:33:48+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
             "@type": "Organization",
             "name": "阿冰","logo": {
                     "@type": "ImageObject",
-                    "url": "https://blog.coldbin.top/images/avatar.png",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
                     "width":  396 ,
                     "height":  396 
                 }},"author": {
@@ -48,43 +42,34 @@
             },"description": ""
     }
     </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
-        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
-        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
-        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
-        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
-        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
-        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
-        window.switchThemeEventSet = new Set()
-    </script>
-    <div id="back-to-top"></div>
-    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
             <a href="/" title="阿冰的小屋"><img
-        class="logo"
-        loading="lazy"
-        src="/favicon.ico"
-        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        sizes="auto"
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" >阿冰的小屋</a>
+        title="/favicon.ico" />阿冰的小屋</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw"></i>
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw"></i>
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
                 </a></div>
         </div>
     </div>
@@ -93,13 +78,13 @@
         <div class="header-wrapper">
             <div class="header-title">
                 <a href="/" title="阿冰的小屋"><img
-        class="logo"
-        loading="lazy"
-        src="/favicon.ico"
-        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        sizes="auto"
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" >阿冰的小屋</a>
+        title="/favicon.ico" />阿冰的小屋</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -109,66 +94,39 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw"></i>
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw"></i>
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
-            <div class="container"><div class="toc" id="toc-auto">
-        <h2 class="toc-title">Contents</h2>
-        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
-  <ul>
-    <li><a href="#彻底搞懂gorootgopathpathmod管理和gopath管理项目的区别">彻底搞懂GOROOT、GOPATH、PATH、mod管理和gopath管理项目的区别</a>
-      <ul>
-        <li><a href="#1gopath-和-goroot">1、GOPATH 和 GOROOT</a></li>
-        <li><a href="#2修改-gopath-和-goroot">2、修改 GOPATH 和 GOROOT</a></li>
-        <li><a href="#3hellowordgopath版">3、HelloWord——GOPATH版</a>
-          <ul>
-            <li><a href="#1设置并查看gopath和goroot环境变量">（1）设置并查看GOPATH和GOROOT环境变量</a></li>
-            <li><a href="#2goland环境配置">（2）GOLand环境配置</a></li>
-            <li><a href="#3测试">（3）测试</a></li>
-          </ul>
-        </li>
-        <li><a href="#4一些踩坑经验">4、一些踩坑经验</a>
-          <ul>
-            <li><a href="#1使用了了相对路径import-models">（1）使用了了相对路径：import &ldquo;./models&rdquo;</a></li>
-            <li><a href="#2使用结合了gopath的形式import-go-playersrcademomodels">（2）使用结合了GOPATH的形式：<code>import &quot;Go-Player/src/ademo/models&quot;</code></a></li>
-            <li><a href="#3彻底解决方法用go-env--u-恢复初始设置">（3）彻底解决方法：用go env -u 恢复初始设置</a></li>
-          </ul>
-        </li>
-        <li><a href="#4最佳实践">4、最佳实践</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Mod和gopath依赖管理</h1><div class="post-meta">
-            <div class="post-meta-line">
-                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">阿冰</a>
-                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/golang/"><i class="far fa-folder fa-fw"></i>golang</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-01-09">2023-01-09</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-01-09">2023-01-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;2654 words&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;6 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Mod和gopath依赖管理</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/golang/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>golang</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-01-09">2023-01-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2592 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;6 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -195,15 +153,15 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="彻底搞懂gorootgopathpathmod管理和gopath管理项目的区别" class="headerLink">
-    <a href="#%e5%bd%bb%e5%ba%95%e6%90%9e%e6%87%82gorootgopathpathmod%e7%ae%a1%e7%90%86%e5%92%8cgopath%e7%ae%a1%e7%90%86%e9%a1%b9%e7%9b%ae%e7%9a%84%e5%8c%ba%e5%88%ab" class="header-mark"></a>彻底搞懂GOROOT、GOPATH、PATH、mod管理和gopath管理项目的区别</h1><h2 id="1gopath-和-goroot" class="headerLink">
-    <a href="#1gopath-%e5%92%8c-goroot" class="header-mark"></a>1、GOPATH 和 GOROOT</h2><p>不同于其他语言，go中没有项目的说法，只有包, 其中有两个重要的路径，GOROOT 和 GOPATH</p>
+            </div><div class="content" id="content"><h1 id="彻底搞懂gorootgopathpathmod管理和gopath管理项目的区别">彻底搞懂GOROOT、GOPATH、PATH、mod管理和gopath管理项目的区别</h1>
+<h2 id="1gopath-和-goroot">1、GOPATH 和 GOROOT</h2>
+<p>不同于其他语言，go中没有项目的说法，只有包, 其中有两个重要的路径，GOROOT 和 GOPATH</p>
 <p>Go开发相关的环境变量如下：</p>
 <p>GOROOT：GOROOT就是Go的安装目录，（类似于java的JDK）
 GOPATH：GOPATH是我们的工作空间,保存go项目代码和第三方依赖包
 GOPATH可以设置多个，其中，第一个将会是默认的包目录，使用 go get 下载的包都会在第一个path中的src目录下，使用 go install时，在哪个GOPATH中找到了这个包，就会在哪个GOPATH下的bin目录生成可执行文件</p>
-<h2 id="2修改-gopath-和-goroot" class="headerLink">
-    <a href="#2%e4%bf%ae%e6%94%b9-gopath-%e5%92%8c-goroot" class="header-mark"></a>2、修改 GOPATH 和 GOROOT</h2><p>GOROOT
+<h2 id="2修改-gopath-和-goroot">2、修改 GOPATH 和 GOROOT</h2>
+<p>GOROOT
 GOROOT是Go的安装路径。GOROOT在绝大多数情况下都不需要修改</p>
 <p>Mac中安装Go会自动配置好GOROOT，路径为<code>/usr/local/go</code>。Win中默认的GOROOT是在 <code>C:\Go</code>中，也可自己指定</p>
 <p>【如下图所示则我的GORROT为：<code>D:\development\go</code>】，以下是GOROOT目录的内容：</p>
@@ -220,20 +178,20 @@ GOPATH/src：该目录保存了应用自身的代码和第三方依赖的代码�
 <p><code>import &quot;Go-Player/src/chapter17/models&quot;</code>
 第一步：Go会先去GOROOT的scr目录中查找，很显然它不是标准库的包，没找到。
 第二步：继续在GOPATH的src目录去找，准确说是GOPATH/src/Go-Player/src/chapter17/models这个目录。如果该目录不存在，会报错找不到package。在使用GOPATH管理项目时，需要按照GO寻找package的规范来合理地保存和组织Go代码。</p>
-<h2 id="3hellowordgopath版" class="headerLink">
-    <a href="#3hellowordgopath%e7%89%88" class="header-mark"></a>3、HelloWord——GOPATH版</h2><h3 id="1设置并查看gopath和goroot环境变量" class="headerLink">
-    <a href="#1%e8%ae%be%e7%bd%ae%e5%b9%b6%e6%9f%a5%e7%9c%8bgopath%e5%92%8cgoroot%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f" class="header-mark"></a>（1）设置并查看GOPATH和GOROOT环境变量</h3><p>安装go SKD目录：<code>D:\development\go</code>
+<h2 id="3hellowordgopath版">3、HelloWord——GOPATH版</h2>
+<h3 id="1设置并查看gopath和goroot环境变量">（1）设置并查看GOPATH和GOROOT环境变量</h3>
+<p>安装go SKD目录：<code>D:\development\go</code>
 go项目存放目录：<code>D:\development\jetbrains\goland\workspace</code>，并且此目录下含有bin、src、pkg三个文件夹，src文件夹用来存放项目代码
 当引入module时，首先在GOROOT的src目录下查找，然后再GPOPATH的src目录下查找</p>
-<h3 id="2goland环境配置" class="headerLink">
-    <a href="#2goland%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae" class="header-mark"></a>（2）GOLand环境配置</h3><p>在<code>D:\development\jetbrains\goland\workspace\src</code>目录下新建项目GO-Player
+<h3 id="2goland环境配置">（2）GOLand环境配置</h3>
+<p>在<code>D:\development\jetbrains\goland\workspace\src</code>目录下新建项目GO-Player
 bin：存放编译后的exe文件</p>
 <p>pkg：存放自定义包的目录</p>
 <p>src：存放项目源文件的目录</p>
 <p>按如下指令进行配置</p>
 <p>可在Settings中选择SDK和添加GOPATH</p>
-<h3 id="3测试" class="headerLink">
-    <a href="#3%e6%b5%8b%e8%af%95" class="header-mark"></a>（3）测试</h3><div class="highlight"><div class="chroma">
+<h3 id="3测试">（3）测试</h3>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -278,8 +236,8 @@ bin：存放编译后的exe文件</p>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>此篇文章仅介绍网上大部分GOPATH版本。Go语言Hello World都只简单地介绍了GOPATH版本。但是从Go的1.11版本之后，已不再推荐使用GOPATH来构建应用了。也就是说GOPATH被认为是废弃的，错误的做法。</p>
-<h2 id="4一些踩坑经验" class="headerLink">
-    <a href="#4%e4%b8%80%e4%ba%9b%e8%b8%a9%e5%9d%91%e7%bb%8f%e9%aa%8c" class="header-mark"></a>4、一些踩坑经验</h2><p>当你开启了GO111MODULE，仍然使用GOPATH模式的方法，在引入自定义模块时会报错。go mod具体使用将在下一篇介绍</p>
+<h2 id="4一些踩坑经验">4、一些踩坑经验</h2>
+<p>当你开启了GO111MODULE，仍然使用GOPATH模式的方法，在引入自定义模块时会报错。go mod具体使用将在下一篇介绍</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -301,19 +259,19 @@ bin：存放编译后的exe文件</p>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>当modules 功能启用时，依赖包的存放位置变更为$GOPATH/pkg，允许同一个package多个版本并存，且多个项目可以共享缓存的 module。</p>
-<h3 id="1使用了了相对路径import-models" class="headerLink">
-    <a href="#1%e4%bd%bf%e7%94%a8%e4%ba%86%e4%ba%86%e7%9b%b8%e5%af%b9%e8%b7%af%e5%be%84import-models" class="header-mark"></a>（1）使用了了相对路径：import &ldquo;./models&rdquo;</h3><p>报错：<code>build command-line-arguments: cannot find module for path _/D_/dev</code>这里后面一堆本地路径
+<h3 id="1使用了了相对路径import-models">（1）使用了了相对路径：import &ldquo;./models&rdquo;</h3>
+<p>报错：<code>build command-line-arguments: cannot find module for path _/D_/dev</code>这里后面一堆本地路径
 这是因为在go module下 你源码中 <code>impot …/ </code>这样的引入形式不支持了， 应该改成 impot 模块名/ 。 这样就ok了</p>
-<h3 id="2使用结合了gopath的形式import-go-playersrcademomodels" class="headerLink">
-    <a href="#2%e4%bd%bf%e7%94%a8%e7%bb%93%e5%90%88%e4%ba%86gopath%e7%9a%84%e5%bd%a2%e5%bc%8fimport-go-playersrcademomodels" class="header-mark"></a>（2）使用结合了GOPATH的形式：<code>import &quot;Go-Player/src/ademo/models&quot;</code></h3><p>于是我们把上面的import改成了结合GOPATH的如上形式</p>
+<h3 id="2使用结合了gopath的形式import-go-playersrcademomodels">（2）使用结合了GOPATH的形式：<code>import &quot;Go-Player/src/ademo/models&quot;</code></h3>
+<p>于是我们把上面的import改成了结合GOPATH的如上形式</p>
 <p>报错：<code>package Go-Player/src/ademo/models is not in GOROOT D:/development/go/src/GPlayer/src/ademo/models</code></p>
-<h3 id="3彻底解决方法用go-env--u-恢复初始设置" class="headerLink">
-    <a href="#3%e5%bd%bb%e5%ba%95%e8%a7%a3%e5%86%b3%e6%96%b9%e6%b3%95%e7%94%a8go-env--u-%e6%81%a2%e5%a4%8d%e5%88%9d%e5%a7%8b%e8%ae%be%e7%bd%ae" class="header-mark"></a>（3）彻底解决方法：用go env -u 恢复初始设置</h3><p>不再使用go mod：</p>
+<h3 id="3彻底解决方法用go-env--u-恢复初始设置">（3）彻底解决方法：用go env -u 恢复初始设置</h3>
+<p>不再使用go mod：</p>
 <p><code>go env -w GO111MODULE=off</code>  或者  <code>go env -w GO111MODULE=auto</code>
 <code>go env -u GO111MODULE</code>
 区别在于，如果GO111MODULE=on或者auto，在go get下载包时候，会下载到GOPATH/pkg/mod，引入时也是同样的从这个目录开始。如果这行了上述命令，那么在go get下载包时候，会下载到GOPATH/src 目录下</p>
-<h2 id="4最佳实践" class="headerLink">
-    <a href="#4%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5" class="header-mark"></a>4、最佳实践</h2><ul>
+<h2 id="4最佳实践">4、最佳实践</h2>
+<ul>
 <li>
 <p>如果在GOPATH目录下的src文件下编写项目代码，可以不使用mod管理方式，直接沿用旧版本的GOPATH管理；</p>
 </li>
@@ -339,50 +297,44 @@ bin：存放编译后的exe文件</p>
 </div>
 </div></li>
 </ul>
-</div>
-
-        <div class="post-footer" id="post-footer">
+</div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2023-01-09</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
-            <div class="post-info-md"><span><a class="link-to-mardown" href=/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
-                    </span></div>
-            <div class="post-info-share"><button title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" data-title="Mod和gopath依赖管理"><span class="fab fa-weibo fa-fw"></span></button><button title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" data-title="Mod和gopath依赖管理"><span data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></span></button></div>
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" data-title="Mod和gopath依赖管理"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/" data-title="Mod和gopath依赖管理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/go%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/">go编程技巧</a></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/go%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/">go编程技巧</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/leecode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" class="prev" rel="prev" title="Leetcode每日一题"><i class="fas fa-angle-left fa-fw"></i>Leetcode每日一题</a>
-            <a href="/redis%E5%BA%94%E7%94%A8/" class="next" rel="next" title="Redis应用">Redis应用<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/leecode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/" class="prev" rel="prev" title="Leetcode每日一题"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Leetcode每日一题</a>
+            <a href="/redis%E5%BA%94%E7%94%A8/" class="next" rel="next" title="Redis应用">Redis应用<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="gitalk" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
             </noscript></div></article></div>
-        </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-            <div class="footer-line"></div>
-            <div class="footer-line">
-            </div>
-        </div></footer></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
 
-    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="Back to Top">
-            <i class="fas fa-arrow-up fa-fw"></i>
-        </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-            <i class="fas fa-comment fa-fw"></i>
-        </a>
-    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.b38ee65d6456beb2d034bf554505f4ca47e421548b7cd26e8a7805fd2673b6c3.css" integrity="sha256-s47mXWRWvrLQNL9VRQX0ykfkIVSLfNJuingF/SZztsM="><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr&#43;QR0SQDNfgglgtcM="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc=">
-        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18&#43;2anxsuaz3pWYyVWi&#43;bTvTH8Q="><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-09T10:33:48+08:00","owner":"cold-bin","repo":"blog-comment","title":"Mod和gopath依赖管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"},"sharerjs":true};</script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.0c4d9db673dd19489cfa134ab15ef8b9237ae72aaa65d8490d55658442b3a2d3.js" integrity="sha256-DE2dtnPdGUic&#43;hNKsV74uSN65yqqZdhJDVVlhEKzotM="></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.72ceb0f87691041e9e0bea2f2468b9aa3ed544e8f7f6dc9f76d8c8f997699e41.js" integrity="sha256-cs6w&#43;HaRBB6eC&#43;ovJGi5qj7VROj39tyfdtjI&#43;ZdpnkE="></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.5b0e82e9a1ae0b52d07a52da1eb4640da77eb3ca7e78c3a428c1f3b712858d3c.js" integrity="sha256-Ww6C6aGuC1LQelLaHrRkDad&#43;s8p&#43;eMOkKMHztxKFjTw="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.11be927cda59c8b6019ebbea838285c5beaf21183ea4b83dbd4e4fbf9413ce4a.js" integrity="sha256-Eb6SfNpZyLYBnrvqg4KFxb6vIRg&#43;pLg9vU5Pv5QTzko="></script><script type="text/javascript" src="/lib/sharer/sharer.min.8fe10eb615eb163a20f795484430a012805ec7c8c11df52df54ddb7a46084254.js" integrity="sha256-j&#43;EOthXrFjog95VIRDCgEoBex8jBHfUt9U3bekYIQlQ="></script><script type="text/javascript" src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw&#43;iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y&#43;KzPOwaJ0PYhsf7R6c=" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54&#43;rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn&#43;yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script></div>
-</body>
-
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-09T10:33:48+08:00","owner":"cold-bin","repo":"blog-comment","title":"Mod和gopath依赖管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
 </html>

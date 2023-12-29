@@ -1,14 +1,11 @@
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noodp" />
-    <title>操作系统之文件管理 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="操作系统之文件管理" />
-<meta property="og:description" content="[toc] 文件系统基础 文件的概念由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文" />
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <title>操作系统之文件管理 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="操作系统之文件管理" />
+<meta property="og:description" content="[toc] 文件系统基础 文件的概念 由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-05-21T15:19:47+08:00" />
@@ -18,14 +15,11 @@
 <meta name="twitter:image" content="https://blog.coldbin.top/favicon.ico"/>
 
 <meta name="twitter:title" content="操作系统之文件管理"/>
-<meta name="twitter:description" content="[toc] 文件系统基础 文件的概念由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文"/>
+<meta name="twitter:description" content="[toc] 文件系统基础 文件的概念 由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋">
-
-<meta name="theme-color" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" />
-<link rel="stylesheet" href="/css/main.d5cb6f29e0750a13b17688d628b04d50f9fbbd32e0629ccc0dcf796a299ae226.css" integrity="sha256-1ctvKeB1ChOxdojWKLBNUPn7vTLgYpzMDc95aima4iY="><link rel="stylesheet" href="/lib/normalize/normalize.min.055364f5be272caa092b0e6654c165828707f8ab971e2656383a6d6392bc345e.css" integrity="sha256-BVNk9b4nLKoJKw5mVMFlgocH&#43;KuXHiZWODptY5K8NF4="><link rel="stylesheet" href="/css/color.b0a0f8c429ce52dfa2805b5f9e99ccdae1e8fbfd9adf4f3ddb409d8201fc0c5a.css" integrity="sha256-sKD4xCnOUt&#43;igFtfnpnM2uHo&#43;/2a308920CdggH8DFo="><link rel="stylesheet" href="/css/style.min.5963810f80932dd0408e0fe2003ab30dbccfb3400fe079d989aad753741320e0.css" integrity="sha256-WWOBD4CTLdBAjg/iADqzDbzPs0AP4HnZiarXU3QTIOA="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc=">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.43202d5486e011f9684a17bd6846b5c16a2619002bfc783f7e32e20dfb6bf857.css" integrity="sha256-QyAtVIbgEfloShe9aEa1wWomGQAr/Hg/fjLiDftr&#43;Fc="></noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1&#43;AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -33,13 +27,13 @@
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/"
-        },"image": ["https://blog.coldbin.top/favicon.ico"],"genre": "posts","wordcount":  13100 ,
-        "url": "https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/","datePublished": "2023-05-21T15:19:47+08:00","dateModified": "2023-05-21T15:19:47+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+            "@id": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86\/"
+        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  13100 ,
+        "url": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86\/","datePublished": "2023-05-21T15:19:47+08:00","dateModified": "2023-05-21T15:19:47+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
             "@type": "Organization",
             "name": "阿冰","logo": {
                     "@type": "ImageObject",
-                    "url": "https://blog.coldbin.top/images/avatar.png",
+                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
                     "width":  396 ,
                     "height":  396 
                 }},"author": {
@@ -48,43 +42,34 @@
             },"description": ""
     }
     </script></head>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-<body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">
-        function setTheme(theme) {document.body.setAttribute('theme', theme); document.documentElement.style.setProperty('color-scheme', theme === 'light' ? 'light' : 'dark'); window.theme = theme;   window.isDark = window.theme !== 'light' }
-        function saveTheme(theme) {window.localStorage && localStorage.setItem('theme', theme);}
-        function getMeta(metaName) {const metas = document.getElementsByTagName('meta'); for (let i = 0; i < metas.length; i++) if (metas[i].getAttribute('name') === metaName) return metas[i]; return '';}
-        if (window.localStorage && localStorage.getItem('theme')) {let theme = localStorage.getItem('theme');theme === 'light' || theme === 'dark' || theme === 'black' ? setTheme(theme) : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light')); } else { if ('auto' === 'light' || 'auto' === 'dark' || 'auto' === 'black') setTheme('auto'), saveTheme('auto'); else saveTheme('auto'), window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? setTheme('dark') : setTheme('light');}
-        let metaColors = {'light': '#f8f8f8','dark': '#252627','black': '#000000'}
-        getMeta('theme-color').content = metaColors[document.body.getAttribute('theme')];
-        window.switchThemeEventSet = new Set()
-    </script>
-    <div id="back-to-top"></div>
-    <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
         <div class="header-title">
             <a href="/" title="阿冰的小屋"><img
-        class="logo"
-        loading="lazy"
-        src="/favicon.ico"
-        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        sizes="auto"
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" >阿冰的小屋</a>
+        title="/favicon.ico" />阿冰的小屋</a>
         </div>
         <div class="menu">
             <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw"></i>
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw"></i>
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
                         </span>
                     </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw"></i>
+                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
                 </a></div>
         </div>
     </div>
@@ -93,13 +78,13 @@
         <div class="header-wrapper">
             <div class="header-title">
                 <a href="/" title="阿冰的小屋"><img
-        class="logo"
-        loading="lazy"
-        src="/favicon.ico"
-        srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        sizes="auto"
+        class="lazyload logo"
+        src="/svg/loading.min.svg"
+        data-src="/favicon.ico"
+        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
+        data-sizes="auto"
         alt="/favicon.ico"
-        title="/favicon.ico" >阿冰的小屋</a>
+        title="/favicon.ico" />阿冰的小屋</a>
             </div>
             <div class="menu-toggle" id="menu-toggle-mobile">
                 <span></span><span></span><span></span>
@@ -109,153 +94,39 @@
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw"></i>
+                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
                         </a>
                         <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw"></i>
+                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
                         </a>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
                         </span>
                     </div>
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
                 </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw"></i>
+                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
             </a></div>
     </div>
-</header>
-<div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-</div>
-<div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-</div>
-<main class="main">
-            <div class="container"><div class="toc" id="toc-auto">
-        <h2 class="toc-title">Contents</h2>
-        <div class="toc-content" id="toc-content-auto"><nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#文件系统基础">文件系统基础</a>
-          <ul>
-            <li><a href="#文件的概念">文件的概念</a>
-              <ul>
-                <li><a href="#文件和文件系统">文件和文件系统</a>
-                  <ul>
-                    <li><a href="#文件操作">文件操作</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="#文件的结构">文件的结构</a>
-              <ul>
-                <li><a href="#文件逻辑结构的类型">文件逻辑结构的类型</a>
-                  <ul>
-                    <li><a href="#顺序文件">顺序文件</a></li>
-                    <li><a href="#索引文件">索引文件</a></li>
-                    <li><a href="#索引顺序文件">索引顺序文件</a></li>
-                    <li><a href="#直接文件">直接文件</a></li>
-                    <li><a href="#哈希文件">哈希文件</a></li>
-                  </ul>
-                </li>
-                <li><a href="#文件的目录结构">文件的目录结构</a>
-                  <ul>
-                    <li><a href="#文件控制块fcb">文件控制块（FCB）</a></li>
-                    <li><a href="#索引节点index-node">索引节点<code>index node</code></a>
-                      <ul>
-                        <li><a href="#inode包含内容"><code>inode</code>包含内容</a></li>
-                        <li><a href="#操作系统读取磁盘文件的流程">操作系统读取磁盘文件的流程</a></li>
-                        <li><a href="#inode的优点"><code>inode</code>的优点</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#inode和fcb的关系"><code>inode</code>和FCB的关系</a></li>
-                    <li><a href="#目录结构">目录结构</a>
-                      <ul>
-                        <li><a href="#单级目录">单级目录</a></li>
-                        <li><a href="#两级目录">两级目录</a></li>
-                        <li><a href="#多级目录">多级目录</a></li>
-                        <li><a href="#增加或删除目录">增加或删除目录</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li><a href="#文件的共享">文件的共享</a>
-              <ul>
-                <li><a href="#硬链接基于索引结点的共享方式">硬链接：基于索引结点的共享方式</a>
-                  <ul>
-                    <li><a href="#示例说明">示例说明</a></li>
-                  </ul>
-                </li>
-                <li><a href="#软链接利用符号链实现文件共享">软链接：利用符号链实现文件共享</a></li>
-              </ul>
-            </li>
-            <li><a href="#文件的保护">文件的保护</a>
-              <ul>
-                <li><a href="#口令保护与加密保护">口令保护与加密保护</a></li>
-                <li><a href="#访问控制">访问控制</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#文件系统实现">文件系统实现</a>
-          <ul>
-            <li><a href="#文件系统层次结构">文件系统层次结构</a></li>
-            <li><a href="#目录实现">目录实现</a>
-              <ul>
-                <li><a href="#线性表">线性表</a></li>
-                <li><a href="#哈希表">哈希表</a></li>
-              </ul>
-            </li>
-            <li><a href="#文件实现">文件实现</a>
-              <ul>
-                <li><a href="#文件分配方式">文件分配方式</a>
-                  <ul>
-                    <li><a href="#连续分配">连续分配</a></li>
-                    <li><a href="#链接分配">链接分配</a>
-                      <ul>
-                        <li><a href="#隐式链接分配">隐式链接分配</a></li>
-                        <li><a href="#显式链接分配">显式链接分配</a></li>
-                        <li><a href="#区别">区别</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#索引分配">索引分配</a>
-                      <ul>
-                        <li><a href="#单级索引分配">单级索引分配</a></li>
-                        <li><a href="#多级索引分配">多级索引分配</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-                <li><a href="#文件存储空间管理">文件存储空间管理</a>
-                  <ul>
-                    <li><a href="#空闲表法">空闲表法</a></li>
-                    <li><a href="#空闲链表法">空闲链表法</a></li>
-                    <li><a href="#成组链表法">成组链表法</a></li>
-                    <li><a href="#位示图法">位示图法</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-</nav></div>
-    </div><script>document.getElementsByTagName("main")[0].setAttribute("autoTOC", "true")</script><article class="page single"><h1 class="single-title animate__animated animate__flipInX">操作系统之文件管理</h1><div class="post-meta">
-            <div class="post-meta-line">
-                <span class="post-author"><span class="author fas fa-user-circle fa-fw"></span><a href="/" title="Author" rel=" author" class="author">阿冰</a>
-                </span>&nbsp;<span class="post-category">included in </span>&nbsp;<span class="post-category">category <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw"></i>操作系统</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-05-21">2023-05-21</time>&nbsp;<i class="far fa-edit fa-fw"></i>&nbsp;<time datetime="2023-05-21">2023-05-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;13100 words&nbsp;<i class="far fa-clock fa-fw"></i>&nbsp;27 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  kept="">
+</header><div class="search-dropdown desktop">
+        <div id="search-dropdown-desktop"></div>
+    </div>
+    <div class="search-dropdown mobile">
+        <div id="search-dropdown-mobile"></div>
+    </div><main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">操作系统之文件管理</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>操作系统</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-05-21">2023-05-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;13100 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;27 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
@@ -370,11 +241,11 @@
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>[toc]</p>
-<h2 id="文件系统基础" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e5%9f%ba%e7%a1%80" class="header-mark"></a>文件系统基础</h2><h3 id="文件的概念" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e7%9a%84%e6%a6%82%e5%bf%b5" class="header-mark"></a>文件的概念</h3><p>由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。</p>
-<h4 id="文件和文件系统" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e5%92%8c%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f" class="header-mark"></a>文件和文件系统</h4><p>现代OS几乎都是通过文件系统来组织和管理在计算机中所存储的大量程序和数据的。<strong>文件系统的管理功能是通过把它所管理的程序和数据组织成一系列文件的方法来实现</strong>的。而<strong>文件则是指具有文件名的若干相关元素的集合</strong>。<strong>元素通常是记录，而记录是一组有意义的数据项的集合</strong>。可以把数据组成分为数据项、记录、文件。</p>
+<h2 id="文件系统基础">文件系统基础</h2>
+<h3 id="文件的概念">文件的概念</h3>
+<p>由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。</p>
+<h4 id="文件和文件系统">文件和文件系统</h4>
+<p>现代OS几乎都是通过文件系统来组织和管理在计算机中所存储的大量程序和数据的。<strong>文件系统的管理功能是通过把它所管理的程序和数据组织成一系列文件的方法来实现</strong>的。而<strong>文件则是指具有文件名的若干相关元素的集合</strong>。<strong>元素通常是记录，而记录是一组有意义的数据项的集合</strong>。可以把数据组成分为数据项、记录、文件。</p>
 <ol>
 <li><strong>数据项</strong>，数据项是最低级数据组织形式。分为基本数据项（用于描述一个对象某种属性的字符集，是数据组织中可以明明的最小逻辑数据单位，即原子数据，又称为数据元素或字段）和组合数据项（由若干个基本数据项组成）</li>
 <li><strong>记录</strong>，是一组相关数据项的集合，用于描述一个对象在某方面的属性，为了能够唯一标识一个记录，需要在记录中确定一个或集合数据项，把他们的集合称为关键字，关键字是能够唯一标识一个记录的数据项。</li>
@@ -382,8 +253,8 @@
 </ol>
 <p>一个文件可对应若干个记录，一个记录可对应若干个数据项。</p>
 <p>文件系统管理的对象有：<strong>文件</strong>（作为文件管理的直接对象），<strong>目录</strong>（为了方便用户对文件的存取和检索，在文件系统中配置目录，每个目录项中，必须含有文件名及该文件所在的物理地址，对目录的组织和管理是方便和提高对文件存取速度的关键），<strong>磁盘（磁盘）存储空间</strong>（文件和目录必定占用存储空间，对这部分空间的有效管理，不仅能提高外存的利用率，而且能提高对文件的存取速度）。</p>
-<h5 id="文件操作" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c" class="header-mark"></a>文件操作</h5><ol>
+<h5 id="文件操作">文件操作</h5>
+<ol>
 <li><strong>创建文件</strong>，在创建一个新文件时，系统首先要为新文件分配必要的外存空间，并在文件系统的目录中，为之建立一个目录项，目录项中应该记录新文件的文件名及其在外存的地址等属性。</li>
 <li><strong>删除文件</strong>，当已不再需要某文件时，可将其从文件系统中删除。在删除时，系统应先从目录中找到要删除文件的目录项，使之成为空项，然后回收该文件所占用的存储空间。</li>
 <li><strong>读文件</strong>，读文件时，须在相应系统调用中给出文件名和应读入的内存目标地址。此时，系统要查找目录，找到指定目录项，从中得到被读文件在外存中的位置。在目录项中，还有一个指针用于对文件进行读/写。</li>
@@ -404,8 +275,8 @@
 </blockquote>
 </li>
 </ol>
-<h3 id="文件的结构" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e7%9a%84%e7%bb%93%e6%9e%84" class="header-mark"></a>文件的结构</h3><p>对任何的文件，都存在以下两种形式的结构</p>
+<h3 id="文件的结构">文件的结构</h3>
+<p>对任何的文件，都存在以下两种形式的结构</p>
 <ul>
 <li>
 <p><strong>文件的逻辑结构</strong>，这是从用户观点出发所观察到的文件组织形式，是用户可以直接处理的数据及其结构，独立于文件的物理特性，又称为文件组织。</p>
@@ -415,8 +286,8 @@
 </li>
 </ul>
 <p>文件物理结构涉及硬件，不是操作系统关注的重点</p>
-<h4 id="文件逻辑结构的类型" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e9%80%bb%e8%be%91%e7%bb%93%e6%9e%84%e7%9a%84%e7%b1%bb%e5%9e%8b" class="header-mark"></a>文件逻辑结构的类型</h4><p>文件的逻辑结构可分为两大类，一类是有结构文件，这是指由一个以上的记录构成的文件，故把他称为记录式文件，另一类是无结构文件，这是指由字符流构成的文件，又称为流式文件。</p>
+<h4 id="文件逻辑结构的类型">文件逻辑结构的类型</h4>
+<p>文件的逻辑结构可分为两大类，一类是有结构文件，这是指由一个以上的记录构成的文件，故把他称为记录式文件，另一类是无结构文件，这是指由字符流构成的文件，又称为流式文件。</p>
 <ul>
 <li>
 <p><strong>有结构文件（记录式文件）</strong></p>
@@ -431,138 +302,131 @@
 </blockquote>
 </li>
 </ul>
-<h5 id="顺序文件" class="headerLink">
-    <a href="#%e9%a1%ba%e5%ba%8f%e6%96%87%e4%bb%b6" class="header-mark"></a>顺序文件</h5><p>顺序文件是有结构文件。文件是记录的集合，它可以按照各种不同的顺序进行排列，一般地，可归纳为以下两种情况。</p>
+<h5 id="顺序文件">顺序文件</h5>
+<p>顺序文件是有结构文件。文件是记录的集合，它可以按照各种不同的顺序进行排列，一般地，可归纳为以下两种情况。</p>
 <ul>
 <li><strong>链表结构（变长）</strong>，各记录之间的顺序与关键字无关，通常按照时间先后排序，最先存入的记录作为第一个记录，其次，为第二个记录，以此类推。链表结构存储检索效率低下，所以定位删除、更新、查询的效率都较为低下。</li>
 <li><strong>顺序结构（定长）</strong>，文件中所有记录按照关键字排列，可以按照关键词长度从大到小排列。顺序结构的检索效率更高，但增加删除效率低下，需要删除原分配空间，另外分配一个更小，将所有没有删除的数据拷贝到新分配好的空间中去，<strong>可以类比二维数组实现</strong>。</li>
 </ul>
 <p>顺序文件的最佳应用场合是在对诸记录进行批量存取时，即每次要读或写一大批记录时，此时，对顺序文件的存取效率是所有逻辑文件中最高的，此外，只有顺序文件才能存储在磁带上，并能有效工作。但是想要增加或删除一个文件比较困难。</p>
-<h5 id="索引文件" class="headerLink">
-    <a href="#%e7%b4%a2%e5%bc%95%e6%96%87%e4%bb%b6" class="header-mark"></a>索引文件</h5><p>对于定长记录文件，顺序文件的实现，可以方便的实现顺序存取和直接存取。然而，顺序文件对于变长记录就很难实现。为了解决变长记录检索问题，可为变长记录文件建立一张索引表，对主文件中的每个记录，在索引表中设有一个相应的表项，用于记录该记录的长度L及指向该记录的指针（指向该记录在逻辑地址空间的首址），由于索引表示按记录键排序的，因此，<strong>索引表本身是一个定长记录的顺序文件</strong>。从而可以方便实现直接存取。</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<h5 id="索引文件">索引文件</h5>
+<p>对于定长记录文件，顺序文件的实现，可以方便的实现顺序存取和直接存取。然而，顺序文件对于变长记录就很难实现。为了解决变长记录检索问题，可为变长记录文件建立一张索引表，对主文件中的每个记录，在索引表中设有一个相应的表项，用于记录该记录的长度L及指向该记录的指针（指向该记录在逻辑地址空间的首址），由于索引表示按记录键排序的，因此，<strong>索引表本身是一个定长记录的顺序文件</strong>。从而可以方便实现直接存取。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png"
+        title="img" /></p>
 <p>在对索引文件进行检索时，首先根据用户（程序)提供的关键字，并利用折半查找检索索引表，从中找到相应的表项，再利用该表项给出的指向记录的指针值，去访问所需的记录。每当要向索引文件中增加一个新纪录时，便须对索引表进行修改。索引表的问题在于除了有主文件外，还需要配置一张索引表，每个记录需要有一个索引项，因此提高了存储费用。</p>
-<h5 id="索引顺序文件" class="headerLink">
-    <a href="#%e7%b4%a2%e5%bc%95%e9%a1%ba%e5%ba%8f%e6%96%87%e4%bb%b6" class="header-mark"></a>索引顺序文件</h5><p>其有效克服了变长记录不便于直接存取的缺点，而且所付出的代价也不算太大，它是顺序文件和索引文件相结合的产物，它<strong>将顺序文件中的所有记录分为若干个组，为顺序文件建立一张索引表，在索引表中为每组中的第一个记录建立一个索引项，其中含有该记录的键值和指向记录的指针</strong>。</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<h5 id="索引顺序文件">索引顺序文件</h5>
+<p>其有效克服了变长记录不便于直接存取的缺点，而且所付出的代价也不算太大，它是顺序文件和索引文件相结合的产物，它<strong>将顺序文件中的所有记录分为若干个组，为顺序文件建立一张索引表，在索引表中为每组中的第一个记录建立一个索引项，其中含有该记录的键值和指向记录的指针</strong>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png"
+        title="img" /></p>
 <p>在对索引顺序文件进行检索时，首先利用用户（程序）所提供的关键字及某种查找算法去检索索引表，找到该记录组中的第一个记录的表项，从中得到该记录组第一个记录在主文件中的位置，然后，再利用顺序查找法去查找主文件，从中找出所要求的记录。</p>
 <blockquote>
 <p>类似于字典查找，先找拼音或部首缩小范围，再找具体的字。</p>
 </blockquote>
-<h5 id="直接文件" class="headerLink">
-    <a href="#%e7%9b%b4%e6%8e%a5%e6%96%87%e4%bb%b6" class="header-mark"></a>直接文件</h5><p>对于直接文件，则根据给定的记录键值，直接获得指定记录的物理地址，换言之，<strong>记录键值本身就决定了记录的物理地址</strong>，这种由记录键值到记录物理地址的转换被称为键值转换。</p>
-<h5 id="哈希文件" class="headerLink">
-    <a href="#%e5%93%88%e5%b8%8c%e6%96%87%e4%bb%b6" class="header-mark"></a>哈希文件</h5><p><strong>利用Hash函数可将记录键值转换为相应记录的地址</strong>，为了能实现文件存储空间的动态分配，通常由Hash函数所求得的并非是相应记录的地址，而是指向一目录表相应表目的指针，该表目的内容指向相应记录所在的物理块。</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
-<h4 id="文件的目录结构" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e7%9a%84%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84" class="header-mark"></a>文件的目录结构</h4><p>为了能够对文件实施有效的管理，必须对它们加以妥善组织，这主要是通过文件目录实现的，文件目录也是一种数据结构，用于标识系统中的文件及其物理地址，供检索时使用，对目录的管理要求如下：</p>
+<h5 id="直接文件">直接文件</h5>
+<p>对于直接文件，则根据给定的记录键值，直接获得指定记录的物理地址，换言之，<strong>记录键值本身就决定了记录的物理地址</strong>，这种由记录键值到记录物理地址的转换被称为键值转换。</p>
+<h5 id="哈希文件">哈希文件</h5>
+<p><strong>利用Hash函数可将记录键值转换为相应记录的地址</strong>，为了能实现文件存储空间的动态分配，通常由Hash函数所求得的并非是相应记录的地址，而是指向一目录表相应表目的指针，该表目的内容指向相应记录所在的物理块。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png"
+        title="img" /></p>
+<h4 id="文件的目录结构">文件的目录结构</h4>
+<p>为了能够对文件实施有效的管理，必须对它们加以妥善组织，这主要是通过文件目录实现的，文件目录也是一种数据结构，用于标识系统中的文件及其物理地址，供检索时使用，对目录的管理要求如下：</p>
 <ul>
 <li><strong>实现按名存取</strong>，即用户只须向系统提供所需访问的文件的名字，便能够快速准确地找到指定文件在外存上的存储位置，这是目录管理中最基本的功能。</li>
 <li><strong>提高对目录检索速度</strong>，通过合理地组织目录结构的方法，可加快对目录的检索速度，从而提高对文件的存取速度。</li>
 <li><strong>文件共享</strong>，在多用户系统中，应该允许用户共享一个文件。</li>
 <li><strong>允许文件重名</strong>，系统应允许不同用户对不同文件采用相同的名字，以便用户按照自己的习惯给文件命名和使用文件。</li>
 </ul>
-<h5 id="文件控制块fcb" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e6%8e%a7%e5%88%b6%e5%9d%97fcb" class="header-mark"></a>文件控制块（FCB）</h5><p>一个FCB条目可能是文件，也可能是目录，但不能即是文件，又是目录。因为目录也是文件的一种。<strong>FCB的有序集合称为文件目录</strong>，一个FCB就是一个文件目录项。为了创建一个新文件，系统将分配一个FCB并存放在文件目录中，称为目录项。</p>
+<h5 id="文件控制块fcb">文件控制块（FCB）</h5>
+<p>一个FCB条目可能是文件，也可能是目录，但不能即是文件，又是目录。因为目录也是文件的一种。<strong>FCB的有序集合称为文件目录</strong>，一个FCB就是一个文件目录项。为了创建一个新文件，系统将分配一个FCB并存放在文件目录中，称为目录项。</p>
 <p><strong>值得注意的是，FCB是存储在目录中，而并不是目录项中。也就是说，目录文件会存储当前目录里的FCB，而当前目录的FCB是在上级目录中存放</strong></p>
 <ul>
 <li>基本信息：文件名、类型、物理位置</li>
 <li>存取控制权限信息：文件读写权限</li>
 <li>使用信息：创建时间等</li>
 </ul>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
-<h5 id="索引节点index-node" class="headerLink">
-    <a href="#%e7%b4%a2%e5%bc%95%e8%8a%82%e7%82%b9index-node" class="header-mark"></a>索引节点<code>index node</code></h5><blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png"
+        title="img" /></p>
+<h5 id="索引节点index-node">索引节点<code>index node</code></h5>
+<blockquote>
 <p>理解<code>inode</code>，要从文件储存说起。文件储存在硬盘上，硬盘的最小存储单位叫做”扇区”（Sector）。每个扇区储存512字节（相当于0.5KB）。操作系统读取硬盘的时候，不会一个个扇区地读取，这样效率太低，而是一次性连续读取多个扇区，即一次性读取一个”块”（block）。这种由多个扇区组成的”块”，是文件存取的最小单位。”块”的大小，最常见的是4KB，即连续八个 sector组成一个 block。文件数据都储存在”块”中，那么很显然，我们还必须找到一个地方储存文件的元信息，比如文件的创建者、文件的创建日期、文件的大小等等。这种储存文件元信息的区域就叫做<code>inode</code>，中文译名为”索引节点” 。</p>
 </blockquote>
-<h6 id="inode包含内容" class="headerLink">
-    <a href="#inode%e5%8c%85%e5%90%ab%e5%86%85%e5%ae%b9" class="header-mark"></a><code>inode</code>包含内容</h6><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png" title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png 2x"
-            sizes="auto"
-            alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png">
-    </a></figure></p>
+<h6 id="inode包含内容"><code>inode</code>包含内容</h6>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png"
+        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png" /></p>
 <p>Linux中目录的数据块中的每一项中都包含了文件名和其对应的<code>inode</code>。<code>inode</code>记录了文件的属性以及该文件实际存储位置，即数据块号（block number），每一个block（常见大小4KB），通过<code>inode</code>可以实现文件的查找定位。<code>inode</code>是Linux中的，Unix中是<code>vnode</code>。</p>
 <p>基本上，<code>inode</code>包含的信息至少有如下这些：（1）文件的类型 （2）文件访问权限； （3）文件的所有者与组； （4）文件的大小； （5）链接数，即指向该<code>inode</code>的文件名总数； （6）文件的状态改变时间（ctime）、最近访问时间（atime）和最近修改时间（mtime）； （7）文件特殊属性，SUID、SGID和SBIT； （8）文件内容的真正指向（pointer）。</p>
 <p>可以用stat命令，查看某个文件的<code>inode</code>信息。</p>
 <p>每个文件都只占用一个<code>inode</code>。因此，文件系统能够建立的文件数量与<code>inode</code>数量有关。系统读取档案时需要先找到<code>inode</code>，并分析<code>inode</code>所记录的权限与用户是否符合，若符合才能够开始实际读取block的内容。</p>
-<h6 id="操作系统读取磁盘文件的流程" class="headerLink">
-    <a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e8%af%bb%e5%8f%96%e7%a3%81%e7%9b%98%e6%96%87%e4%bb%b6%e7%9a%84%e6%b5%81%e7%a8%8b" class="header-mark"></a>操作系统读取磁盘文件的流程</h6><ol>
+<h6 id="操作系统读取磁盘文件的流程">操作系统读取磁盘文件的流程</h6>
+<ol>
 <li>根据给定的文件的所在目录，获取该目录的数据实体。再根据数据实体中的数据项，找到对应文件的<code>inode</code>（拿到了<code>inode</code>地址）；</li>
 <li>根据文件<code>inode</code>，找到<code>inodeTable</code>；</li>
 <li>根据<code>inodeTable</code>中的对应关系，找到对应的block；</li>
 <li>读取文件。</li>
 </ol>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
-<h6 id="inode的优点" class="headerLink">
-    <a href="#inode%e7%9a%84%e4%bc%98%e7%82%b9" class="header-mark"></a><code>inode</code>的优点</h6><ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png"
+        title="img" /></p>
+<h6 id="inode的优点"><code>inode</code>的优点</h6>
+<ul>
 <li>对于有些无法删除的文件可以通过删除<code>inode</code>节点来删除；</li>
 <li>移动或者重命名文件，只是改变了目录下的文件名到<code>inode</code>的映射，并不需要实际对硬盘操作；</li>
 <li>删除文件的时候，只需要删除<code>inode</code>，不需要实际清空那块硬盘，只需要在下次写入的时候覆盖即可（这也是为什么删除了数据可以进行数据恢复的原因之一）；</li>
 <li>打开一个文件后，只需要通过<code>inode</code>来识别文件。</li>
 </ul>
-<h5 id="inode和fcb的关系" class="headerLink">
-    <a href="#inode%e5%92%8cfcb%e7%9a%84%e5%85%b3%e7%b3%bb" class="header-mark"></a><code>inode</code>和FCB的关系</h5><ul>
+<h5 id="inode和fcb的关系"><code>inode</code>和FCB的关系</h5>
+<ul>
 <li>FCB = 文件名 + <code>inode</code>的所有内容</li>
 <li>FCB是在文件打开时创建的，而<code>inode</code>是在文件创建时就被创建的</li>
 <li>FCB随着文件关闭而释放，<code>inode</code>并不会</li>
 <li>寻找文件时，需要通过<code>inode</code>包含的文件物理地址查询</li>
 </ul>
-<h5 id="目录结构" class="headerLink">
-    <a href="#%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84" class="header-mark"></a>目录结构</h5><p>目录结构的组织，关系到文件系统的存取速度，也关系到文件的共享性和安全性，目前常用的目录结构形式有单级目录、两级目录、多级目录。</p>
-<h6 id="单级目录" class="headerLink">
-    <a href="#%e5%8d%95%e7%ba%a7%e7%9b%ae%e5%bd%95" class="header-mark"></a>单级目录</h6><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<h5 id="目录结构">目录结构</h5>
+<p>目录结构的组织，关系到文件系统的存取速度，也关系到文件的共享性和安全性，目前常用的目录结构形式有单级目录、两级目录、多级目录。</p>
+<h6 id="单级目录">单级目录</h6>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png"
+        title="img" /></p>
 <p>在整个系统中只建立一张目录表，每个文件占一个目录项，目录项中含文件名、文件扩展名、文件长度、文件类型、文件物理地址、状态位（表示目录项是否空闲）等。</p>
 <p><strong>缺点：</strong></p>
 <ul>
@@ -570,16 +434,15 @@
 <li>无法实现文件重名：在同一目录下，没有办法实现重名，只能每个文件都取不同名字</li>
 <li>不便于实现多用户的文件共享：单级目录下，多个用户使用相同的文件名对一个文件进行访问，但不能实现多个用户使用不同文件名对一个文件进行访问。</li>
 </ul>
-<h6 id="两级目录" class="headerLink">
-    <a href="#%e4%b8%a4%e7%ba%a7%e7%9b%ae%e5%bd%95" class="header-mark"></a>两级目录</h6><p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<h6 id="两级目录">两级目录</h6>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png"
+        title="img" /></p>
 <p>为每个用户建立一个单独的<strong>用户文件目录UFD</strong>（User File Directory），这些文件目录具有相似的结构，由用户所有文件的文件控制块组成。此外，系统中还有一个<strong>主文件目录MFD</strong>（Master File Directory），在主文件目录中，每个用户目录文件都占有一个目录项，其目录项包括<strong>用户名和指向用户目录文件的指针</strong>。</p>
 <p><strong>优点：</strong></p>
 <ul>
@@ -591,44 +454,42 @@
 <ul>
 <li>但在多个用户需要合作完成一个大任务时，不便于用户之间共享文件</li>
 </ul>
-<h6 id="多级目录" class="headerLink">
-    <a href="#%e5%a4%9a%e7%ba%a7%e7%9b%ae%e5%bd%95" class="header-mark"></a>多级目录</h6><p>对于大型文件系统，通常采用三级或三级以上的目录结构，以提高对目录的检索速度和文件系统的性能。多级目录结构又称为树形目录结构，<strong>主目录被称为根目录</strong>，把<strong>数据文件称为树叶</strong>，<strong>其他的目录均作为树的结点</strong>。</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<h6 id="多级目录">多级目录</h6>
+<p>对于大型文件系统，通常采用三级或三级以上的目录结构，以提高对目录的检索速度和文件系统的性能。多级目录结构又称为树形目录结构，<strong>主目录被称为根目录</strong>，把<strong>数据文件称为树叶</strong>，<strong>其他的目录均作为树的结点</strong>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png"
+        title="img" /></p>
 <blockquote>
 <p>说明：方框代表目录文件，圆圈代表数据文件，主目录中有是哪个用户总目录A、B、C，在B用户的总目录B中，又包括三个分目录F、E、D，其中每个分目录中又包含多个文件，为提高系统的灵活性，<strong>应该允许在一个目录文件中的目录项既是作为目录文件的FCB，又是数据文件的FCB</strong>，这一信息可用目录项中的一位来指示。如用户A总目录中，目录项A是目录文件FCB，而目录项B和D则是数据文件的FCB。</p>
 </blockquote>
 <p>在树形目录结构中，从根目录到任何数据文件，都只有一条唯一的通路，在该路径上从树的根开始，把全部目录文件名和数据文件名依次用&quot;/&ldquo;连接起来，即构成该数据文件的路径名。<strong>系统中的每个文件都有唯一的路径名</strong>。例如，用户B访问文件J，则使用路径名/B/F/J来访问。</p>
 <p>当一个文件系统含有很多级时，每访问一个文件，都要使用从树根开始直到树叶（数据文件）为止的、包含各中间节点（目录）的全路径名，这非常麻烦，可为每个进程设置一个当前目录，又称为工作目录，进程对各文件的访问都相对于当前目录而进行的。<strong>把从当前目录开始值得数据文件为止所构成的路径名称为相对路径名</strong>，而<strong>把从树根开始的路径名称为绝对路径名</strong>。</p>
-<h6 id="增加或删除目录" class="headerLink">
-    <a href="#%e5%a2%9e%e5%8a%a0%e6%88%96%e5%88%a0%e9%99%a4%e7%9b%ae%e5%bd%95" class="header-mark"></a>增加或删除目录</h6><p>增加目录没啥好说的。</p>
+<h6 id="增加或删除目录">增加或删除目录</h6>
+<p>增加目录没啥好说的。</p>
 <ul>
 <li>删除目录为空：简单地将其删除，使它在其上一级目录中所对应的目录项为空</li>
 <li>不删除非空目录：当目录不为空时，为了删除一个非空目录，必须先删除目录中所有的文件，使之称为空目录，然后再删除，如果目录中包含有子目录，则应该递归调用方式删除</li>
 <li>删除非空目录：将目录中的所有文件和子目录同时删除</li>
 </ul>
-<h3 id="文件的共享" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e7%9a%84%e5%85%b1%e4%ba%ab" class="header-mark"></a>文件的共享</h3><p>文件共享使多个用户（进程）共享同一份文件，系统中只需保留该文件的一份副本。如果系统不能提供共享功能，那么每个需要该文件的用户都要有各自的副本，会造成对存储空间的极大浪费。随着计算机技术的发展，文件共享的范围已由单机系统发展到多机系统，进而通过网络扩展到全球。</p>
+<h3 id="文件的共享">文件的共享</h3>
+<p>文件共享使多个用户（进程）共享同一份文件，系统中只需保留该文件的一份副本。如果系统不能提供共享功能，那么每个需要该文件的用户都要有各自的副本，会造成对存储空间的极大浪费。随着计算机技术的发展，文件共享的范围已由单机系统发展到多机系统，进而通过网络扩展到全球。</p>
 <p>这些文件的分享是通过分布式文件系统、远程文件系统、分布式信息系统实现的。这些系统允许多个客户通过C/S模型共享网络中的服务器文件。</p>
 <p>现代常用的两种文件共享方法有：硬链接和软链接</p>
-<h4 id="硬链接基于索引结点的共享方式" class="headerLink">
-    <a href="#%e7%a1%ac%e9%93%be%e6%8e%a5%e5%9f%ba%e4%ba%8e%e7%b4%a2%e5%bc%95%e7%bb%93%e7%82%b9%e7%9a%84%e5%85%b1%e4%ba%ab%e6%96%b9%e5%bc%8f" class="header-mark"></a>硬链接：基于索引结点的共享方式</h4><p>在树形结构的目录中，当有两个或多个用户要共享一个子目录或文件时，必须将共享文件或子目录链接到两个或多个用户的目录中，才能方便地找到该文件，如图所示</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png" title="输入图片说明" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png 2x"
-            sizes="auto"
-            alt="输入图片说明">
-    </a></figure></p>
+<h4 id="硬链接基于索引结点的共享方式">硬链接：基于索引结点的共享方式</h4>
+<p>在树形结构的目录中，当有两个或多个用户要共享一个子目录或文件时，必须将共享文件或子目录链接到两个或多个用户的目录中，才能方便地找到该文件，如图所示</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png"
+        title="输入图片说明" /></p>
 <p>在这种共享方式中引用索引结点，即诸如文件的物理地址及其他的文件属性等信息，不再是放在目录项中，而是放在索引结点中。</p>
 <p>在文件目录中只设置文件名及指向相应索引结点的指针。在索引结点中还应有一个链接计数count,用于表示链接到本索引结点（亦即文件）上的用户目录项的数目。只有当count=0时，也就是文件没有其他用户被硬链接，此时可以删除掉文件；count&gt;0时，不能删除文件。</p>
 <p><strong>优点：</strong></p>
@@ -641,16 +502,16 @@
 <li>可能会出现访问共享文件异常空指针地情况：如果删除掉索引节点时，还有用户保留了共享文件。那么这个共享文件的<code>inode</code>指针将会为空，访问会出错。</li>
 <li>不好实现网络文件地共享</li>
 </ul>
-<h5 id="示例说明" class="headerLink">
-    <a href="#%e7%a4%ba%e4%be%8b%e8%af%b4%e6%98%8e" class="header-mark"></a>示例说明</h5><p>当count=2时，表示有两个用户目录项链接到本文件上，或者说是有两个用户共享此文件。</p>
+<h5 id="示例说明">示例说明</h5>
+<p>当count=2时，表示有两个用户目录项链接到本文件上，或者说是有两个用户共享此文件。</p>
 <p>当用户A创建一个新文件时，它便是该文件的所有者，此时将count置为1。</p>
 <p>当有用户 B要共享此文件时，在用户B的目录中增加一个目录项，并设置一指针指向该文件的索引结点。</p>
 <p>此时，文件主仍然是用户A，count=2。如果用户A不再需要此文件，不能将文件直接删除。</p>
 <p>因为，若删除了该文件，也必然删除了该文件的索引结点，这样便会便用户B的指针悬空，而用户B则可能正在此文件上执行写操作，此时用户B会无法访问到文件。</p>
 <p>因此用户A不能删除此文件，只是将该文件的count减1，然后删除自己目录中的相应目录项。用户B仍可以使用该文件。</p>
 <p>当count=0时，表示没有用户使用该文件，系统将负责删除该文件。</p>
-<h4 id="软链接利用符号链实现文件共享" class="headerLink">
-    <a href="#%e8%bd%af%e9%93%be%e6%8e%a5%e5%88%a9%e7%94%a8%e7%ac%a6%e5%8f%b7%e9%93%be%e5%ae%9e%e7%8e%b0%e6%96%87%e4%bb%b6%e5%85%b1%e4%ba%ab" class="header-mark"></a>软链接：利用符号链实现文件共享</h4><p>为使用户B能共享用户A的一个文件F,可以由系统创建一个<code>LINK</code>类型的新文件，也取名为F，并将文件F写入用户B的目录中，以实现用户B的目录与文件F的链接。</p>
+<h4 id="软链接利用符号链实现文件共享">软链接：利用符号链实现文件共享</h4>
+<p>为使用户B能共享用户A的一个文件F,可以由系统创建一个<code>LINK</code>类型的新文件，也取名为F，并将文件F写入用户B的目录中，以实现用户B的目录与文件F的链接。</p>
 <p>在新文件中只包含被链接文件F的路径名或URL。这样的链接方法被称为符号链接。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230527212247331.png" alt="image-20230527212247331" style="zoom:50%;" />
 <p>值得注意的是：在利用符号链方式实现文件共享时，只有文件的拥有者才拥有指向其索引结点的指针；而共享该文件的其他用户则只有该文件的路径名，并不拥有指向其索引结点的指针，也就是说，通过符号链的方式共享文件时，需要通过路径名来查找索引节点，显然比较慢。而且，每个软链接文件都需要创建一个link类型文件的索引节点，增加了存储开销。</p>
@@ -664,18 +525,18 @@
 <li>读取效率较低：当其他用户读共享文件时，需要根据文件路径名逐个地查找目录，直至找到该文件的索引结点。因此，每次访问时，都可能要多次地读盘，使得访问文件的开销变大并增加了启动磁盘的频率；</li>
 <li>存储开销更大：符号链文件共享就是创建一个link类型的文件，所以也需要创建一个索引节点来保存link类型文件的元信息；</li>
 </ul>
-<h3 id="文件的保护" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e7%9a%84%e4%bf%9d%e6%8a%a4" class="header-mark"></a>文件的保护</h3><p>为了防止文件共享可能会导致文件被破坏或未经核准的用户修改文件，文件系统必须控制用户对文件的存取，即解决对文件的读、写、执行的许可问题。</p>
+<h3 id="文件的保护">文件的保护</h3>
+<p>为了防止文件共享可能会导致文件被破坏或未经核准的用户修改文件，文件系统必须控制用户对文件的存取，即解决对文件的读、写、执行的许可问题。</p>
 <p>为此，必须在文件系统中建立相应的文件保护机制。</p>
 <p>文件保护通过<strong>口令保护</strong>、<strong>加密保护</strong>和<strong>访问控制</strong>等方式实现。其中，口令保护和加密保护是为了防止用户文件被他人存取或窃取，而访问控制则用于控制用户对文件的访问方式。</p>
-<h4 id="口令保护与加密保护" class="headerLink">
-    <a href="#%e5%8f%a3%e4%bb%a4%e4%bf%9d%e6%8a%a4%e4%b8%8e%e5%8a%a0%e5%af%86%e4%bf%9d%e6%8a%a4" class="header-mark"></a>口令保护与加密保护</h4><img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230527214748052.png" alt="image-20230527214748052" style="zoom:50%;" />
+<h4 id="口令保护与加密保护">口令保护与加密保护</h4>
+<img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230527214748052.png" alt="image-20230527214748052" style="zoom:50%;" />
 <ul>
 <li>口令保护：用户需要输入对的口令，才能拿到索引节点，之后再通过索引节点中文件物理地址去访问磁盘上的文件。但是口令保护有个无法忽视的缺点，那就是如果某用户越过了索引节点，直接拿到文件物理地址，口令保护就会失去作用；</li>
 <li>加密保护：对存储的文件进行可靠加密，只有解密才能拿到文件内容，可以很好的起到文件保护作用。</li>
 </ul>
-<h4 id="访问控制" class="headerLink">
-    <a href="#%e8%ae%bf%e9%97%ae%e6%8e%a7%e5%88%b6" class="header-mark"></a>访问控制</h4><p>控制的含义就是控制不同文件的操作权限。解决访问控制最常用的方法是<strong>根据用户身份进行文件操作控制</strong>。</p>
+<h4 id="访问控制">访问控制</h4>
+<p>控制的含义就是控制不同文件的操作权限。解决访问控制最常用的方法是<strong>根据用户身份进行文件操作控制</strong>。</p>
 <p>而实现基于身份访问的最为普通的方法是为每个文件和目录增加一个访问控制列表(Access-Control List, ACL)，以规定每个用户名及其所允许的访问类型。</p>
 <p>这种方法的优点是可以使用复杂的访同方法。其缺点是长度无法预期并且可能导致复杂的空间管理，使用精简的访问列表可以解决这个问题。</p>
 <p>精简的访问列表釆用拥有者、组和其他三种用户类型。</p>
@@ -687,9 +548,9 @@
 <p>这样只需用三个域列出访问表中这三类用户的访问权限即可。</p>
 <p>文件拥有者在创建文件时，说明创建者用户名及所在的组名，系统在创建文件时也将文件主的名字、所属组名列在该文件的FCB中。</p>
 <p>用户访问该文件时，按照拥有者所拥有的权限访问文件，如果用户和拥有者在同一个用户组则按照同组权限访问，否则只能按其他用户权限访问。UNIX操作系统即釆用此种方法。</p>
-<h2 id="文件系统实现" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e5%ae%9e%e7%8e%b0" class="header-mark"></a>文件系统实现</h2><h3 id="文件系统层次结构" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e5%b1%82%e6%ac%a1%e7%bb%93%e6%9e%84" class="header-mark"></a>文件系统层次结构</h3><ul>
+<h2 id="文件系统实现">文件系统实现</h2>
+<h3 id="文件系统层次结构">文件系统层次结构</h3>
+<ul>
 <li><strong>文件系统接口</strong>。文件系统为用户提供与文件及目录有关的调用，如新建、打开、读写、关闭、删除文件，建立、删除目录等。此层由若干程序模块组成，每一模块对应一条系统调用，用户发出系统调用时，控制即转入相应的模块。</li>
 <li><strong>文件目录系统</strong>的主要功能是管理文件目录，其任务有管理活跃文件目录表、管理读写状态信息表、管理用户进程的打开文件表、管理与组织在存储设备上的文件目录结构、调用下一级存取控制模块。</li>
 <li>实现文件保护主要由<strong>存取控制模块</strong>完成，它把用户的访问要求与FCB中指示的访问控制权限进行比较，以确认访问的合法性。</li>
@@ -699,32 +560,32 @@
 <li><strong>设备管理程序模块</strong>的主要功能是分配设备、分配设备读写缓冲区、磁盘调度、启动设备、处理设备中断、释放设备读写缓冲区、释放设备等。</li>
 </ul>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230529214148981.png" alt="image-20230529214148981" style="zoom:67%;" />
-<h3 id="目录实现" class="headerLink">
-    <a href="#%e7%9b%ae%e5%bd%95%e5%ae%9e%e7%8e%b0" class="header-mark"></a>目录实现</h3><p>在读文件前，必须先打开文件。打开文件时，操作系统利用路径名找到相应目录项，目录项中提供了查找文件磁盘块所需要的信息，目录实现的基本方法有线性列表和哈希表两种方法。</p>
+<h3 id="目录实现">目录实现</h3>
+<p>在读文件前，必须先打开文件。打开文件时，操作系统利用路径名找到相应目录项，目录项中提供了查找文件磁盘块所需要的信息，目录实现的基本方法有线性列表和哈希表两种方法。</p>
 <blockquote>
 <p>目录就是FCB的集合</p>
 </blockquote>
-<h4 id="线性表" class="headerLink">
-    <a href="#%e7%ba%bf%e6%80%a7%e8%a1%a8" class="header-mark"></a>线性表</h4><p>线性表的项是由文件名和数据块指针组成。（数据块指针指向的可能是子目录，也可能是一个具体的文件）</p>
+<h4 id="线性表">线性表</h4>
+<p>线性表的项是由文件名和数据块指针组成。（数据块指针指向的可能是子目录，也可能是一个具体的文件）</p>
 <blockquote>
 <p>下图的画法是链表实现，当然，也可以是数组实现。</p>
 </blockquote>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/535100501_68412.png" alt="img"  />
 <p>**优点：**实现较为简单</p>
 <p>**缺点：**线性表的增删操作较为复杂耗时，而且查询也比较耗时(O(n))</p>
-<h4 id="哈希表" class="headerLink">
-    <a href="#%e5%93%88%e5%b8%8c%e8%a1%a8" class="header-mark"></a>哈希表</h4><p>哈希表根据文件名得到一个值，并返回一个指向线性列表中元素的指针。</p>
+<h4 id="哈希表">哈希表</h4>
+<p>哈希表根据文件名得到一个值，并返回一个指向线性列表中元素的指针。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/168100504_55429.png" alt="img" style="zoom: 80%;" />
 <p>**优点：**查询目录速度更快</p>
 <p>**缺点：**可能会发生哈希冲突，导致文件可能会被覆盖；增删文件时，会触发重哈希，较为耗损性能。</p>
 <blockquote>
 <p>目录查询必须通过在磁盘上反复搜索完成，需要不断的进行IO操作，开销较大。所以如前面所述，为了减少IO操作，把当前使用的文件目录复制到内存，以后要使用该文件时只要在内存中操作，从而降低了磁盘操作次数。</p>
 </blockquote>
-<h3 id="文件实现" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e5%ae%9e%e7%8e%b0" class="header-mark"></a>文件实现</h3><p>文件分配对应于文件的物理结构，是指如何为文件分配磁盘块。常用的磁盘空间分配方式有三种：连续分配、链接分配和索引分配。有的系统对三种方式都支持，但是更普遍的是一个系统只提供一种方法支持。</p>
-<h4 id="文件分配方式" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e5%88%86%e9%85%8d%e6%96%b9%e5%bc%8f" class="header-mark"></a>文件分配方式</h4><h5 id="连续分配" class="headerLink">
-    <a href="#%e8%bf%9e%e7%bb%ad%e5%88%86%e9%85%8d" class="header-mark"></a>连续分配</h5><p>如果将块分配给文件，使得文件的所有逻辑块都得到硬盘中的连续物理块，则这种分配方案被称为连续分配。</p>
+<h3 id="文件实现">文件实现</h3>
+<p>文件分配对应于文件的物理结构，是指如何为文件分配磁盘块。常用的磁盘空间分配方式有三种：连续分配、链接分配和索引分配。有的系统对三种方式都支持，但是更普遍的是一个系统只提供一种方法支持。</p>
+<h4 id="文件分配方式">文件分配方式</h4>
+<h5 id="连续分配">连续分配</h5>
+<p>如果将块分配给文件，使得文件的所有逻辑块都得到硬盘中的连续物理块，则这种分配方案被称为连续分配。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7bd9ab140bff47bf8c89f85ded015b24" alt="操作系统基础51-磁盘空间的分配方法" style="zoom:80%;" />
 <p><strong>优点：</strong></p>
 <ul>
@@ -737,19 +598,18 @@
 <li>文件长度不能随便动态增加。因为一个文件末尾后的盘块可能已经分配给其他文件，一旦需要增加，就需要大量移动盘块。</li>
 <li>外部碎片增加。反复增删文件后会产生外部碎片。所以给文件连续分配磁盘空间块时，比较适合文件长度固定的文件。</li>
 </ul>
-<h5 id="链接分配" class="headerLink">
-    <a href="#%e9%93%be%e6%8e%a5%e5%88%86%e9%85%8d" class="header-mark"></a>链接分配</h5><h6 id="隐式链接分配" class="headerLink">
-    <a href="#%e9%9a%90%e5%bc%8f%e9%93%be%e6%8e%a5%e5%88%86%e9%85%8d" class="header-mark"></a>隐式链接分配</h6><p>链接分配解决了连续分配的所有问题。也就是说，链接分配可以实现文件长度动态增加，而且不存在外部碎片。</p>
+<h5 id="链接分配">链接分配</h5>
+<h6 id="隐式链接分配">隐式链接分配</h6>
+<p>链接分配解决了连续分配的所有问题。也就是说，链接分配可以实现文件长度动态增加，而且不存在外部碎片。</p>
 <p>在链接分配中，分配给特定文件的磁盘块不需要在磁盘上连续存在。分配给文件的每个磁盘块都包含一个指向分配给同一文件的下一个磁盘块的指针。</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png"
+        title="img" /></p>
 <p><strong>优点</strong></p>
 <ul>
 <li>链接分配没有外部碎片。通过链接的方式，所有的磁盘空闲块都能得到利用，所以也就没有外部碎片。</li>
@@ -764,19 +624,18 @@
 <li>会有数据丢失风险。链接列表中的任何指针都不能被破坏，否则文件将被损坏。</li>
 <li>文件访问性能较低。需要遍历每个块。</li>
 </ul>
-<h6 id="显式链接分配" class="headerLink">
-    <a href="#%e6%98%be%e5%bc%8f%e9%93%be%e6%8e%a5%e5%88%86%e9%85%8d" class="header-mark"></a>显式链接分配</h6><p>链接分配的显式实现——文件分配表FAT。</p>
+<h6 id="显式链接分配">显式链接分配</h6>
+<p>链接分配的显式实现——文件分配表FAT。</p>
 <p>隐式链表分配的主要缺点是它不提供对特定块的随机访问。要访问一个块，我们还需要访问它之前的所有块。</p>
 <p>文件分配表克服了链表分配的缺点。在这个方案中，维护一个文件分配表，它收集所有的磁盘块链接。该表对每个磁盘块都有一个条目，并按块编号进行索引。</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png"
+        title="img" /></p>
 <p><strong>优点</strong></p>
 <ul>
 <li>使用整个磁盘块获取数据。</li>
@@ -790,25 +649,24 @@
 <li>根据FAT条目的数量，FAT大小可能非常大。</li>
 <li>可以通过增加块大小来减少FAT条目的数量，但也会增加内部碎片。</li>
 </ul>
-<h6 id="区别" class="headerLink">
-    <a href="#%e5%8c%ba%e5%88%ab" class="header-mark"></a>区别</h6><ul>
+<h6 id="区别">区别</h6>
+<ul>
 <li>显式链接分配方式，就是数据块和指向下一个数据块的指针都存于同一个磁盘块；</li>
 <li>而隐式连接分配方式，就是将数据块和指向下一个数据块的指针进行分离，所有的指针存于FAT中，而FAT需要加载到内存里。</li>
 </ul>
-<h5 id="索引分配" class="headerLink">
-    <a href="#%e7%b4%a2%e5%bc%95%e5%88%86%e9%85%8d" class="header-mark"></a>索引分配</h5><p><strong>FAT的限制</strong>：</p>
+<h5 id="索引分配">索引分配</h5>
+<p><strong>FAT的限制</strong>：</p>
 <p>文件分配表尽量解决尽可能多的问题，但会导致一个缺点。 块的数量越多，FAT的大小就越大。</p>
 <p>因此，我们需要为文件分配表分配更多空间。 由于文件分配表需要被缓存，因此不可能在缓存中具有尽可能多的空间。 在这里我们需要一种可以解决这些问题的新技术。</p>
 <p>索引分配方案不是维护所有磁盘指针的文件分配表，而是将一个文件中所有磁盘指针存储在一个称为索引块的磁盘块中。 索引块不包含文件数据，但它保存指向分配给该特定文件的所有磁盘块的指针。目录条目将只包含索引块地址。</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png"
+        title="img" /></p>
 <p><strong>优点</strong></p>
 <ul>
 <li>支持直接访问。</li>
@@ -822,8 +680,8 @@
 <li>更多的指针开销</li>
 </ul>
 <p>如果文件太大，一个索引块无法存下时，那么就需要多个索引块进行索引，如何组织多个索引块呢？</p>
-<h6 id="单级索引分配" class="headerLink">
-    <a href="#%e5%8d%95%e7%ba%a7%e7%b4%a2%e5%bc%95%e5%88%86%e9%85%8d" class="header-mark"></a>单级索引分配</h6><p>在索引分配中，文件大小取决于磁盘块的大小。要允许大文件，我们必须将几个索引块链接在一起。在链接索引分配中，</p>
+<h6 id="单级索引分配">单级索引分配</h6>
+<p>在索引分配中，文件大小取决于磁盘块的大小。要允许大文件，我们必须将几个索引块链接在一起。在链接索引分配中，</p>
 <ul>
 <li>提供文件名称的小标题</li>
 <li>前100个块地址的集合</li>
@@ -832,48 +690,47 @@
 <p>对于较大的文件，索引块的最后一个条目是一个指向另一个索引块的指针。 这也被称为链接模式。</p>
 <p><strong>优点:</strong> 它消除了文件大小限制
 <strong>缺点:</strong> 随机访问变得有点困难</p>
-<h6 id="多级索引分配" class="headerLink">
-    <a href="#%e5%a4%9a%e7%ba%a7%e7%b4%a2%e5%bc%95%e5%88%86%e9%85%8d" class="header-mark"></a>多级索引分配</h6><p>在多级指数分配中，有各种索引级别。 有外层索引块包含指向内层索引块的指针，内层索引块包含指向文件数据的指针。</p>
+<h6 id="多级索引分配">多级索引分配</h6>
+<p>在多级指数分配中，有各种索引级别。 有外层索引块包含指向内层索引块的指针，内层索引块包含指向文件数据的指针。</p>
 <ul>
 <li>外层索引用于查找内层索引。</li>
 <li>内层索引用于查找所需的数据块。</li>
 </ul>
 <p><strong>优点:</strong> 随机访问变得更好，更高效。
 <strong>缺点:</strong> 文件的访问时间会更长；文件最大大小有限。</p>
-<p><figure><a class="lightgallery" href="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png" title="img" data-thumbnail="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png">
-        <img
-            
-            loading="lazy"
-            src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png"
-            srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png 2x"
-            sizes="auto"
-            alt="img">
-    </a></figure></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png"
+        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png 2x"
+        data-sizes="auto"
+        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png"
+        title="img" /></p>
 <blockquote>
 <p>值得注意的是，多级索引的索引层数，将决定能存储文件的容量上限，不能无休止的增加文件长度。</p>
 </blockquote>
-<h4 id="文件存储空间管理" class="headerLink">
-    <a href="#%e6%96%87%e4%bb%b6%e5%ad%98%e5%82%a8%e7%a9%ba%e9%97%b4%e7%ae%a1%e7%90%86" class="header-mark"></a>文件存储空间管理</h4><p>由于文件存储设备是分成若干个大小相等的物理块，并以块为单位来交换信息的，因此，文件存储空间的管理实质上是一个空闲块的组织和管理问题，它包括空闲块组织，空闲块的分配和空闲块的回收等几个问题。</p>
+<h4 id="文件存储空间管理">文件存储空间管理</h4>
+<p>由于文件存储设备是分成若干个大小相等的物理块，并以块为单位来交换信息的，因此，文件存储空间的管理实质上是一个空闲块的组织和管理问题，它包括空闲块组织，空闲块的分配和空闲块的回收等几个问题。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230530113807756.png" alt="image-20230530113807756" style="zoom:67%;" />
-<h5 id="空闲表法" class="headerLink">
-    <a href="#%e7%a9%ba%e9%97%b2%e8%a1%a8%e6%b3%95" class="header-mark"></a>空闲表法</h5><p>空闲表法就是为所有空闲空间建立一张表，表内容包括空闲区的第一个块号和该空闲区的块个数，注意，这个方式是连续分配的。如下图：</p>
+<h5 id="空闲表法">空闲表法</h5>
+<p>空闲表法就是为所有空闲空间建立一张表，表内容包括空闲区的第一个块号和该空闲区的块个数，注意，这个方式是连续分配的。如下图：</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/v2-1ec1e7e0b313a92e0028691ae97c9766_1440w.webp" alt="img" style="zoom: 50%;" />
 <p>当请求分配磁盘空间时，系统依次扫描空闲表里的内容，直到找到一个合适的空闲区域为止。当用户撤销一个文件时，系统回收文件空间。这时，也需顺序扫描空闲表，寻找一个空闲表条目并将释放空间的第一个物理块号及它占用的块数填到这个条目中。</p>
 <p>这种方法仅当有少量的空闲区时才有较好的效果。因为，如果存储空间中有着大量的小的空闲区，则空闲表变得很大，这样查询效率会很低。另外，这种分配技术适用于建立连续文件。</p>
-<h5 id="空闲链表法" class="headerLink">
-    <a href="#%e7%a9%ba%e9%97%b2%e9%93%be%e8%a1%a8%e6%b3%95" class="header-mark"></a>空闲链表法</h5><p>我们也可以使用「链表」的方式来管理空闲空间，每一个空闲块里有一个指针指向下一个空闲块，这样也能很方便的找到空闲块并管理起来。如下图：</p>
+<h5 id="空闲链表法">空闲链表法</h5>
+<p>我们也可以使用「链表」的方式来管理空闲空间，每一个空闲块里有一个指针指向下一个空闲块，这样也能很方便的找到空闲块并管理起来。如下图：</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230530114517356.png" alt="image-20230530114517356" style="zoom:50%;" />
 <p>当创建文件需要一块或几块时，就从链头上依次取下一块或几块。反之，当回收空间时，把这些空闲块依次接到链头上。</p>
 <p>这种技术只要在主存中保存一个指针，令它指向第一个空闲块。其特点是简单，但不能随机访问，工作效率低，因为每当在链上增加或移动空闲块时需要做很多 I/O 操作，同时数据块的指针消耗了一定的存储空间。</p>
 <blockquote>
 <p>空闲表法和空闲链表法都不适合用于大型文件系统，因为这会使空闲表或空闲链表太大。</p>
 </blockquote>
-<h5 id="成组链表法" class="headerLink">
-    <a href="#%e6%88%90%e7%bb%84%e9%93%be%e8%a1%a8%e6%b3%95" class="header-mark"></a>成组链表法</h5><p>在 UNIX 系统中采用的是成组链接法，这是将上述两种方法相结合而形成的一种空闲盘块管理方法，它兼备了上述两种方法的优点而克服了两种方法均有的表太长的缺点。</p>
+<h5 id="成组链表法">成组链表法</h5>
+<p>在 UNIX 系统中采用的是成组链接法，这是将上述两种方法相结合而形成的一种空闲盘块管理方法，它兼备了上述两种方法的优点而克服了两种方法均有的表太长的缺点。</p>
 <p>其大致思想是：把顺序的n个空闲扇区地址保存在第一个空闲扇区内，其后一个空闲扇区则保存另一顺序空闲扇区的地址和空闲块数，如此继续直至所有空闲扇区均予以链接。系统只需要保存一个指向第一个空闲扇区的指针。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20170508235227203" alt="img" style="zoom: 80%;" />
-<h5 id="位示图法" class="headerLink">
-    <a href="#%e4%bd%8d%e7%a4%ba%e5%9b%be%e6%b3%95" class="header-mark"></a>位示图法</h5><p>位图是利用二进制的一位来表示磁盘中一个盘块的使用情况，磁盘上所有的盘块都有一个二进制位与之对应。</p>
+<h5 id="位示图法">位示图法</h5>
+<p>位图是利用二进制的一位来表示磁盘中一个盘块的使用情况，磁盘上所有的盘块都有一个二进制位与之对应。</p>
 <p>当值为 0 时，表示对应的盘块空闲，值为 1 时，表示对应的盘块已分配。它形式如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -886,20 +743,19 @@
 </div><p>盘块分配与回收过程如下：</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230530115427513.png" alt="image-20230530115427513" style="zoom:50%;" />
 <p>在 Linux 文件系统就采用了位图的方式来管理空闲空间，不仅用于数据空闲块的管理，还用于 inode 空闲块的管理，因为 inode 也是存储在磁盘的，自然也要有对其管理。</p>
-</div>
-
-        <div class="post-footer" id="post-footer">
+</div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
                 <span>Updated on 2023-05-21</span>
-            </div>
-            <div class="post-info-license"></div>
-        </div>
+            </div></div>
         <div class="post-info-line">
-            <div class="post-info-md"><span><a class="link-to-mardown" href=/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/index.md target="_blank" rel="noopener noreferrer">Read markdown</a>
-                    </span></div>
-            <div class="post-info-share"><button title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" data-title="操作系统之文件管理"><span class="fab fa-weibo fa-fw"></span></button><button title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" data-title="操作系统之文件管理"><span data-svg-src="/lib/simple-icons/icons/baidu.min.svg"></span></button></div>
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" data-title="操作系统之文件管理"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" data-title="操作系统之文件管理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
+            </div>
         </div>
     </div>
 
@@ -910,26 +766,21 @@
         </section>
     </div>
 
-    <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="prev" rel="prev" title="操作系统之内存管理"><i class="fas fa-angle-left fa-fw"></i>操作系统之内存管理</a>
-            <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" class="next" rel="next" title="操作系统之输入输出管理">操作系统之输入输出管理<i class="fas fa-angle-right fa-fw"></i></a></div>
+    <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="prev" rel="prev" title="操作系统之内存管理"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>操作系统之内存管理</a>
+            <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" class="next" rel="next" title="操作系统之输入输出管理">操作系统之输入输出管理<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"><div id="gitalk" class="comment"></div><noscript>
                 Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
             </noscript></div></article></div>
-        </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank" rel="noopener noreferrer">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-            <div class="footer-line"></div>
-            <div class="footer-line">
-            </div>
-        </div></footer></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
 
-    <div id="fixed-buttons"><a href="#back-to-top" id="back-to-top-button" class="fixed-button" title="Back to Top">
-            <i class="fas fa-arrow-up fa-fw"></i>
-        </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-            <i class="fas fa-comment fa-fw"></i>
-        </a>
-    </div><div id="cookieconsent-container"></div><div class="assets"><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.b38ee65d6456beb2d034bf554505f4ca47e421548b7cd26e8a7805fd2673b6c3.css" integrity="sha256-s47mXWRWvrLQNL9VRQX0ykfkIVSLfNJuingF/SZztsM="><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr&#43;QR0SQDNfgglgtcM="><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc=">
-        <noscript><link rel="stylesheet" href="/lib/katex/copy-tex.min.cf8e3e934d92a839d209ffdac331fa693da5958a6dff2c8788a4713cc1f50a47.css" integrity="sha256-z44&#43;k02SqDnSCf/awzH6aT2llYpt/yyHiKRxPMH1Ckc="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18&#43;2anxsuaz3pWYyVWi&#43;bTvTH8Q="><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-05-21T15:19:47+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之文件管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"},"sharerjs":true};</script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.0c4d9db673dd19489cfa134ab15ef8b9237ae72aaa65d8490d55658442b3a2d3.js" integrity="sha256-DE2dtnPdGUic&#43;hNKsV74uSN65yqqZdhJDVVlhEKzotM="></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.72ceb0f87691041e9e0bea2f2468b9aa3ed544e8f7f6dc9f76d8c8f997699e41.js" integrity="sha256-cs6w&#43;HaRBB6eC&#43;ovJGi5qj7VROj39tyfdtjI&#43;ZdpnkE="></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.5b0e82e9a1ae0b52d07a52da1eb4640da77eb3ca7e78c3a428c1f3b712858d3c.js" integrity="sha256-Ww6C6aGuC1LQelLaHrRkDad&#43;s8p&#43;eMOkKMHztxKFjTw="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.11be927cda59c8b6019ebbea838285c5beaf21183ea4b83dbd4e4fbf9413ce4a.js" integrity="sha256-Eb6SfNpZyLYBnrvqg4KFxb6vIRg&#43;pLg9vU5Pv5QTzko="></script><script type="text/javascript" src="/lib/sharer/sharer.min.8fe10eb615eb163a20f795484430a012805ec7c8c11df52df54ddb7a46084254.js" integrity="sha256-j&#43;EOthXrFjog95VIRDCgEoBex8jBHfUt9U3bekYIQlQ="></script><script type="text/javascript" src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw&#43;iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script type="text/javascript" src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y&#43;KzPOwaJ0PYhsf7R6c=" defer></script><script type="text/javascript" src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54&#43;rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script type="text/javascript" src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script type="text/javascript" src="/js/katex.min.js" defer></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn&#43;yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script type="text/javascript" src="/js/cookieconsent.min.js" defer></script><script type="text/javascript" src="/js/theme.min.js" defer></script><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/js/gitalk.min.js" defer></script></div>
-</body>
-
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-05-21T15:19:47+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之文件管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
 </html>

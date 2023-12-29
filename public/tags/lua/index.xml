@@ -7,9 +7,10 @@
             <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Tue, 24 Jan 2023 16:08:44 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/tags/lua/" rel="self" type="application/rss+xml" /><item>
     <title>Redis高级篇之多级缓存</title>
     <link>https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/</link>
-    <pubDate>Tue, 24 Jan 2023 16:08:44 &#43;0800</pubDate><author>
-        <name>阿冰</name>
-    </author><guid>https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/</guid>
-    <description><![CDATA[[toc] 多级缓存 1.什么是多级缓存传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图： 存在下面的问题： 请求]]></description>
-</item></channel>
+    <pubDate>Tue, 24 Jan 2023 16:08:44 &#43;0800</pubDate>
+    <author>阿冰</author>
+    <guid>https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/</guid>
+    <description><![CDATA[[toc] 多级缓存 1.什么是多级缓存 传统的缓存策略一般是请求到达Tomcat后，先查询Redis，如果未命中则查询数据库，如图： 存在下面的问题： 请求]]></description>
+</item>
+</channel>
 </rss>
