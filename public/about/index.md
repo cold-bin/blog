@@ -31,13 +31,3 @@
 
 在你心中留下印记。
 
-
-
-## 友链
-
-{{< friend "LMH" "https://hardews.cn/" "https://avatars.githubusercontent.com/u/93819001?v=4" >}}
-
-{{< friend "ZHK" "https://siamao.cn/" "https://avatars.githubusercontent.com/u/96694568?v=4" >}}
-
-{{< friend "LRC" "https://madfrey.top" "https://avatars.githubusercontent.com/u/89887780?v=4" >}}
-
