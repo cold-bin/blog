@@ -15,7 +15,7 @@
 
 那服务器进程对客户端进程发送的请求做了什么处理，才能产生最后的处理结果呢？这里以查询请求为 例展示：
 
-![image-20220615133227202](https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208301022215.png)
+![image-20220615133227202](https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208301022215.png "-")
 
 下面具体展开如下：
 

@@ -4,9 +4,29 @@
 使用github action构建自动交付与持续集成，algolia构建全文搜索引擎
 <!--more-->
 
-### 主题部分功能不生效
+### 主题shortcodes报错未找到
 
 本地部署生效，但是vercel部署失效，主要原因是vercel的hugo默认版本太老了，需要手动指定`HUGO_VERSION`环境变量，启用支持shortcodes等的版本。
+
+### 画廊失效
+
+{{< admonition note >}}
+
+针对markdown，需要严格使用下面的语法，不能取空，否则无效了。
+
+```markdown
+![name](${url} "description")
+```
+
+{{< /admonition >}}
+
+### 修复public部署可能存在的路由冲突
+
+原先主题是直接把文件名生成到public目录部署的，如果有篇文章的名字刚好和源码或者其他文件相同，可能会在执行`hugo`的时候报错。下面通过约定`archive-`作为前缀，来防止文件名冲突的问题。
+
+```yaml
+title: {{ replace (replace .TranslationBaseName "archive-" "") "-" " " | title }}
+```
 
 ### 切换algolia搜索
 

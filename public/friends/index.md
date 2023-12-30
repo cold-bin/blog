@@ -1,14 +1,5 @@
----
-title: 友情链接
-subtitle: 
-type: friends
-description: 
-keywords:
-  - Hugo
-  - 友情链接
-comment:
-  enable: true
----
+# 友情链接
+
 
 ---
 
@@ -20,3 +11,10 @@ comment:
   url: <your site link>
   description: <description of your site>
 ```
+
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/friends/  
+

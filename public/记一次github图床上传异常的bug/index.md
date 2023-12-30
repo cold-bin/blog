@@ -25,7 +25,7 @@
 
 我们在picgo中设置了vpn的服务端口。这样所有请求就可以转发到这里，包括一些外网的请求。
 
-![image-20230822163253429](https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img2/202308221632138.png)
+![image-20230822163253429](https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img2/202308221632138.png "picgo代理")
 
 因此，解决了代理问题。
 

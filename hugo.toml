@@ -85,7 +85,7 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
   name = "友链"
   weight = 50
   identifier = "friends"
-  url = "/friends/friends"
+  url = "/friends/"
   [menu.main.params]
     icon = "fa-solid fa-users fa-fw fa-sm"
 
@@ -424,7 +424,7 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     # FixIt 0.2.17 | NEW end of post flag
     endFlag = ""
     # FixIt 0.2.18 | NEW whether to enable instant.page
-    instantPage = false
+    instantPage = true
 
     # FixIt 0.2.15 | NEW Repost config
     [params.page.repost]
