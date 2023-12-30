@@ -103,3 +103,9 @@ func (a *AliOss) UploadMultiple(ctx context.Context, keys []string, values [][]b
   
 - 代理模式指的是：通过引入原始类的方式来给原始类增加功能。我们也可以引入原始类实现的接口，这样可以对所有的实现进行统一代理
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/  
+

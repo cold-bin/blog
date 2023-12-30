@@ -237,3 +237,9 @@ userService := dal.NewUserService(userDal)
 > 高内聚就是指把功能相近或为一体的放到同一个模块实现，松耦合就是减少模块之间不必要的依赖。
 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/  
+

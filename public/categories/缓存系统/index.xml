@@ -1,16 +1,16 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>缓存系统 - Category - 阿冰的小屋</title>
-        <link>https://blog.coldbin.top/categories/%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F/</link>
-        <description>缓存系统 - Category - 阿冰的小屋</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>cold-bin@qq.com (阿冰)</managingEditor>
-            <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Wed, 31 May 2023 22:53:14 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/categories/%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F/" rel="self" type="application/rss+xml" /><item>
-    <title>缓存淘汰策略</title>
-    <link>https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/</link>
-    <pubDate>Wed, 31 May 2023 22:53:14 &#43;0800</pubDate>
-    <author>阿冰</author>
-    <guid>https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/</guid>
-    <description><![CDATA[[toc] 缓存淘汰 背景 不论是进程内缓存，还是分布式缓存，都无法避免这样一个问题：当我们需要缓存的数据大于物理内存时，那么就需要通过操作系统虚拟内存管]]></description>
+  <channel>
+    <title>缓存系统 - Category - 阿冰的小屋</title>
+    <link>https://blog.coldbin.top/categories/%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F/</link>
+    <description>缓存系统 - Category - 阿冰的小屋</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>cold-bin@qq.com (阿冰)</managingEditor>
+      <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Wed, 31 May 2023 22:53:14 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/categories/%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F/" rel="self" type="application/rss+xml" /><item>
+  <title>缓存淘汰策略</title>
+  <link>https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/</link>
+  <pubDate>Wed, 31 May 2023 22:53:14 &#43;0800</pubDate>
+  <author>阿冰</author>
+  <guid>https://blog.coldbin.top/%E7%BC%93%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/</guid>
+  <description><![CDATA[[toc] 缓存淘汰 背景 不论是进程内缓存，还是分布式缓存，都无法避免这样一个问题：当我们需要缓存的数据大于物理内存时，那么就需要通过操作系统虚拟内存管]]></description>
 </item>
 </channel>
 </rss>

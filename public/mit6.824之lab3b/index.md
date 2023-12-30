@@ -181,3 +181,9 @@ ok      6.5840/kvraft   154.159s
 go test -race -run 3B  140.72s user 4.55s system 93% cpu 2:34.80 total
 ```
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mit6.824%E4%B9%8Blab3b/  
+

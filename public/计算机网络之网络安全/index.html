@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>计算机网络之网络安全 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="计算机网络之网络安全" />
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>计算机网络之网络安全 - 阿冰的小屋</title><meta name="author" content="阿冰">
+<meta name="author-link" content="https://github.com/cold-bin">
+<meta name="description" content="[toc] 一、网络攻击的类型 网络攻击分为两大类：被动攻击和主动攻击。 截获：从网络上窃听他人的通信内容，但不干扰原报文在源端和目的端的传送。 篡改：捕获" /><meta name="keywords" content='Hugo, FixIt' /><meta itemprop="name" content="计算机网络之网络安全">
+<meta itemprop="description" content="[toc] 一、网络攻击的类型 网络攻击分为两大类：被动攻击和主动攻击。 截获：从网络上窃听他人的通信内容，但不干扰原报文在源端和目的端的传送。 篡改：捕获"><meta itemprop="datePublished" content="2023-07-13T21:15:36+08:00" />
+<meta itemprop="dateModified" content="2023-07-13T21:15:36+08:00" />
+<meta itemprop="wordCount" content="7090"><meta itemprop="image" content="https://blog.coldbin.top/favicon.ico"/>
+<meta itemprop="keywords" content="" /><meta property="og:title" content="计算机网络之网络安全" />
 <meta property="og:description" content="[toc] 一、网络攻击的类型 网络攻击分为两大类：被动攻击和主动攻击。 截获：从网络上窃听他人的通信内容，但不干扰原报文在源端和目的端的传送。 篡改：捕获" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,118 +24,196 @@
 <meta name="twitter:title" content="计算机网络之网络安全"/>
 <meta name="twitter:description" content="[toc] 一、网络攻击的类型 网络攻击分为两大类：被动攻击和主动攻击。 截获：从网络上窃听他人的通信内容，但不干扰原报文在源端和目的端的传送。 篡改：捕获"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" /><link rel="next" href="https://blog.coldbin.top/cs144-lab/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "计算机网络之网络安全",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  7090 ,
-        "url": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8\/","datePublished": "2023-07-13T21:15:36+08:00","dateModified": "2023-07-13T21:15:36+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
-            "@type": "Organization",
-            "name": "阿冰","logo": {
-                    "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
-                    "width":  396 ,
-                    "height":  396 
-                }},"author": {
-                "@type": "Person",
-                "name": "阿冰"
-            },"description": ""
-    }
-    </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" /><link rel="next" href="https://blog.coldbin.top/cs144-lab/" /><link rel="stylesheet" href="/css/style.min.04a53c8f85f60bfc901f510b07233befa08ea6546fc4a641b7a7caf06269844a.css" integrity="sha256-BKU8j4X2C/yQH1ELByM776COplRvxKZBt6fK8GJphEo="><link rel="preload" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "计算机网络之网络安全",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8\/"
+    },"image": [{
+              "@type": "ImageObject",
+              "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+              "width":  396 ,
+              "height":  396 
+            }],"genre": "posts","wordcount":  7090 ,
+    "url": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8\/","datePublished": "2023-07-13T21:15:36+08:00","dateModified": "2023-07-13T21:15:36+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+      "@type": "Organization",
+      "name": "阿冰","logo": {
+          "@type": "ImageObject",
+          "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+          "width":  396 ,
+          "height":  396 
+        }},"author": {
+        "@type": "Person",
+        "name": "阿冰"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="阿冰的小屋" data-alt="阿冰的小屋" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/friends"
+                
+                
+              ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
     <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-                </a></div>
-        </div>
+      <div class="header-title">
+        <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="/favicon.ico" data-alt="/favicon.ico" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        Cancel
-                    </a>
-                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-            </a></div>
-    </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/friends"
+                  
+                  
+                ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
 </header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">计算机网络之网络安全</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>计算机网络</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-07-13">2023-07-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;7090 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;15 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
-                <div class="details-summary toc-title">
-                    <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><nav aria-label="breadcrumb" class="breadcrumb-container sticky">
+    <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/" title="阿冰的小屋">Home</a></li><li class="breadcrumb-item"><a href="/posts/" title="Posts">Posts</a></li><li class="breadcrumb-item active" aria-current="page">计算机网络之网络安全</li>
+    </ol>
+  </nav><main class="container"><aside class="toc" id="toc-auto"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>计算机网络之网络安全</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://www.gravatar.com/avatar/bbeb236273ce7a8cc349e66deaa25959?s=32&amp;d=" data-title="阿冰" data-alt="阿冰" class="avatar" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;阿冰</a></span>
+          <span class="post-category">included in <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 计算机网络</a></span></div>
+      <div class="post-meta-line"><span title="published on 2023-07-13 21:15:36"><i class="fa-regular fa-calendar-alt fa-fw me-1" aria-hidden="true"></i><time datetime="2023-07-13">2023-07-13</time></span>&nbsp;<span title="Updated on 2023-07-13 21:15:36"><i class="fa-regular fa-edit fa-fw me-1" aria-hidden="true"></i><time datetime="2023-07-13">2023-07-13</time></span>&nbsp;<span title="7090 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 7100 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>15 minutes</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="计算机网络之网络安全">
+              <i class="fa-regular fa-eye fa-fw me-1" aria-hidden="true"></i><span id="busuanzi_value_page_pv">-</span>&nbsp;views
+            </span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -158,17 +243,10 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>[toc]</p>
+      </div><div class="content" id="content"><p>[toc]</p>
 <h2 id="一网络攻击的类型">一、网络攻击的类型</h2>
 <p>网络攻击分为两大类：被动攻击和主动攻击。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150013.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>截获：从网络上窃听他人的通信内容，但不干扰原报文在源端和目的端的传送。</p>
 <p>篡改：捕获报文并篡改报文后再发送给目的站。</p>
 <p>恶意程序：计算机病毒。</p>
@@ -186,14 +264,7 @@
 <p>A 和 B 分别持有一对加密算法 E 和 D。</p>
 <p>A将明文X通过密钥K(e) 和 算法E进行加密得到密文Y，可以把E看做是一个函数，密钥 K(e)和明文X作为这个函数的参数，返回值是Y。</p>
 <p>传输给B后，用D(K(d), Y)解密得到X。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150960.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>需要注意：</p>
 <p>0、密钥 K本质是一串字符串。</p>
 <p>1、D 和 E 都既可以是加密算法，也可以是解密算法，其本质都是将传入的字符串数据变为另一个字符串，所以我更倾向于说成是 D运算和E运算，而不是说 加密算法 和 解密算法。</p>
@@ -208,14 +279,7 @@
 <h3 id="1对称密钥密码体制">1、对称密钥密码体制</h3>
 <p>该体制是 <strong>加密密钥与解密密钥都使用相同密钥</strong> 的密码体制。对称密钥又称为<strong>共享密钥</strong>。</p>
 <p>加密过程如下：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132147331.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>E(K, X) = Y</p>
 <p>D(K, Y) = X</p>
 <p>所以：</p>
@@ -224,14 +288,7 @@
 <p>通信双方持有一对密钥分别是对外公开的公钥PK 和 只有自己知道的私钥SK。例如通信双方 A 和 B，A有一对密钥 PK(a) 和 SK(a)，B也有一对密钥 PK(b) 和 SK(b)。</p>
 <p>当A作为发送方向B发送数据时，A要用B的公钥 PK(b) 对明文X加密得到Y，B用私钥 SK(b) 对Y解密得到X。当B作为发送方向A发送数据时，则和上述过程一样要用A的一对密钥加解密。</p>
 <p>目前最流行的公钥密码体制是<strong>RSA体制</strong>。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150752.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>公钥算法的特点：</p>
 <p>(1) 密钥对产生器产生出接收者 B 的一对密钥：</p>
 <p>加密密钥 PKB 和 解密密钥 SKB 。</p>
@@ -252,14 +309,7 @@
 <p>例如 A 发送报文X给 B，B要鉴别发送者是A：</p>
 <p>1、首先，A 用其私钥 SKA 对报文 X 进行 D 运算得到的密文，这个过程就是签名。</p>
 <p>2、B 为了核实签名，用 A 的公钥 PKA 对密文Y进行 E 运算，还原出明文 X</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150273.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>为什么这样可以做到实体鉴别？</p>
 <p>因为SKA只有A才有，B如果能用PKA解密成功（得到的明文是可读的），就说明对方是A。如果B解密出来的明文是不可读的，这段不可读报文也不会对B产生危害。</p>
 <p><strong>签名的本质是什么？</strong></p>
@@ -268,14 +318,7 @@
 <p><strong>核实签名的本质是对签名运算的逆运算（即图中的E运算）</strong>。</p>
 <p>这样做<strong>达到了实体鉴别的目的，但没有做到保密性</strong>，因为任何一个接收方收到报文都可以用A的公钥（公钥是公开的）解密得到明文。假如有中间者截获，依旧可以直到报文的内容。</p>
 <p>为了同时做到实体鉴别和保密，应该使用A的私钥进行数字签名，用B的公钥进行内容加密，这么一来只有B才能用B的私钥解密。这里A的私钥和B的公钥的作用是不同的。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150093.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>这里我们无需深究使用的是D运算还是E运算，只要知道签名和核实签名使用的是互逆的运算，加密和解密用的也是互逆的运算即可。</p>
 <p>综上总结：签名用发送者的私钥，加密用接收者的公钥。</p>
 <p>这种方式的很少用，因为需要对报文进行两次 D 运算和两次 E 运算，运算量太大，花费非常多的 CPU 时间。</p>
@@ -293,26 +336,12 @@
 <p>下面我们可以简单看看MD5加密的原理：</p>
 <p>1、附加：把任意长的报文按模 2^64 计算其余数（余数的长度64位），追加在报文的后面。</p>
 <p>2、 填充：在报文和余数之间填充 1～512 位，使得填充后的总长度是 512 的整数倍。填充的首位是 1，后面都是 0。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132150767.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>3、分组：把追加和填充后的报文分割为多个 512 位的数据块，每个 512 位的报文数据再分成 4 个 128 位的数据块。</p>
 <p>4、计算：将 4 个 128 位的数据块依次送到不同的散列函数进行 4 轮计算。每一轮都按 32 位的小数据块进行复杂的位运算，而且一轮运算的结果会作为下一轮运算的参数。一直到最后计算出 MD5 结果（128 位）。</p>
 <p>散列函数的开销相比于签名函数的开销可以忽略不计。</p>
 <p>回到之前的问题，如何借助散列函数进行报文鉴别？</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151439.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>1、A对X使用散列函数处理得到一个散列值 H(X)。</p>
 <p>2、A对 H(x)用A的私钥经过D签名运算得到报文鉴别码MAC，这是一个经过签名的鉴别码。</p>
 <p>3、将 报文X + MAC 拼接起来，经过B的公钥对整个扩展报文加密（图中没有画出来）并发送。</p>
@@ -320,14 +349,7 @@
 <p>5、B用 H()散列运算对报文X进行计算得到 H(X1) ,如果H(X1) == H(X2)，就既能证明报文没有被篡改，又能证明对方是A。</p>
 <p>需要注意：第二步没有对报文进行加密（D运算），而是对很短的散列 H(X) 进行 D 运算，因为 H(X)很短，所以D(H(X))的开销和耗时很小，这样就解决了之前开销大的问题。</p>
 <p>上图是非对称密钥的签名过程，下图是对称密钥的签名过程：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151979.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>对称密钥的签名方式就不是使用 D 运算，而是直接 把对称密钥K 拼在报文 X 之后，直接进行散列运算。图中也是省略了加密这一步，其实也应该要加密。</p>
 <p><strong>TLS会话阶段就是用的对称密钥对报文签名的</strong>。</p>
 <h2 id="四实体鉴别">四、实体鉴别</h2>
@@ -335,14 +357,7 @@
 <p>报文鉴别：对每一个收到的报文都要鉴别报文的发送者和完整性。</p>
 <p>实体鉴别：在通信开始前，对和自己通信的对方实体只需验证一次。</p>
 <p>最简单的实体鉴别就是使用共享的对称密钥 K(AB)，因为这个密钥只有A和B才有，因此B如果能用K(AB)这个密钥解密成功，就知道对方肯定只能是A。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151579.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>该方法存在明显漏洞：不能抵抗重放攻击。</p>
 <p>重放攻击 ：原理是把以前窃听到的数据原封不动地重新发送给接收方。入侵者 C 捕获到报文后不需要破译报文，而是在之后攻击者想攻击的时候直接把由 A 加密的报文发送给 B，使 B 误认为 C 就是 A。B 就会向伪装成 A 的 C 发送许多本来应当发给 A 的报文。</p>
 <p>回到上图，C不用拥有K(AB)这个密钥，C只需截获这个报文，之后想攻击的时候，就发送这个报文给B就让B以为C拥有K(AB)。从而让B以为C是A。</p>
@@ -352,80 +367,38 @@
 <p>2、B用私钥SKb对Ra进行签名（是签名不是加密，这样A就知道对方是B）并加上自己的随机数Rb（Rb也会存在B的内存）。A会验证B发过来的签名了的随机数是不是A上次所发的Ra。</p>
 <p>3、A发送用SKa签名的Rb，B就知道对方是A。B再验证Rb是否就是上次B发出去的Rb，如果验证成功就在内存中删除存储的Rb。</p>
 <p>4、A和B开始通信。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151811.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>如果C要使用重放攻击，C就要捕获第三次报文，这是因为C没有A的私钥，B就知道C不是A，而第三次报文是用 A 的私钥签名过的，因此C必须捕获第三次报文。下次重放这个报文B用A的公钥核实签名成功，就以为C是A。但即使如此，B核实完签名又发现里面的随机数Rb是自己不认识的数（因为Rb已经过期和失效），因此知道有内鬼，终止交易。</p>
 <p>此外，还有一种更难防御的“中间人攻击”。即使使用不重数也无法防御：</p>
 <p>1、C 冒充是 A，发送报文给 B，说：“我是 A”。</p>
 <p>2、 B 选择一个不重数 RB，发送给 A，但被 C 截获了。 C 用自己的私钥 SKC 冒充是 A 的私钥，对 RB 签名，并发送给 B。此时B还无法核实签名，因为B没有C的公钥。</p>
 <p>3、 B 向 A 发送报文，要求对方把解密（不应该是解密，应该是核实签名）用的公钥发送过来，但这报文也被 C 截获了。 C 把自己的公钥 PKC 冒充是 A 的公钥发送给 B。 B 用收到的公钥 PKC 对收到的加密的 RB 进行解密，其结果当然正确。</p>
 <p>4、于是 B 相信通信的对方是 A，接着就向 A 发送许多敏感数据，但都被 C 截获了。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151992.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h2 id="五公钥的分配">五、公钥的分配</h2>
 <p>我们知道 发送者A 发送消息 给接收者B的时候，要用B的公钥对报文加密（在TLS传输中，对数据传输阶段的数据加密不使用不对称密钥，而是使用对称密钥，因此通信前需要传输对称密钥。为了安全传输对称密钥，需要用B的公钥对要传输的对称密钥进行加密），那么A怎么得到B的公钥呢？</p>
 <p>有一个权威第三方机构：<strong>认证中心 CA</strong>。它负责为拥有公钥的实体（人或者机器）提供<strong>数字证书</strong>，数字证书 = 实体的公钥 + 实体的信息（如主机名，实体的IP地址，实体人姓名等），数字证书（又称公钥证书）实际上是对公钥和对应实体的绑定。</p>
 <p>这是一个数字证书的样子：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151467.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>数字整数是公开的（因为里面放的是公钥，公钥本来就是公开的），无需加密，但是数字整数需要签名，CA用自己的私钥K(ca)对数字证书签名，目的是让大家知道这个证书是CA出品的，是正规的证书。</p>
 <p>数字证书的制作过程如下：</p>
 <p>1、CA对B的未签名证书散列运算得到 H(X)</p>
 <p>2、CA用自己的私钥K(ca)对H(X)进行签名（D运算)。</p>
 <p>3、把签名追加到明文证书的后面，得到签名后的证书。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151468.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>核实：A 拿到 B 的数字证书后，使用数字证书上给出的 CA 的公钥，对数字证书中 CA 的数字签名进行 E 运算，得出一个数值。再对 B 的数字证书 (CA 数字签名除外的部分) 进行散列运算，又得出一个H(X)。比较这两个H(X)。若一致，则数字证书是真的。</p>
 <h2 id="六tls-运输层安全协议">六、TLS 运输层安全协议</h2>
 <p>TLS协议是SSL协议（安全套接字层协议）的改进，现在我们所说的SSL是 SSL/TLS的统称，实际上用的是TLS协议，真正的SSL协议在多年前已经被废弃。</p>
 <p><strong>TLS 安全运输层位于应用层和运输层之间，作用是为应用层提供保密性、数据完整性和鉴别功能安全传输服务（安全会话）</strong>。TLS层具体要做的是：在发送方，TLS 接收应用层的数据，对数据进行加密，然后把加密后的数据送往 TCP 套接字。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151507.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>不要搞混<strong>可靠传输服务</strong>和<strong>安全服务</strong>，前者是指数据传输的有序、不丢失和无差错，后者指保密性、数据完整性和鉴别通信双方。</p>
 <p>应用层使用 TLS 最多的就是 HTTP（即HTTPS）。TLS 可用于任何应用层协议。TCP 的 HTTPS 端口号是 443，而不是平时使用的端口号 80。</p>
-<p>TLS 具有双向鉴别的功能，但实际应用中只会用到单向鉴别：客户端（浏览器）需要鉴别服务器（即安全服务的第三点），具体来说客户端要对方证明他就是 <a href="http://www.baidu.com" target="_blank" rel="noopener noreffer ">http://www.baidu.com</a>这个站点的服务。这就需要服务端提供CA证书，<strong>CA 证书是运输层安全协议 TLS 的基石</strong>。</p>
+<p>TLS 具有双向鉴别的功能，但实际应用中只会用到单向鉴别：客户端（浏览器）需要鉴别服务器（即安全服务的第三点），具体来说客户端要对方证明他就是 <a href="http://www.baidu.com"target="_blank" rel="external nofollow noopener noreferrer">http://www.baidu.com<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>这个站点的服务。这就需要服务端提供CA证书，<strong>CA 证书是运输层安全协议 TLS 的基石</strong>。</p>
 <p>TLS如何建立安全会话？</p>
 <p>建立安全会话两个阶段：</p>
 <p>握手阶段：使用握手协议，这个阶段需要做三件事：协商加密算法、鉴别接收方的CA证书和生成用于加密的对称密钥。</p>
 <p>会话阶段：使用记录协议。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151822.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="1握手阶段">1、握手阶段</h3>
 <p>1、协商加密算法</p>
 <p>浏览器 A 向服务器 B 发送浏览器的 TLS 版本号和一些可选的加密算法（是在TCP第三次握手的ACK报文段中顺带传输这些信息的），以及<strong>A的不重数Ra</strong>。</p>
@@ -442,37 +415,16 @@
 <p>服务器 B 发送数据时使用的 MAC 密钥 MB （用于B对数据签名）</p>
 <p>也就是说数据收发阶段，每个报文都要加密和签名这两步。</p>
 <p>最后总结：使用了TLS安全传输的会比传统的TCP三次握手多出三次握手（对于客户端多出2个RTT时延， 对于服务端多出1个RTT）才能开始数据发送阶段。如下图绿色部分：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151880.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>TLS 的浏览器端和服务端都会保存之前的TLS会话参数（包括协商好的加密算法和主密钥等等），以及这些参数的会话ID（会话ID - 会话参数的映射）。下次浏览器再访问同一个服务器时，直接发送会话ID就能够通知服务端使用上一次的密钥和加密算法进行通信，节省了一个RTT时间和生成主密钥的时间：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151457.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="2会话阶段">2、会话阶段</h3>
 <p>即数据报文传输阶段。以A发送数据给B这一个传输方向为例：</p>
 <p>1、把长的数据划分为较小的数据块（TCP把一个应用层消息分隔为多个报文段），叫做记录。</p>
 <p><strong>对每一个记录进行鉴别运算(用密钥MA)和加密运算（用密钥KA）</strong>。</p>
 <p>2、记录协议对每一个记录按发送顺序赋予序号，第一个记录作为 0。发送下一个记录时序号就加 1，序号最大值不得超过 <code>264 – 1</code>，且不允许序号绕回。</p>
 <p>序号未写在记录之中，而是在进行散列运算时，把序号包含进去。客户 A 向服务器 B 发送一个记录前，对 密钥 MA 、记录的当前序号和明文记录进行散列运算得到数字签名MAC，MAC在拼到明文记录后面，附有签名的数据记录就生成好了。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132151138.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>使用会话密钥 KA 对附有签名的数据记录进行加解密。</p>
 <p><strong>上面过程，在握手阶段使用了实体鉴别，在会话阶段使用了报文鉴别。</strong></p>
 <p>关闭 TLS 连接：</p>
@@ -480,43 +432,55 @@
 <p>截断攻击：在 A 和 B 正在进行会话时，入侵者突然发送 TCP 的 FIN 报文段来关闭 TCP 连接。</p>
 <p>如果 A 或 B 没有发送一个要关闭 TLS 的记录的情况下收到了 TCP 的 FIN 报文段时，就知道这是入侵者的截断攻击了。因为入侵者无法伪造关闭 TLS 的记录。</p>
 </div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>Updated on 2023-07-13</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-title="计算机网络之网络安全"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-title="计算机网络之网络安全"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
-            </div>
-        </div>
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2023-07-13 21:15:36">Updated on 2023-07-13&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span><span><a href="https://github.com/cold-bin/blog/edit/main/content/posts/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c%e4%b9%8b%e7%bd%91%e7%bb%9c%e5%ae%89%e5%85%a8.md" title="Edit this page"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">Edit this page</a></span></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-title="计算机网络之网络安全"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/" data-title="计算机网络之网络安全"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
 
-    <div class="post-info-more">
-        <section class="post-tags"></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
-        </section>
-    </div>
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
 
-    <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" class="prev" rel="prev" title="计算机网络之应用层"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>计算机网络之应用层</a>
-            <a href="/cs144-lab/" class="next" rel="next" title="Cs144 Lab">Cs144 Lab<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" class="post-nav-item" rel="prev" title="计算机网络之应用层"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>计算机网络之应用层</a>
+      <a href="/cs144-lab/" class="post-nav-item" rel="next" title="Cs144 Lab">Cs144 Lab<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-<div id="comments"><div id="gitalk" class="comment"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
-            </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
-
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-07-13T21:15:36+08:00","owner":"cold-bin","repo":"blog-comment","title":"计算机网络之网络安全"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+<div class="post-reward">
+    <div class="comment">Buy me a coffee</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">Donate</label>
+    <div class="reward-ways" data-mode="fixed"><div><img loading="lazy" src="/images/alipay.jpg" data-title="阿冰 Alipay" data-alt="阿冰 Alipay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>Alipay</span>
+          </div><div><img loading="lazy" src="/images/wechatpay.png" data-title="阿冰 WeChat Pay" data-alt="阿冰 WeChat Pay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>WeChat Pay</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright order-5" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/cold-bin"target="_blank" rel="external nofollow noopener noreferrer">阿冰</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics order-4"><span class="site-time" title='Website running ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="ms-1 d-none">运行</span><span class="run-times ms-1">Website running ...</span></span></div><div class="footer-line visitor order-2">
+          <span id="busuanzi_container_site_uv" title='Total visitors'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='Total visits'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.120f067ebd6f322339e2ccccd7e87e334d7c7ea5b2bd553f325f2ae3c3ae6fe8.css" integrity="sha256-Eg8Gfr1vMiM54szM1+h+M018fqWyvVU/Ml8q48Oub+g="><link rel="preload" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><link rel="stylesheet" href="/lib/pace/themes/silver/pace-theme-minimal.1aefeadd689806308301fe332322fc3cec76f1d28a8e516afd37d31600e1e964.css" integrity="sha256-Gu/q3WiYBjCDAf4zIyL8POx28dKKjlFq/TfTFgDh6WQ="><script src="/lib/gitalk/gitalk.min.f4f9407ea35ccf4be5019cc41d70eab1eb273941bca01b3a93c91201f195a76f.js" integrity="sha256-9PlAfqNcz0vlAZzEHXDqsesnOUG8oBs6k8kSAfGVp28="></script><script src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.804e26c45f81a02b98b05bc1e378c1ff6c5d2339e0c6550aadf1419adf3a8c81.js" integrity="sha256-gE4mxF+BoCuYsFvB43jB/2xdIzngxlUKrfFBmt86jIE=" defer></script><script src="/lib/lightgallery/lightgallery.min.7de2854e7954105f2b91ff5983749c4e3c7af51e05aae279f8a5d66994a85777.js" integrity="sha256-feKFTnlUEF8rkf9Zg3ScTjx69R4FquJ5+KXWaZSoV3c=" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4fbc3ec1878e90348b71b3594d8ef27c4f10a1a4c6d5e74948d0ee59018fd87c.js" integrity="sha256-T7w+wYeOkDSLcbNZTY7yfE8QoaTG1edJSNDuWQGP2Hw=" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.821a2adb8005511c0ad9ef6f395c1b74beacc2da194cd13a4ac43d341246e085.js" integrity="sha256-ghoq24AFURwK2e9vOVwbdL6swtoZTNE6SsQ9NBJG4IU=" defer></script><script src="/lib/sharer/sharer.min.ba5171a78670b031914e623431a33a3d73c1ea9897e552ba73bc2c2da7c777b9.js" integrity="sha256-ulFxp4ZwsDGRTmI0MaM6PXPB6piX5VK6c7wsLafHd7k=" async defer></script><script src="/lib/typeit/index.umd.16f3fa3374a7eea31f19672293edc98326413002dea74b8c413a74f1b7e4f1cf.js" integrity="sha256-FvP6M3Sn7qMfGWcik+3JgyZBMALep0uMQTp08bfk8c8=" defer></script><script src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw+iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script src="/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script src="/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":50},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-07-13T21:15:36+08:00","owner":"cold-bin","repo":"blog-comment","title":"计算机网络之网络安全"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"life and code.","typeit-header-subtitle-mobile":"life and code."},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"siteTime":"2023-12-28T12:00:00+00:00","typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"loop":false,"speed":100}};</script><script src="/js/theme.min.58f9858983f2742da374c22058a1768784a6955aa9a3f3b3b179c080fa0fa468.js" integrity="sha256-WPmFiYPydC2jdMIgWKF2h4SmlVqpo/OzsXnAgPoPpGg=" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-75123653-1');
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=UA-75123653-1" async></script></body>
 </html>

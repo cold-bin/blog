@@ -627,3 +627,9 @@ VERBOSE=0 go test -race -run 2  70.15s user 8.20s system 17% cpu 7:36.74 total
 
 至此, 终于实现了raft协议🍻
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mit6.824%E4%B9%8Blab2d/  
+

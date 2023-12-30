@@ -1,7 +1,7 @@
 baseURL = "https://blog.coldbin.top"
 
 # 更改使用 Hugo 构建网站时使用的默认主题
-theme = "loveit"
+theme = ["FixIt"]
 
 # 网站标题
 title = "阿冰的小屋"
@@ -23,52 +23,82 @@ copyright = "本博客内容仅供教育和信息分享，不对准确性和完�
 # 是否使用 robots.txt
 enableRobotsTXT = true
 # 是否使用 git 信息
-enableGitInfo = false
+enableGitInfo = true
 # 是否使用 emoji 代码
 enableEmoji = true
 
 # 忽略一些构建错误
 ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
 
-# 作者配置
-[author]
-  name = "阿冰"
-  email = "cold-bin@qq.com"
- # link = "https://github.com/cold-bin"
+# # 作者配置
+# [author]
+#   name = "阿冰"
+#   email = "cold-bin@qq.com"
+#  # link = "https://github.com/cold-bin"
 
 # 菜单配置
 [[menu.main]]             # config your menu              # 配置目录
   name = "主页"
+  # you can add extra information before the name (HTML format is supported), such as icons
+  pre = ""
+  # you can add extra information after the name (HTML format is supported), such as icons
+  post = ""
   weight = 10
   identifier = "home"
   url = "/"
+    [menu.main.params]
+      icon = "fa-solid fa-microchip fa-fw fa-sm"
+
 [[menu.main]]
   name = "归档"
   weight = 20
   identifier = "archives"
   url = "/posts/"
+  # FixIt 0.2.14 | NEW add user-defined content to menu items
+  [menu.main.params]
+    # add css class to a specific menu item
+    class = ""
+    # whether set as a draft menu item whose function is similar to a draft post/page
+    draft = false
+    # FixIt 0.2.16 | NEW add fontawesome icon to a specific menu item
+    icon = "fa-solid fa-archive"
+    # FixIt 0.2.16 | NEW set menu item type, optional values: ["mobile", "desktop"]
+    type = ""
+
 [[menu.main]]
   name = "标签"
   weight = 30
   identifier = "tags"
   url = "/tags/"
+    [menu.main.params]
+      icon = "fa-solid fa-tags"
+
 [[menu.main]]
   name = "分类"
   weight = 40
   identifier = "categories"
   url = "/categories/"
-# [[menu.main]]
-#   name = "友链"
-#   weight = 50
-#   identifier = "links"
-#   url = "/links/"
+  [menu.main.params]
+    icon = "fa-solid fa-th"
+
+[[menu.main]]
+  name = "友链"
+  weight = 50
+  identifier = "friends"
+  url = "/friends/friends"
+  [menu.main.params]
+    icon = "fa-solid fa-users fa-fw fa-sm"
+
 [[menu.main]]
   name = "关于"
-  weight = 50
+  weight = 60
   identifier = "about"
   url = "/about/"
+  [menu.main.params]
+    icon = "fa-solid fa-info-circle fa-fw fa-sm"
 
 [params]
+  version = "0.2.X" # e.g. "0.2.X", "0.2.15", "v0.2.15" etc.
   # 网站默认主题样式 ["auto", "light", "dark"]
   defaultTheme = "auto"
   # 公共 git 仓库路径，仅在 enableGitInfo 设为 true 时有效
@@ -82,14 +112,30 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
   title = "阿冰的小屋"
   # 网站描述, 用于 RSS, SEO, Open Graph 和 Twitter Cards
   description = "记录生活与学习的点滴..."
+  keywords = ["Hugo", "FixIt"]
   # 网站图片, 用于 Open Graph 和 Twitter Cards
   images = ["/favicon.ico"]
+  # FixIt 0.2.12 | NEW enable PWA
+  enablePWA = true
+  # FixIt 0.2.14 | NEW whether to add external Icon for external links automatically
+  externalIcon = true
+  # FixIt 0.2.14 | NEW FixIt will, by default, inject a theme meta tag in the HTML head on the home page only.
+  # You can turn it off, but we would really appreciate if you don’t, as this is a good way to watch FixIt's popularity on the rise.
+  disableThemeInject = true
+
+  # Author Configuration
+  [params.author]
+    name = "阿冰"
+    email = "cold-bin@qq.com"
+    link = "https://github.com/cold-bin"
+    avatar = "/images/avatar.png"
+
 
   # 页面头部导航栏配置
   [params.header]
-    # 桌面端导航栏模式 ["fixed", "normal", "auto"]
-    desktopMode = "fixed"
-    # 移动端导航栏模式 ["fixed", "normal", "auto"]
+    # 桌面端导航栏模式 ["sticky", "normal", "auto"]
+    desktopMode = "sticky"
+    # 移动端导航栏模式 ["sticky", "normal", "auto"]
     mobileMode = "auto"
     #  页面头部导航栏标题配置
     [params.header.title]
@@ -103,6 +149,17 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
       post = ""
       #  是否为标题显示打字机动画
       typeit = false
+      [params.header.subtitle]
+        # subtitle name
+        name = "life and code."
+        # whether to use typeit animation for subtitle name
+        typeit = true
+
+  # FixIt 0.2.18 | NEW Breadcrumb config
+  [params.breadcrumb]
+    enable = true
+    sticky = true
+    showHome = true
 
   # 页面底部信息配置
   [params.footer]
@@ -121,6 +178,19 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     icp = ""
     # 许可协议信息 (支持 HTML 格式)
     license = '<a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>'
+    [params.footer.siteTime]
+      enable = true
+      animate = true
+      icon = "fa-solid fa-heartbeat"
+      pre = "运行"
+      value = "2023-12-28T12:00:00+00:00" # e.g. "2021-12-18T16:15:22+08:00"
+    # FixIt 0.2.17 | NEW footer lines order, optional values: ["first", 0, 1, 2, 3, 4, 5, "last"]
+    [params.footer.order]
+      powered = 1
+      copyright = 5
+      statistics = 4
+      visitor = 2
+      beian = 3
 
   #  Section (所有文章) 页面配置
   [params.section]
@@ -130,6 +200,12 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     dateFormat = "01-02"
     # RSS 文章数目
     rss = 20
+    # FixIt 0.2.13 | NEW recently updated posts settings
+    [params.section.recentlyUpdated]
+      enable = true
+      rss = true
+      days = 30
+      maxCount = 10
 
   #  List (目录或标签) 页面配置
   [params.list]
@@ -140,20 +216,32 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     # RSS 文章数目
     rss = 20
 
+  # FixIt 0.2.17 | NEW TagCloud config for tags page
+  [params.tagcloud]
+    enable = true
+    min = 15 # Minimum font size in px
+    max = 30 # Maximum font size in px
+    peakCount = 10 # Maximum count of posts per tag
+    orderby = "name" # Order of tags, optional values: ["name", "count"]
+
   #  应用图标配置
   [params.app]
     # 当添加到 iOS 主屏幕或者 Android 启动器时的标题, 覆盖默认标题
     title = "阿冰的小屋"
     # 是否隐藏网站图标资源链接
-    noFavicon = true
+    noFavicon = false
     # 更现代的 SVG 网站图标, 可替代旧的 .png 和 .ico 文件
-    #svgFavicon = ""
+    svgFavicon = ""
     # Android 浏览器主题色
-    themeColor = "#ffffff"
+    # themeColor = "#ffffff"
     # Safari 图标颜色
     iconColor = "#5bbad5"
     # Windows v8-10磁贴颜色
     tileColor = "#da532c"
+    # FixIt 0.2.12 | CHANGED Android browser theme color
+    [params.app.themeColor]
+      light = "#f8f8f8"
+      dark = "#252627"
 
   #  搜索配置
   [params.search]
@@ -167,7 +255,7 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     #  最大结果数目
     maxResultLength = 10
     #  结果内容片段长度
-    snippetLength = 50
+    snippetLength = 30
     #  搜索结果中高亮部分的 HTML 标签
     highlightTag = "em"
     #  是否在搜索索引中使用基于 baseURL 的绝对路径
@@ -238,6 +326,7 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     Soundcloud = ""
     Spotify = ""
     Bandcamp = ""
+    Paypal = ""
     Fivehundredpx = ""
     Mix = ""
     Goodreads = ""
@@ -251,7 +340,7 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     Strava = ""
     Skype = ""
     Whatsapp = ""
-    Zhihu = ""
+    Zhihu = "xiao-he-shang-88-13"
     Douban = ""
     Angellist = ""
     Slidershare = ""
@@ -269,55 +358,111 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     Gitea = ""
     XMPP = ""
     Matrix = ""
-    Bilibili = "248959839"
+    Bilibili = ""
+    ORCID = ""
+    Liberapay = ""
+    Ko-Fi = ""
+    BuyMeaCoffee = "coldbin"
+    Linktree = ""
+    QQ = "3398341353"
+    QQGroup = "" # https://qun.qq.com/join.html
+    Diaspora = ""
+    CSDN = "qq_57467091"
     Discord = ""
     DiscordInvite = ""
     Lichess = ""
-    ORCID = ""
     Pleroma = ""
     Kaggle = ""
     MediaWiki= ""
     Plume = ""
     HackTheBox = ""
-    RootMe= ""
+    RootMe = ""
+    Feishu = ""
+    TryHackMe = ""
+    Douyin = ""
+    TikTok = ""
     Phone = ""
     Email = "cold-bin@qq.com"
-    RSS = true # 
+    RSS = true
 
   #  文章页面全局配置
   [params.page]
-    #  是否在主页隐藏一篇文章
+    # FixIt 0.2.18 | NEW whether to enable the author's avatar of the post
+    authorAvatar = true
+    # FixIt 0.2.0 | NEW whether to hide a page from home page
     hiddenFromHomePage = true
-    #  是否在搜索结果中隐藏一篇文章
+    # FixIt 0.2.0 | NEW whether to hide a page from search results
     hiddenFromSearch = true
-    #  是否使用 twemoji
+    # FixIt 0.2.18-lts.5 | NEW whether to hide a page from RSS feed
+    hiddenFromRss = false
+    # FixIt 0.2.0 | NEW whether to enable twemoji
     twemoji = false
-    # 是否使用 lightgallery
+    # whether to enable lightgallery
+    # FixIt 0.2.18 | CHANGED if set to "force", images in the content will be forced to shown as the gallery.
     lightgallery = true
-    #  是否使用 ruby 扩展语法
+    # FixIt 0.2.0 | NEW whether to enable the ruby extended syntax
     ruby = true
-    #  是否使用 fraction 扩展语法
+    # FixIt 0.2.0 | NEW whether to enable the fraction extended syntax
     fraction = true
-    #  是否使用 fontawesome 扩展语法
+    # FixIt 0.2.0 | NEW whether to enable the fontawesome extended syntax
     fontawesome = true
-    # 是否在文章页面显示原始 Markdown 文档链接
+    # license info (HTML format is supported)
+    license = '<a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>'
+    # whether to show link to Raw Markdown content of the content
     linkToMarkdown = true
-    #  是否在 RSS 中显示全文内容
+    # FixIt 0.2.4 | NEW whether to show the full text content in RSS
     rssFullText = false
+    # FixIt 0.2.13 | NEW Page style ["narrow", "normal", "wide", ...]
+    pageStyle = "normal"
+    # FixIt 0.2.17 | CHANGED Auto Bookmark Support
+    # If true, save the reading progress when closing the page.
+    autoBookmark = false
+    # FixIt 0.2.17 | NEW whether to enable wordCount
+    wordCount = true
+    # FixIt 0.2.17 | NEW whether to enable readingTime
+    readingTime = true
+    # FixIt 0.2.17 | NEW end of post flag
+    endFlag = ""
+    # FixIt 0.2.18 | NEW whether to enable instant.page
+    instantPage = false
+
+    # FixIt 0.2.15 | NEW Repost config
+    [params.page.repost]
+      enable = false
+      url = ""
+
     #  目录配置
     [params.page.toc]
-      # 是否使用目录
+      # whether to enable the table of the contents
       enable = true
-      #  是否保持使用文章前面的静态目录
+      # FixIt 0.2.9 | NEW whether to keep the static table of the contents in front of the post
       keepStatic = false
-      # 是否使侧边目录自动折叠展开
+      # whether to make the table of the contents in the sidebar automatically collapsed
       auto = true
+      # FixIt 0.2.13 | NEW position of TOC ["left", "right"]
+      position = "right"
+    [params.page.expirationReminder]
+      enable = true
+      # Display the reminder if the last modified time is more than 90 days ago
+      reminder = 366
+      # Display warning if the last modified time is more than 180 days ago
+      warning = 1000
+      # If the article expires, close the comment or not
+      closeComment = false
+    # FixIt 0.2.16 | CHANGED KaTeX mathematical formulas (https://katex.org)
     #  代码配置
     [params.page.code]
       # 是否显示代码块的复制按钮
       copy = true
       # 默认展开显示的代码行数
       maxShownLines = 50
+    [params.page.edit]
+      enable = true
+      # FixIt 0.2.15 | CHANGED Link for fork & edit
+      # url = "/edit/branch-name/subdirectory-name" # base on `params.gitRepo`
+      # url = "https://github.com/user-name/repo-name/edit/branch-name/subdirectory-name" # full url
+      url = "https://github.com/cold-bin/blog/edit/main/content/"
+
     #  KaTeX 数学公式
     [params.page.math]
       enable = true
@@ -347,6 +492,19 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
       scale = true
       # 是否添加 FullscreenControl
       fullscreen = true
+    [params.page.reward]
+      enable = true
+      animation = true
+      # position relative to post footer, optional values: ["before", "after"]
+      position = "after"
+      comment = "Buy me a coffee"
+      # FixIt 0.2.18 | NEW display mode of QR code images, optional values: ["static", "fixed"], default: `static`
+      mode = "fixed"
+      [params.page.reward.ways]
+        wechatpay = "/images/wechatpay.png"
+        alipay = "/images/alipay.jpg"
+        # paypal = "/images/paypal.png"
+        # bitcoin = "/images/bitcoin.png"
     #  文章页面的分享信息设置
     [params.page.share]
       enable = true
@@ -474,7 +632,7 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     #  页面 SEO 配置
     [params.page.seo]
       # 图片 URL
-      images = ["/favicon.ico"]
+      images = ["/images/avatar.png"]
       # 出版者信息
       [params.page.seo.publisher]
         name = "阿冰"
@@ -490,7 +648,50 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     cursorChar = "|"
     # 打字结束之后光标的持续时间 (单位是毫秒, "-1" 代表无限大)
     # 打字结束之后光标的持续时间 (单位是毫秒, "-1" 代表无限大)
-    duration = 0
+    duration = -1
+    loop = false
+
+  # FixIt 0.2.15 | NEW Mermaid config
+  [params.mermaid]
+    # For values, see https://mermaid.js.org/config/theming.html#available-themes
+    themes = ["default", "dark"]
+
+  # FixIt 0.2.12 | NEW PanguJS config
+  [params.pangu]
+    # For Chinese writing
+    enable = true
+    selector = "article" # FixIt 0.2.17 | NEW
+
+  # FixIt 0.2.12 | NEW Watermark config
+  # Detail config see https://github.com/Lruihao/watermark#readme
+  [params.watermark]
+    enable = false
+    # watermark's text (HTML format is supported)
+    content = ""
+    # watermark's transparency
+    opacity = 0.1
+    # parent of watermark's container
+    appendTo = ".wrapper>main"
+    # watermark's width. unit: px
+    width = 150
+    # watermark's height. unit: px
+    height = 20
+    # row spacing of watermarks. unit: px
+    rowSpacing = 60
+    # col spacing of watermarks. unit: px
+    colSpacing = 30
+    # watermark's tangent angle. unit: deg
+    rotate = 15
+    # watermark's fontSize. unit: rem
+    fontSize = 0.85
+    # FixIt 0.2.13 | NEW watermark's fontFamily
+    fontFamily = "inherit"
+
+  # FixIt 0.2.12 | NEW Busuanzi count
+  [params.ibruce]
+    enable = true
+    # Enable in post meta
+    enablePost = true
 
   # 网站验证代码，用于 Google/Bing/Yandex/Pinterest/Baidu
   [params.verification]
@@ -509,12 +710,12 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
 
   #  网站分析配置
   [params.analytics]
-    enable = false
+    enable = true
     # Google Analytics
     [params.analytics.google]
-      id = ""
+      id = "UA-75123653-1"
       # 是否匿名化用户 IP
-      anonymizeIP = true
+      anonymizeIP = false
     # Fathom Analytics
     [params.analytics.fathom]
       id = ""
@@ -551,7 +752,75 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
     polyfill = false
     # 是否使用 object-fit-images 来兼容旧式浏览器
     objectFit = false
+  # FixIt 0.2.14 | NEW GitHub banner in the top-right or top-left corner
+  [params.githubCorner]
+    enable = false
+    permalink = "https://github.com/hugo-fixit/FixIt"
+    title = "View source on GitHub"
+    position = "right" # ["left", "right"]
+  # FixIt 0.2.14 | NEW Gravatar config
+  [params.gravatar]
+    # FixIt 0.2.18 | NEW Depends on the author's email, if the author's email is not set, the local avatar will be used
+    enable = true
+    # Gravatar host, default: "www.gravatar.com"
+    host = "www.gravatar.com" # ["cn.gravatar.com", "gravatar.loli.net", ...]
+    style = "" # ["", "mp", "identicon", "monsterid", "wavatar", "retro", "blank", "robohash"]
 
+  # FixIt 0.2.16 | NEW Back to top
+  [params.backToTop]
+    enable = true
+    # Scroll percent label in b2t button
+    scrollpercent = false
+
+  # FixIt 0.2.16 | NEW Reading progress bar
+  [params.readingProgress]
+    enable = true
+    # Available values: ["left", "right"]
+    start = "left"
+    # Available values: ["top", "bottom"]
+    position = "top"
+    reversed = false
+    light = ""
+    dark = ""
+    height = "2px"
+
+  # FixIt 0.2.17 | NEW Progress bar in the top during page loading.
+  # For more information: https://github.com/CodeByZach/pace
+  [params.pace]
+    enable = true
+    # All available colors:
+    # ["black", "blue", "green", "orange", "pink", "purple", "red", "silver", "white", "yellow"]
+    color = "silver"
+    # All available themes:
+    # ["barber-shop", "big-counter", "bounce", "center-atom", "center-circle", "center-radar", "center-simple",
+    # "corner-indicator", "fill-left", "flash", "flat-top", "loading-bar", "mac-osx", "material", "minimal"]
+    theme = "minimal"
+
+  # FixIt 0.2.18-lts.3 | NEW [Experimental] cache remote images locally, see: https://github.com/hugo-fixit/FixIt/pull/362
+  [params.cacheRemoteImages]
+    enable = false
+    # replace remote image url with local image url
+    replace = false
+
+  # FixIt 0.2.17 | NEW Define custom file paths
+  # Create your custom files in site directory `layouts/partials/custom` and uncomment needed files below
+  [params.customFilePath]
+    # aside = "custom/aside.html"
+    # profile = "custom/profile.html"
+    # footer = "custom/footer.html"
+
+  # FixIt 0.2.15 | NEW Developer options
+  [params.dev]
+    enable = false
+    # Check for updates
+    c4u = false
+    # Please do not expose to public!
+    githubToken = ""
+    # Mobile Devtools config
+    [params.dev.mDevtools]
+      enable = false
+      # "vConsole", "eruda" supported
+      type = "vConsole"
 # Hugo 解析文档的配置
 [markup]
   # 语法高亮设置
@@ -604,20 +873,31 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
 
 # 用于输出 Markdown 格式文档的设置
 [mediaTypes]
-  [mediaTypes."text/plain"]
+  # Options to make output .md files
+  [mediaTypes."text/markdown"]
     suffixes = ["md"]
+  # Options to make output .txt files
+  [mediaTypes."text/plain"]
+    suffixes = ["txt"]
 
 # 用于输出 Markdown 格式文档的设置
-[outputFormats.MarkDown]
-  mediaType = "text/plain"
-  isPlainText = true
-  isHTML = false
+[outputFormats]
+  # Options to make output .md files
+  [outputFormats.MarkDown]
+    mediaType = "text/markdown"
+    isPlainText = true
+    isHTML = false
+  # FixIt 0.2.15 | NEW Options to make output baidu_urls.txt file
+  [outputFormats.BaiduUrls]
+    baseName = "baidu_urls"
+    mediaType = "text/plain"
+    isPlainText = true
+    isHTML = false
 
 # 用于 Hugo 输出文档的设置
 [outputs]
-  # 
-  home = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS", "JSON", "BaiduUrls"]
   page = ["HTML", "MarkDown"]
   section = ["HTML", "RSS"]
-  taxonomy = ["HTML", "RSS"]
-  #taxonomyTerm = ["HTML"]
+  taxonomy = ["HTML"]
+  term = ["HTML", "RSS"]

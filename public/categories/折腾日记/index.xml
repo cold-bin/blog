@@ -1,16 +1,16 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>折腾日记 - Category - 阿冰的小屋</title>
-        <link>https://blog.coldbin.top/categories/%E6%8A%98%E8%85%BE%E6%97%A5%E8%AE%B0/</link>
-        <description>折腾日记 - Category - 阿冰的小屋</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>cold-bin@qq.com (阿冰)</managingEditor>
-            <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Thu, 28 Dec 2023 19:17:08 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/categories/%E6%8A%98%E8%85%BE%E6%97%A5%E8%AE%B0/" rel="self" type="application/rss+xml" /><item>
-    <title>折腾小记 2023 12 28</title>
-    <link>https://blog.coldbin.top/%E6%8A%98%E8%85%BE%E5%B0%8F%E8%AE%B0-2023-12-28/</link>
-    <pubDate>Thu, 28 Dec 2023 19:17:08 &#43;0800</pubDate>
-    <author>阿冰</author>
-    <guid>https://blog.coldbin.top/%E6%8A%98%E8%85%BE%E5%B0%8F%E8%AE%B0-2023-12-28/</guid>
-    <description><![CDATA[<p>使用github action构建自动交付与持续集成，algolia构建全文搜索引擎</p>]]></description>
+  <channel>
+    <title>折腾日记 - Category - 阿冰的小屋</title>
+    <link>https://blog.coldbin.top/categories/%E6%8A%98%E8%85%BE%E6%97%A5%E8%AE%B0/</link>
+    <description>折腾日记 - Category - 阿冰的小屋</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>cold-bin@qq.com (阿冰)</managingEditor>
+      <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Thu, 28 Dec 2023 19:17:08 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/categories/%E6%8A%98%E8%85%BE%E6%97%A5%E8%AE%B0/" rel="self" type="application/rss+xml" /><item>
+  <title>主题迁移 2023-12-28</title>
+  <link>https://blog.coldbin.top/%E4%B8%BB%E9%A2%98%E8%BF%81%E7%A7%BB-2023-12-28/</link>
+  <pubDate>Thu, 28 Dec 2023 19:17:08 &#43;0800</pubDate>
+  <author>阿冰</author>
+  <guid>https://blog.coldbin.top/%E4%B8%BB%E9%A2%98%E8%BF%81%E7%A7%BB-2023-12-28/</guid>
+  <description><![CDATA[<p>使用github action构建自动交付与持续集成，algolia构建全文搜索引擎</p>]]></description>
 </item>
 </channel>
 </rss>

@@ -151,3 +151,9 @@ lab5的要求其实很简单了。我们只需要实现路由最长前缀匹配�
 
 - [lab6实验手册](https://cs144.github.io/assignments/check6.pdf)
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/cs144-lab/  
+

@@ -629,3 +629,9 @@ DNS 最早的一种简单设计只是在因特网上使用一个 DNS 服务器�
 
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307132025180.png" alt="img" style="zoom:50%;" />
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/  
+

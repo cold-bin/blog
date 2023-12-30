@@ -189,3 +189,9 @@ r命令用于查看和改变CPU寄存器的内容，使用如下图所示
 >
 >  所以，一段内存既可以是代码的存储空间，又可以是数据的存储空间，还可以是栈空间，也可以是栈空间，也可以什么都不是。关键在于CPU寄存器的设置，即CS、IP、SS、SP、DS的指向。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%AF%84%E5%AD%98%E5%99%A8/  
+

@@ -5884,3 +5884,9 @@ SELECT employee_id,last_name FROM cte WHERE n >= 3;
 
 公用表表达式的作用是可以替代子查询，而且可以被多次引用。递归公用表表达式对查询有一个共同根节点的树形结构数据非常高效，可以轻松搞定其他查询方式难以处理的查询。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mysql%E5%9F%BA%E7%A1%80%E7%AF%87/  
+

@@ -714,3 +714,9 @@ MySQL中同一个数据库，不同的表可以选择不同的存储引擎。如
 
 MySQL5.5之前的默认存储引擎是MyISAM，5.5之后改为了InnoDB。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mysql%E6%9E%B6%E6%9E%84%E7%AF%87/  
+

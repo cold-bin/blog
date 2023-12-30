@@ -218,3 +218,9 @@ end start
 - 所以，我们从 ds 中可以得到 PSP 的段地址 SA，PSP 的偏移地址为 0，则物理地址为 SA×16+0。
 - 因为 PSP 占256（100H）字节，所以程序的物理地址是：SA×16+0+256= SA×16+16×16=（SA+16）×16+0，可用段地址和偏移地址表示为：SA+10:0。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%A8%8B%E5%BA%8F/  
+

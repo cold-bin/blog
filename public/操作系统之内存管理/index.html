@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>操作系统之内存管理 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="操作系统之内存管理" />
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>操作系统之内存管理 - 阿冰的小屋</title><meta name="author" content="阿冰">
+<meta name="author-link" content="https://github.com/cold-bin">
+<meta name="description" content="[toc] 内存管理概念 内存管理的基本原理和要求 存储器结构 上图展示了一个典型的存储器层次结构。一般而言，从高层往底层走，存储设备变得更慢、更便宜和更大" /><meta name="keywords" content='Hugo, FixIt' /><meta itemprop="name" content="操作系统之内存管理">
+<meta itemprop="description" content="[toc] 内存管理概念 内存管理的基本原理和要求 存储器结构 上图展示了一个典型的存储器层次结构。一般而言，从高层往底层走，存储设备变得更慢、更便宜和更大"><meta itemprop="datePublished" content="2023-05-11T19:53:00+08:00" />
+<meta itemprop="dateModified" content="2023-05-11T19:53:00+08:00" />
+<meta itemprop="wordCount" content="15109"><meta itemprop="image" content="https://blog.coldbin.top/favicon.ico"/>
+<meta itemprop="keywords" content="" /><meta property="og:title" content="操作系统之内存管理" />
 <meta property="og:description" content="[toc] 内存管理概念 内存管理的基本原理和要求 存储器结构 上图展示了一个典型的存储器层次结构。一般而言，从高层往底层走，存储设备变得更慢、更便宜和更大" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,118 +24,196 @@
 <meta name="twitter:title" content="操作系统之内存管理"/>
 <meta name="twitter:description" content="[toc] 内存管理概念 内存管理的基本原理和要求 存储器结构 上图展示了一个典型的存储器层次结构。一般而言，从高层往底层走，存储设备变得更慢、更便宜和更大"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "操作系统之内存管理",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  15109 ,
-        "url": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86\/","datePublished": "2023-05-11T19:53:00+08:00","dateModified": "2023-05-11T19:53:00+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
-            "@type": "Organization",
-            "name": "阿冰","logo": {
-                    "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
-                    "width":  396 ,
-                    "height":  396 
-                }},"author": {
-                "@type": "Person",
-                "name": "阿冰"
-            },"description": ""
-    }
-    </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.04a53c8f85f60bfc901f510b07233befa08ea6546fc4a641b7a7caf06269844a.css" integrity="sha256-BKU8j4X2C/yQH1ELByM776COplRvxKZBt6fK8GJphEo="><link rel="preload" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "操作系统之内存管理",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86\/"
+    },"image": [{
+              "@type": "ImageObject",
+              "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+              "width":  396 ,
+              "height":  396 
+            }],"genre": "posts","wordcount":  15109 ,
+    "url": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86\/","datePublished": "2023-05-11T19:53:00+08:00","dateModified": "2023-05-11T19:53:00+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+      "@type": "Organization",
+      "name": "阿冰","logo": {
+          "@type": "ImageObject",
+          "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+          "width":  396 ,
+          "height":  396 
+        }},"author": {
+        "@type": "Person",
+        "name": "阿冰"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="阿冰的小屋" data-alt="阿冰的小屋" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/friends"
+                
+                
+              ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
     <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-                </a></div>
-        </div>
+      <div class="header-title">
+        <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="/favicon.ico" data-alt="/favicon.ico" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        Cancel
-                    </a>
-                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-            </a></div>
-    </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/friends"
+                  
+                  
+                ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
 </header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">操作系统之内存管理</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>操作系统</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-05-11">2023-05-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;15109 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;31 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
-                <div class="details-summary toc-title">
-                    <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><nav aria-label="breadcrumb" class="breadcrumb-container sticky">
+    <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/" title="阿冰的小屋">Home</a></li><li class="breadcrumb-item"><a href="/posts/" title="Posts">Posts</a></li><li class="breadcrumb-item active" aria-current="page">操作系统之内存管理</li>
+    </ol>
+  </nav><main class="container"><aside class="toc" id="toc-auto"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>操作系统之内存管理</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://www.gravatar.com/avatar/bbeb236273ce7a8cc349e66deaa25959?s=32&amp;d=" data-title="阿冰" data-alt="阿冰" class="avatar" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;阿冰</a></span>
+          <span class="post-category">included in <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 操作系统</a></span></div>
+      <div class="post-meta-line"><span title="published on 2023-05-11 19:53:00"><i class="fa-regular fa-calendar-alt fa-fw me-1" aria-hidden="true"></i><time datetime="2023-05-11">2023-05-11</time></span>&nbsp;<span title="Updated on 2023-05-11 19:53:00"><i class="fa-regular fa-edit fa-fw me-1" aria-hidden="true"></i><time datetime="2023-05-11">2023-05-11</time></span>&nbsp;<span title="15109 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 15200 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>31 minutes</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="操作系统之内存管理">
+              <i class="fa-regular fa-eye fa-fw me-1" aria-hidden="true"></i><span id="busuanzi_value_page_pv">-</span>&nbsp;views
+            </span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -221,7 +306,7 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>[toc]</p>
+      </div><div class="content" id="content"><p>[toc]</p>
 <h2 id="内存管理概念">内存管理概念</h2>
 <h3 id="内存管理的基本原理和要求">内存管理的基本原理和要求</h3>
 <h4 id="存储器结构">存储器结构</h4>
@@ -255,14 +340,7 @@
 <p>装入：<strong>由装入程序</strong>将装入模块装入内存运行。</p>
 </li>
 </ol>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg"
-        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg?size=large 2x" sizes="auto" data-title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg" data-alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9d416348e5303043d2eabda18fd4884f.jpeg" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="编译">编译</h5>
 <p>这部分并不是操作系统的工作，是由编程语言编译器完成。</p>
 <h5 id="链接">链接</h5>
@@ -301,14 +379,7 @@
 <li>
 <p>可重定位装入</p>
 <p>在多道程序环境下，多个目标模块的起始地址通常都是从0开始，程序中的其他地址都是相对于起始地址的,此时应釆用可重定位装入方式。根据内存的当前情况，将装入模块装入到内存的适当位置。装入时对目标程序中指令和数据的修改过程称为重定位，地址变换通常是在装入时一次完成的，所以又称为静态重定位，如下图（a）所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg"
-        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg?size=large 2x" sizes="auto" data-title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg" data-alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d31760ddcb2ee4ff0d2a6204ccbd4f4.jpeg" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <blockquote>
 <p>静态重定位的特点是在一个作业装入内存时，必须分配其要求的全部内存空间，如果没有足够的内存，就不能装入该作业。此外，作业一旦进入内存后，在整个运行期间不能在内存中移动，也不能再申请内存空间。</p>
 </blockquote>
@@ -328,14 +399,7 @@
 <h4 id="内存保护">内存保护</h4>
 <p>内存分配前，需要保护操作系统不受用户进程的影响，同时保护用户进程不受其他用户进程的影响。通过釆用重定位寄存器和界地址寄存器来实现这种保护。重定位寄存器含最小的物理地址值，界地址寄存器含逻辑地址值。每个逻辑地址值必须小于界地址寄存器；内存管理机构动态地将逻辑地址与界地址寄存器进行比较，如果未发生地址越界，则加上重定位寄存器的值后映射成物理地址，再送交内存单元，如图所示。</p>
 <p>当CPU调度程序选择进程执行时，派遣程序会初始化重定位寄存器和界地址寄存器。每一个逻辑地址都需要与这两个寄存器进行核对，以保证操作系统和其他用户程序及数据不被该进程的运行所影响。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg"
-        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg?size=large 2x" sizes="auto" data-title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg" data-alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_3a533ac66d727e9b16c885841206bf3d.jpeg" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="内存扩充">内存扩充</h3>
 <p>覆盖与交换技术是在多道程序环境下用来扩充内存的两种方法。</p>
 <h4 id="内存覆盖">内存覆盖</h4>
@@ -381,28 +445,14 @@
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230513112318769.png" alt="image-20230513112318769" style="zoom:50%;" />
 <h4 id="固定分区分配">固定分区分配</h4>
 <p>固定分区分配是最简单的一种多道程序存储管理方式，它将用户内存空间划分为若干个固定大小的区域，每个分区只装入一道作业。当有空闲分区时，便可以再从外存的后备作业队列中,选择适当大小的作业装入该分区，如此循环。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png"
-        title="img_99bfc2217522de4a18eb8cf74c5c26f3.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_99bfc2217522de4a18eb8cf74c5c26f3.png?size=large 2x" sizes="auto" data-title="img_99bfc2217522de4a18eb8cf74c5c26f3.png" data-alt="img_99bfc2217522de4a18eb8cf74c5c26f3.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>固定分区分配在划分分区时，有两种不同的方法，如上图所示</p>
 <ul>
 <li>分区大小相等：用于利用一台计算机去控制多个相同对象的场合，缺乏灵活性。</li>
 <li>分区大小不等：划分为含有多个较小的分区、适量的中等分区及少量的大分区。</li>
 </ul>
 <p>为便于内存分配，通常将分区按大小排队，并为之建立一张分区说明表，其中各表项包括每个分区的起始地址、大小及状态（是否已分配），如图(a)所示。当有用户程序要装入时，便检索该表，以找到合适的分区给予分配并将其状态置为”已分配”；未找到合适分区则拒绝为该用户程序分配内存。存储空间的分配情况如图(b)所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png"
-        title="img_bd1fbafe059ca869134ae818b9e4f962.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_bd1fbafe059ca869134ae818b9e4f962.png?size=large 2x" sizes="auto" data-title="img_bd1fbafe059ca869134ae818b9e4f962.png" data-alt="img_bd1fbafe059ca869134ae818b9e4f962.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>这种分区方式存在两个问题：</p>
 <ul>
 <li>一是程序可能太大而放不进任何一个分区中，这时用户不得不使用覆盖技术来使用内存空间；</li>
@@ -411,14 +461,7 @@
 <p>固定分区是可用于多道程序设计最简单的存储分配，无外部碎片，但不能实现多进程共享一个主存区，所以存储空间利用率低。<strong>固定分区分配很少用于现在通用的操作系统中，但在某些用于控制多个相同对象的控制系统中仍发挥着一定的作用</strong>。</p>
 <h4 id="动态分区分配">动态分区分配</h4>
 <p>动态分区分配又称为可变分区分配，是一种动态划分内存的分区方法。这种分区方法不预先将内存划分，而是在进程装入内存时，根据进程的大小动态地建立分区，并使分区的大小正好适合进程的需要。因此系统中分区的大小和数目是可变的。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg"
-        title="img_63e7910a1d2d271ae1f033d13aa34974.jpe" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_63e7910a1d2d271ae1f033d13aa34974.jpeg?size=large 2x" sizes="auto" data-title="img_63e7910a1d2d271ae1f033d13aa34974.jpe" data-alt="img_63e7910a1d2d271ae1f033d13aa34974.jpe" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>如上图所示，系统有64MB内存空间，其中低8MB固定分配给操作系统，其余为用户可用内存。开始时装入前三个进程，在它们分别分配到所需空间后，内存只剩下4MB，进程4无法装入。在某个时刻，内存中没有一个就绪进程，CPU出现空闲，操作系统就换出进程2，换入进程4。由于进程4比进程2小，这样在主存中就产生了一个6MB的内存块。之后CPU又出现空闲，而主存无法容纳进程2,操作系统就换出进程1，换入进程2。</p>
 <p>动态分区在开始分配时是很好的，但是之后会导致内存中出现许多小的内存块。随着时间的推移，内存中会产生越来越多的碎片（图中最后的4MB和中间的6MB，且随着进程的换入/换出，很可能会出现更多更小的内存块)，内存的利用率随之下降。</p>
 <p>这些小的内存块称为外部碎片(指在所有分区外的存储空间会变成越来越多的碎片)，这与固定分区中的内部碎片正好相对。克服外部碎片可以通过紧凑（Compaction)技术来解决，就是操作系统不时地对进程进行移动和整理。但是这需要动态重定位寄存器的支持，且相对费时。紧凑的过程实际上类似于Windows系统中的磁盘整理程序，只不过后者是对外存空间的紧凑。</p>
@@ -435,14 +478,7 @@
 <p>最坏适应算法与最佳适应算法相反，选择最大的可用块，这看起来最不容易产生碎片，但是却把最大的连续内存划分开，会很快导致没有可用的大的内存块，因此性能也非常差。</p>
 <p>Kunth和Shore分别就前三种方法对内存空间的利用情况做了模拟实验，结果表明：</p>
 <p>首次适应算法可能比最佳适应法效果好，而它们两者一定比最大适应法效果好。另外注意,在算法实现时,分配操作中，最佳适应法和最大适应法需要对可用块进行排序或遍历查找，而首次适应法和邻近适应法只需要简单查找；回收操作中，当回收的块与原来的空闲块相邻时（有三种相邻的情况，比较复杂)，需要将这些块合并。在算法实现时，使用数组或链表进行管理。除了内存的利用率，这里的算法开销也是操作系统设计需要考虑的一个因素。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png"
-        title="img_e35a09558dc11821fabc2cd5aca5af7c.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_e35a09558dc11821fabc2cd5aca5af7c.png?size=large 2x" sizes="auto" data-title="img_e35a09558dc11821fabc2cd5aca5af7c.png" data-alt="img_e35a09558dc11821fabc2cd5aca5af7c.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>以上三种内存分区管理方法有一共同特点，即用户进程（或作业）在主存中都是连续存放的。这里对它们进行比较和总结，见上表图。</p>
 <h3 id="非连续分配与管理方式">非连续分配与管理方式</h3>
 <p>非连续分配允许一个程序分散地装入到不相邻的内存分区中，根据分区的大小是否固定分为<strong>分页存储管理方式</strong>和<strong>分段存储管理方式</strong>。</p>
@@ -460,14 +496,7 @@
 <li>
 <p>地址结构</p>
 <p>分页存储管理的逻辑地址结构如图所示</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png"
-        title="img_0d0c3778336a156946e7924d1404e14e.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_0d0c3778336a156946e7924d1404e14e.png?size=large 2x" sizes="auto" data-title="img_0d0c3778336a156946e7924d1404e14e.png" data-alt="img_0d0c3778336a156946e7924d1404e14e.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>地址结构包含两部分：前一部分为页号P，后一部分为页内偏移量W。地址长度为32 位，其中011位为页内地址，即每页大小为4KB；12-31位为页号，地址空间最多允许有2^20页。</p>
 </li>
 <li>
@@ -475,25 +504,11 @@
 <p>为了便于在内存中找到进程的每个页面所对应的物理块，系统为每个进程建立一张页表，记录页面在内存中对应的物理块号，页表一般存放在内存中。</p>
 <p>在配置了页表后，进程执行时，通过查找该表，即可找到每页在内存中的物理块号。</p>
 <p>可见，页表的作用是实现从页号到物理块号的地址映射，如图所示</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg"
-        title="img_83e772bcd622cdf1e3ddcc8475a21996.jpe" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_83e772bcd622cdf1e3ddcc8475a21996.jpeg?size=large 2x" sizes="auto" data-title="img_83e772bcd622cdf1e3ddcc8475a21996.jpe" data-alt="img_83e772bcd622cdf1e3ddcc8475a21996.jpe" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 </ul>
 <h5 id="基本地址变换机构">基本地址变换机构</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg"
-        title="img_1d822ebb6200e781d18e0aa7ff8f2266.jpe" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_1d822ebb6200e781d18e0aa7ff8f2266.jpeg?size=large 2x" sizes="auto" data-title="img_1d822ebb6200e781d18e0aa7ff8f2266.jpe" data-alt="img_1d822ebb6200e781d18e0aa7ff8f2266.jpe" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在系统中通常设置一个页表寄存器(PTR)，存放页表在内存的始址F和页表长度M。进程未执行时，页表的始址和长度存放在进程控制块中，当进程执行时，才将页表始址和长度存入页表寄存器。设页面大小为L，逻辑地址A到物理地址E的变换过程如下：</p>
 <ol>
 <li>计算页号P(P=A/L)和页内偏移量W (W=A%L)。</li>
@@ -512,14 +527,7 @@
 <h5 id="具有快表的地址变换机构">具有快表的地址变换机构</h5>
 <p>由上面介绍的地址变换过程可知，若页表全部放在内存中，则存取一个数据或一条指令至少要访问两次内存：一次是访问页表，确定所存取的数据或指令的物理地址，第二次才根据该地址存取数据或指令。显然，这种方法比通常执行指令的速度慢了一半。</p>
 <p>为此，在地址变换机构中增设了一个具有并行查找能力的高速缓冲存储器——快表，又称联想寄存器(TLB)，用来存放当前访问的若干页表项，以加速地址变换的过程。与此对应，主存中的页表也常称为慢表，配有快表的地址变换机构如图所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg"
-        title="img_5cb08987a29ed5398ecdd79afb9a3e09.jpe" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_5cb08987a29ed5398ecdd79afb9a3e09.jpeg?size=large 2x" sizes="auto" data-title="img_5cb08987a29ed5398ecdd79afb9a3e09.jpe" data-alt="img_5cb08987a29ed5398ecdd79afb9a3e09.jpe" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在具有快表的分页机制中，地址的变换过程：</p>
 <ul>
 <li>CPU给出逻辑地址后，由硬件进行地址转换并将页号送入高速缓存寄存器，并将此页号与快表中的所有页号进行比较。</li>
@@ -536,47 +544,19 @@
 <p>解决办法：把页表再分页并离散存储，然后再建立一张页表记录页表各个部分的存放位置，称为页目录表，或称外层页表，或称顶层页表。</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/8c10eb9199ac4604abc430a8aab243a8%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp" alt="两级页表" style="zoom:40%;" />
 <h5 id="多级页表">多级页表</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp"
-        title="多级页表" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/91f61091052348a4b3474564b7ffb2e2%7Etplv-k3u1fbpfcp-zoom-in-crop-mark%3A4536%3A0%3A0%3A0.awebp?size=large 2x" sizes="auto" data-title="多级页表" data-alt="多级页表" class="suffix-invalid suffix-invalid__small suffix-invalid__large" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="基本分段存储管理方式">基本分段存储管理方式</h4>
 <p>分页管理方式是从计算机的角度考虑设计的，以提高内存的利用率，提升计算机的性能, 且分页通过硬件机制实现，对用户完全透明；而分段管理方式的提出则是考虑了用户和程序员，以满足方便编程、信息保护和共享、动态增长及动态链接等多方面的需要。</p>
 <h5 id="分段">分段</h5>
 <p>段式管理方式按照用户进程中的自然段划分逻辑空间。例如，用户进程由主程序、两个子程序、栈和一段数据组成，于是可以把这个用户进程划分为5个段，每段从0 开始编址，并分配一段连续的地址空间（段内要求连续，段间不要求连续，因此整个作业的地址空间是二维的）。其逻辑地址由段号S与段内偏移量W两部分组成。</p>
 <p>在下图中，段号为16位，段内偏移量为16位，则一个作业最多可有2^16=65536个段，最大段长为64KB。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png"
-        title="image-20230516095112900" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516095112900.png?size=large 2x" sizes="auto" data-title="image-20230516095112900" data-alt="image-20230516095112900" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>在页式系统中，逻辑地址的页号和页内偏移量对用户是透明的，用户不可以更改，是由操作系统计算出来的；但在段式系统中，段号和段内偏移量必须由用户显示提供，在髙级程序设计语言中，这个工作由编译程序完成。</strong></p>
 <h5 id="段表">段表</h5>
 <p>每个进程都有一张逻辑空间与内存空间映射的段表，其中每一个段表项对应进程的一个段，段表项记录该段在内存中的起始地址和段的长度。段表的内容如图所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png"
-        title="img_9498e260dd6c5dbc1959a6870a45b95a.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_9498e260dd6c5dbc1959a6870a45b95a.png?size=large 2x" sizes="auto" data-title="img_9498e260dd6c5dbc1959a6870a45b95a.png" data-alt="img_9498e260dd6c5dbc1959a6870a45b95a.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在配置了段表后，执行中的进程可通过查找段表，找到每个段所对应的内存区。可见，段表用于实现从逻辑段到物理内存区的映射，如图所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg"
-        title="img_ae6aed5ce9677734198d83a5781a8074.jpe" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_ae6aed5ce9677734198d83a5781a8074.jpeg?size=large 2x" sizes="auto" data-title="img_ae6aed5ce9677734198d83a5781a8074.jpe" data-alt="img_ae6aed5ce9677734198d83a5781a8074.jpe" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="地址变换机构">地址变换机构</h5>
 <p>分段系统的地址变换过程如图所示。为了实现进程从逻辑地址到物理地址的变换功能，在系统中设置了段表寄存器，用于存放段表始址F和段表长度M。其从逻辑地址A到物理地址E之间的地址变换过程如下：</p>
 <ul>
@@ -585,48 +565,20 @@
 <li>段表中段号S对应的段表项地址 = 段表起始地址F + 段号S * 段表项长度，取出该段表项的前几位得到段长C。若段内偏移量&gt;=C，则产生越界中断，否则继续执行。</li>
 <li>取出段表项中该段的起始地址b，计算 E = b + W，用得到的物理地址E去访问内存。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg"
-        title="img_725dd9d2108457a6c46c1e8e9999b8cc.jpe" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_725dd9d2108457a6c46c1e8e9999b8cc.jpeg?size=large 2x" sizes="auto" data-title="img_725dd9d2108457a6c46c1e8e9999b8cc.jpe" data-alt="img_725dd9d2108457a6c46c1e8e9999b8cc.jpe" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="段的共享与保护">段的共享与保护</h5>
 <p>在分段系统中，段的共享是通过两个作业的段表中相应表项指向被共享的段的同一个物理副本来实现的。当一个作业正从共享段中读取数据时，必须防止另一个作业修改此共享段中的数据。不能修改的代码称为纯代码或可重入代码（它不属于临界资源)，这样的代码和不能修改的数据是可以共享的，而可修改的代码和数据则不能共享。</p>
 <p>与分页管理类似，分段管理的保护方法主要有两种：一种是存取控制保护，另一种是地址越界保护。地址越界保护是利用段表寄存器中的段表长度与逻辑地址中的段号比较，若段号大于段表长度则产生越界中断；再利用段表项中的段长和逻辑地址中的段内位移进行比较，若段内位移大于段长，也会产生越界中断。</p>
 <h4 id="段页管理方式">段页管理方式</h4>
 <p>页式存储管理能有效地提高内存利用率，而分段存储管理能反映程序的逻辑结构并有利于段的共享。如果将这两种存储管理方法结合起来，就形成了段页式存储管理方式。</p>
 <p>在段页式系统中，作业的地址空间首先被分成若干个逻辑段，每段都有自己的段号，然后再将每一段分成若干个大小固定的页。对内存空间的管理仍然和分页存储管理一样，将其分成若干个和页面大小相同的存储块，对内存的分配以存储块为单位，如图所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg"
-        title="img_07273851ee4a0a0e1c2acb63f41d62f2.jpe" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_07273851ee4a0a0e1c2acb63f41d62f2.jpeg?size=large 2x" sizes="auto" data-title="img_07273851ee4a0a0e1c2acb63f41d62f2.jpe" data-alt="img_07273851ee4a0a0e1c2acb63f41d62f2.jpe" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在段页式系统中，作业的逻辑地址分为三部分：段号、页号和页内偏移量，如图所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png"
-        title="img_833f7011c7fa8cac80ac23377865755b.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_833f7011c7fa8cac80ac23377865755b.png?size=large 2x" sizes="auto" data-title="img_833f7011c7fa8cac80ac23377865755b.png" data-alt="img_833f7011c7fa8cac80ac23377865755b.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>为了实现地址变换，系统为每个进程建立一张段表，而每个分段有一张页表。段表表项中至少包括段号、页表长度和页表起始地址，页表表项中至少包括页号和块号。此外，系统中还应有一个段表寄存器，指出作业的段表起始地址和段表长度。</p>
 <p>注意：在一个进程中，段表只有一个，而页表可能有多个。</p>
 <p>在进行地址变换时，首先通过段表查到页表起始地址，然后通过页表找到页帧号，最后形成物理地址。如图所示，进行一次访问实际需要三次访问主存，这里同样可以使用快表以加快查找速度，其关键字由段号、页号组成，值是对应的页帧号和保护码。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg"
-        title="img_d861b1cc5f5d04974a566f9e181115b8.jpe" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/img_d861b1cc5f5d04974a566f9e181115b8.jpeg?size=large 2x" sizes="auto" data-title="img_d861b1cc5f5d04974a566f9e181115b8.jpe" data-alt="img_d861b1cc5f5d04974a566f9e181115b8.jpe" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="分页-vs-分段">分页 VS 分段</h4>
 <ul>
 <li>页是信息的物理单位。分页的主要目的是为了实现离散分配，提高内存利用率。分页仅仅是系统管理上的需要，完全是系统行为，对用户是不可见的。</li>
@@ -667,14 +619,7 @@
 <h5 id="页表机制">页表机制</h5>
 <p>请求分页系统的页表机制不同于基本分页系统，请求分页系统在一个作业运行之前不要求全部一次性调入内存，因此在作业的运行过程中，必然会出现要访问的页面不在内存的情况，如何发现和处理这种情况是请求分页系统必须解决的两个基本问题。</p>
 <p>为此，在请求页表项中增加了四个字段，如图所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png"
-        title="输入图片说明" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/142123_311dd679_508704.png?size=large 2x" sizes="auto" data-title="输入图片说明" data-alt="输入图片说明" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>相较于基本分页存储管理，页表项新增四列：</p>
 <ul>
 <li>状态位P：用于指示该页是否已调入内存，供程序访问时参考。</li>
@@ -776,25 +721,11 @@
 <ol>
 <li>
 <p>刚开始时，进程页还在虚存（磁盘）中，尚未缓存到内存中，所以第一次要访问第1页时发生一次缺页故障，此时调入第1页到内存中，占一个页帧</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f1007a88827b48d98f9f52022f09e335.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 <li>
 <p>此时还剩下两个页帧未分配，由于接下来依次访问第2、3页，同理会触发两次缺页故障，在此之后，第1、2、3页都已经缓存在内存中</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b0eb9f90071943c4afec97641566ff93.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 <li>
 <p>接下来要访问第四页，由于在此之前第1,2,3页已经缓存在内存中，该进程所分配到的3个页帧已满，为此必须替换掉一页，才能把第四页加载进来，此时又发生一次缺页故障。由于采用FIFO替换算法，因为第一页是最先进来，所以它会被替换出去</p>
@@ -805,24 +736,10 @@
 </li>
 <li>
 <p>在接下来的访问中，如果第K页已经存在内存中，则直接使用，所以此时不会发生缺页故障，重复按照上述过程，我们可以得到如下示例图表</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cfe2be7d53904ac7ad9af61323922c6d.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>红色标识出的是发生缺页故障后调入的页，可以看见共发生9次缺页异常，而从访问串可知访问12次，所以缺页率为9/12=0.75。</p>
 <p>现在，该进程在上述3页帧的基础上多分配一页帧，也就是变成四页帧，则仿照上述分析过程，可画出如下图表</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png"
-        title="image-20230516222410620" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230516222410620.png?size=large 2x" sizes="auto" data-title="image-20230516222410620" data-alt="image-20230516222410620" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 </ol>
 <p>红色标识出的是发生缺页故障后调入的页，蓝色标识的是之前调入的页面，可以看见共发生10次缺页异常，而从访问串可知访问12次，所以缺页率为10/12=0.833。</p>
@@ -872,43 +789,55 @@
 <li>可变分配局部置换：根据缺页率动态增加或者减少物理块的数量。</li>
 </ul>
 </div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>Updated on 2023-05-11</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" data-title="操作系统之内存管理"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" data-title="操作系统之内存管理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
-            </div>
-        </div>
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2023-05-11 19:53:00">Updated on 2023-05-11&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span><span><a href="https://github.com/cold-bin/blog/edit/main/content/posts/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e4%b9%8b%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86.md" title="Edit this page"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">Edit this page</a></span></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" data-title="操作系统之内存管理"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" data-title="操作系统之内存管理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
 
-    <div class="post-info-more">
-        <section class="post-tags"></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
-        </section>
-    </div>
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
 
-    <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="prev" rel="prev" title="操作系统之进程管理"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>操作系统之进程管理</a>
-            <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="next" rel="next" title="操作系统之文件管理">操作系统之文件管理<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" class="post-nav-item" rel="prev" title="操作系统之进程管理"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>操作系统之进程管理</a>
+      <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" class="post-nav-item" rel="next" title="操作系统之文件管理">操作系统之文件管理<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-<div id="comments"><div id="gitalk" class="comment"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
-            </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
-
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-05-11T19:53:00+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之内存管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+<div class="post-reward">
+    <div class="comment">Buy me a coffee</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">Donate</label>
+    <div class="reward-ways" data-mode="fixed"><div><img loading="lazy" src="/images/alipay.jpg" data-title="阿冰 Alipay" data-alt="阿冰 Alipay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>Alipay</span>
+          </div><div><img loading="lazy" src="/images/wechatpay.png" data-title="阿冰 WeChat Pay" data-alt="阿冰 WeChat Pay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>WeChat Pay</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright order-5" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/cold-bin"target="_blank" rel="external nofollow noopener noreferrer">阿冰</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics order-4"><span class="site-time" title='Website running ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="ms-1 d-none">运行</span><span class="run-times ms-1">Website running ...</span></span></div><div class="footer-line visitor order-2">
+          <span id="busuanzi_container_site_uv" title='Total visitors'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='Total visits'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.120f067ebd6f322339e2ccccd7e87e334d7c7ea5b2bd553f325f2ae3c3ae6fe8.css" integrity="sha256-Eg8Gfr1vMiM54szM1+h+M018fqWyvVU/Ml8q48Oub+g="><link rel="preload" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><link rel="stylesheet" href="/lib/pace/themes/silver/pace-theme-minimal.1aefeadd689806308301fe332322fc3cec76f1d28a8e516afd37d31600e1e964.css" integrity="sha256-Gu/q3WiYBjCDAf4zIyL8POx28dKKjlFq/TfTFgDh6WQ="><script src="/lib/gitalk/gitalk.min.f4f9407ea35ccf4be5019cc41d70eab1eb273941bca01b3a93c91201f195a76f.js" integrity="sha256-9PlAfqNcz0vlAZzEHXDqsesnOUG8oBs6k8kSAfGVp28="></script><script src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.804e26c45f81a02b98b05bc1e378c1ff6c5d2339e0c6550aadf1419adf3a8c81.js" integrity="sha256-gE4mxF+BoCuYsFvB43jB/2xdIzngxlUKrfFBmt86jIE=" defer></script><script src="/lib/lightgallery/lightgallery.min.7de2854e7954105f2b91ff5983749c4e3c7af51e05aae279f8a5d66994a85777.js" integrity="sha256-feKFTnlUEF8rkf9Zg3ScTjx69R4FquJ5+KXWaZSoV3c=" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4fbc3ec1878e90348b71b3594d8ef27c4f10a1a4c6d5e74948d0ee59018fd87c.js" integrity="sha256-T7w+wYeOkDSLcbNZTY7yfE8QoaTG1edJSNDuWQGP2Hw=" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.821a2adb8005511c0ad9ef6f395c1b74beacc2da194cd13a4ac43d341246e085.js" integrity="sha256-ghoq24AFURwK2e9vOVwbdL6swtoZTNE6SsQ9NBJG4IU=" defer></script><script src="/lib/sharer/sharer.min.ba5171a78670b031914e623431a33a3d73c1ea9897e552ba73bc2c2da7c777b9.js" integrity="sha256-ulFxp4ZwsDGRTmI0MaM6PXPB6piX5VK6c7wsLafHd7k=" async defer></script><script src="/lib/typeit/index.umd.16f3fa3374a7eea31f19672293edc98326413002dea74b8c413a74f1b7e4f1cf.js" integrity="sha256-FvP6M3Sn7qMfGWcik+3JgyZBMALep0uMQTp08bfk8c8=" defer></script><script src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw+iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script src="/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script src="/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":50},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-05-11T19:53:00+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之内存管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"life and code.","typeit-header-subtitle-mobile":"life and code."},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"siteTime":"2023-12-28T12:00:00+00:00","typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"loop":false,"speed":100}};</script><script src="/js/theme.min.58f9858983f2742da374c22058a1768784a6955aa9a3f3b3b179c080fa0fa468.js" integrity="sha256-WPmFiYPydC2jdMIgWKF2h4SmlVqpo/OzsXnAgPoPpGg=" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-75123653-1');
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=UA-75123653-1" async></script></body>
 </html>

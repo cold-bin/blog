@@ -260,3 +260,9 @@ end start
 - 对于数据暂存最好不要使用寄存器，因为寄存器资源有限。应该使用栈作为数据暂存的选择
 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%85%B6%E4%BB%96%E5%AE%9A%E4%BD%8D%E5%9C%B0%E5%9D%80%E6%96%B9%E6%B3%95/  
+

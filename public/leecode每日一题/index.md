@@ -16131,3 +16131,9 @@ https://leetcode.cn/problems/monotone-increasing-digits/solution/dan-diao-di-zen
 
   
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/leecode%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98/  
+

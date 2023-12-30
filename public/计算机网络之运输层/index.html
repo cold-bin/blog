@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>计算机网络之运输层 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="计算机网络之运输层" />
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>计算机网络之运输层 - 阿冰的小屋</title><meta name="author" content="阿冰">
+<meta name="author-link" content="https://github.com/cold-bin">
+<meta name="description" content="[toc] 运输层概述 运输层的基本功能 运输层协议为运行在不同主机上的应用进程之间提供了逻辑通信功能，使得运行在不同主机上的进程像直连一样。 复用和分用 差" /><meta name="keywords" content='Hugo, FixIt' /><meta itemprop="name" content="计算机网络之运输层">
+<meta itemprop="description" content="[toc] 运输层概述 运输层的基本功能 运输层协议为运行在不同主机上的应用进程之间提供了逻辑通信功能，使得运行在不同主机上的进程像直连一样。 复用和分用 差"><meta itemprop="datePublished" content="2023-07-11T17:36:16+08:00" />
+<meta itemprop="dateModified" content="2023-07-11T17:36:16+08:00" />
+<meta itemprop="wordCount" content="16508"><meta itemprop="image" content="https://blog.coldbin.top/favicon.ico"/>
+<meta itemprop="keywords" content="" /><meta property="og:title" content="计算机网络之运输层" />
 <meta property="og:description" content="[toc] 运输层概述 运输层的基本功能 运输层协议为运行在不同主机上的应用进程之间提供了逻辑通信功能，使得运行在不同主机上的进程像直连一样。 复用和分用 差" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,118 +24,196 @@
 <meta name="twitter:title" content="计算机网络之运输层"/>
 <meta name="twitter:description" content="[toc] 运输层概述 运输层的基本功能 运输层协议为运行在不同主机上的应用进程之间提供了逻辑通信功能，使得运行在不同主机上的进程像直连一样。 复用和分用 差"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "计算机网络之运输层",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  16508 ,
-        "url": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82\/","datePublished": "2023-07-11T17:36:16+08:00","dateModified": "2023-07-11T17:36:16+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
-            "@type": "Organization",
-            "name": "阿冰","logo": {
-                    "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
-                    "width":  396 ,
-                    "height":  396 
-                }},"author": {
-                "@type": "Person",
-                "name": "阿冰"
-            },"description": ""
-    }
-    </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" /><link rel="prev" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" /><link rel="next" href="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" /><link rel="stylesheet" href="/css/style.min.04a53c8f85f60bfc901f510b07233befa08ea6546fc4a641b7a7caf06269844a.css" integrity="sha256-BKU8j4X2C/yQH1ELByM776COplRvxKZBt6fK8GJphEo="><link rel="preload" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "计算机网络之运输层",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82\/"
+    },"image": [{
+              "@type": "ImageObject",
+              "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+              "width":  396 ,
+              "height":  396 
+            }],"genre": "posts","wordcount":  16508 ,
+    "url": "https:\/\/blog.coldbin.top\/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82\/","datePublished": "2023-07-11T17:36:16+08:00","dateModified": "2023-07-11T17:36:16+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+      "@type": "Organization",
+      "name": "阿冰","logo": {
+          "@type": "ImageObject",
+          "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+          "width":  396 ,
+          "height":  396 
+        }},"author": {
+        "@type": "Person",
+        "name": "阿冰"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="阿冰的小屋" data-alt="阿冰的小屋" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/friends"
+                
+                
+              ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
     <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-                </a></div>
-        </div>
+      <div class="header-title">
+        <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="/favicon.ico" data-alt="/favicon.ico" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        Cancel
-                    </a>
-                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-            </a></div>
-    </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/friends"
+                  
+                  
+                ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
 </header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">计算机网络之运输层</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>计算机网络</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-07-11">2023-07-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;16508 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;33 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
-                <div class="details-summary toc-title">
-                    <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><nav aria-label="breadcrumb" class="breadcrumb-container sticky">
+    <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/" title="阿冰的小屋">Home</a></li><li class="breadcrumb-item"><a href="/posts/" title="Posts">Posts</a></li><li class="breadcrumb-item active" aria-current="page">计算机网络之运输层</li>
+    </ol>
+  </nav><main class="container"><aside class="toc" id="toc-auto"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>计算机网络之运输层</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://www.gravatar.com/avatar/bbeb236273ce7a8cc349e66deaa25959?s=32&amp;d=" data-title="阿冰" data-alt="阿冰" class="avatar" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;阿冰</a></span>
+          <span class="post-category">included in <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 计算机网络</a></span></div>
+      <div class="post-meta-line"><span title="published on 2023-07-11 17:36:16"><i class="fa-regular fa-calendar-alt fa-fw me-1" aria-hidden="true"></i><time datetime="2023-07-11">2023-07-11</time></span>&nbsp;<span title="Updated on 2023-07-11 17:36:16"><i class="fa-regular fa-edit fa-fw me-1" aria-hidden="true"></i><time datetime="2023-07-11">2023-07-11</time></span>&nbsp;<span title="16508 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 16600 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>33 minutes</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="计算机网络之运输层">
+              <i class="fa-regular fa-eye fa-fw me-1" aria-hidden="true"></i><span id="busuanzi_value_page_pv">-</span>&nbsp;views
+            </span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -241,7 +326,7 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>[toc]</p>
+      </div><div class="content" id="content"><p>[toc]</p>
 <h2 id="运输层概述">运输层概述</h2>
 <h3 id="运输层的基本功能">运输层的基本功能</h3>
 <ul>
@@ -364,14 +449,7 @@
 </li>
 <li>
 <p><strong>选项字段（最大40字节）</strong>：该字段长度可变。有如下可选项：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112042938.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>所有可选选项都包含该选项的类型长度还有实际内容（例如下面的时间戳选项，kind=8表示这是一个时间戳选项，length表示时间戳选项长度为10字节).所有可选选项都在建立连接时的SYN报文指定开启。</p>
 <ul>
 <li>
@@ -385,14 +463,7 @@
 </li>
 <li>
 <p><strong>时间戳选项</strong>：占10字节，包含最主要的是时间戳值字段（4字节）和时间戳回送回答字段（4字节）。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112045037.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <blockquote>
 <p>有两个作用：</p>
 <p>A. 计算报文在两端传输层的往返时延（接近于RTT）</p>
@@ -437,7 +508,7 @@
 <p><strong>一个问题</strong>：超时重传时间应该定为多少？</p>
 <blockquote>
 <p>答：超时重传时间太大会使网络链路空闲，降低传输效率；太小会使报文不必要的重传，加大网络负荷引起拥塞。TCP采用了一种<strong>自适应算法计算超时时间RTO</strong>。RTO应该略大于报文往返时间RTT。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-1"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -450,8 +521,7 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">RTTD = （1-β）* 旧的RTTD + β * | RTTS - 新的RTT样本 |
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">RTO = RTTS + 4*RTTD
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">RTO = RTTS + 4*RTTD</span></span></code></pre></td></tr></table>
 </div>
 </div><p>TCP需要计算一个加权平均往返时间RTTS，反映多次报文传输的整体RTT，每次确认报文到达发送端，发送端都会更新一次RTTS。</p>
 <p>“新的RTT样本”可以使用发送方接收到ACK分组的时间戳 - 分组头部时间戳选项计算得到。</p>
@@ -461,37 +531,22 @@
 <p><strong>另一个问题</strong>：假设发生了重传，并且收到了确认报文，如何确定该ACK报文是对先发送的报文的确认还是重传报文的确认？</p>
 <blockquote>
 <p>这个问题对RTTS的计算很重要（假设时间戳选项没开启）。如果该ACK是对重传报文的确认，却被误认为是对原来报文的确认，则更新后的RTTS和RTO会偏大。该问题不解决，RTO会因为重传越变越大。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112101061.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>答：Karn算法提出，如果报文段重传收到ACK，无需判断ACK是之前报文的确认还是重传报文的确认，直接不更新本次的RTTS和RTO即可。</p>
 <p>这会带来新的问题：如果一段时间内TCP会重传很多报文，采用上述做法会导致RTO失去多次更新，变得不准确。</p>
 <p>修正的Karn算法提出，报文段每重传一次就把RTO增大一点：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-2"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">重传时新RTO = γ * 旧的RTO
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">重传时新RTO = γ * 旧的RTO</span></span></code></pre></td></tr></table>
 </div>
 </div></blockquote>
 <h5 id="举例">举例</h5>
 <p>停止等待协议下的通信会出现如下情况</p>
 <h6 id="无差错的情况">无差错的情况</h6>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112104202.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h6 id="有差错的情况分组丢失或差错">有差错的情况（分组丢失或差错）</h6>
 <p>在接收⽅ B 会出现两种情况：</p>
 <ul>
@@ -508,26 +563,12 @@
 <li>
 <p>子情况1：确认报文丢失。</p>
 <p>由于A收不到 M1 的确认报文，A 在超时计时器到期后重传 M1。 B ⼜收到了重传的分组 M1，所以丢弃这个重复的分组 M1（通过序号和时间戳选项判断分组是否重复），不向上层交付，并向 A 发送确认。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113669.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 <li>
 <p>子情况2：确认报文迟到</p>
 <p>由于A收不到 M1 的确认报文，A 在超时计时器到期后重传 M1。 B ⼜收到了重传的分组 M1，所以丢弃这个重复的分组 M1，并向 A 发送确认。A由于会收到2个ACK号相同的确认报文，A会丢弃其中晚到达的一个。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112113229.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 </ul>
 <p>结论：<strong>停等协议可以保证可靠传输的实现，但通信效率不高</strong></p>
@@ -536,14 +577,7 @@
 <p>连续ARQ协议在停止等待协议的基础之上提升了信道利用率，它除了要遵循确认应答机制和自动超时重传机制外，还包括以下机制：</p>
 <h5 id="流水线传输机制">流水线传输机制</h5>
 <p>指发送方可以连续发送多个分组不必每发一个分组就等待对方的确认，与停止等待协议对立，可以提高信道利用率和链路的吞吐量。当然连续发送的分组数量是有限的，这取决于滑动窗口的大小。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112130991.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="累积确认机制">累积确认机制</h5>
 <p>指接收方不必为每个到达的分组都发送确认，而是收到若干个分组后对按序到达的最后一个分组发送确认。当然TCP协议既可能出现累积确认，也可能出现对单个分组确认。</p>
 <p>确认的时机（这里也是TCP确认的时机）：</p>
@@ -560,27 +594,13 @@
 <p>指当报文乱序到达接收端，接收端收到的分组不是连续的，而是缺了某些分组，此时接收端只确认第一个空缺分组之前的分组，空缺分组以及其之后的n个分组都要发送方重传，这就是回退N。</p>
 <p>B收到1 2 4 5号分组但由于3号分组未收到就到达确认时机，只能选择确认1和2分组，发送端A需要重发 3~5 号分组。</p>
 <p><strong>为了避免回退N机制重复发送已经发过的报文，可以使用TCP选项中的“选择确认SACK功能”。其机制如下：</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112134442.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>上图空缺的序号是 1000~1500 和 3001~3501。</p>
 <p>SACK的原理是，把乱序到达的分组先暂存在接收缓冲区，并且把空缺分组相邻分组的左右边界序号（必须是成对边界，在本例子中有3个边界0~999 / 1501~3000 / 3501~4500，共 6 * 4字节=24字节）放到头部的SACK选项告诉发送方，发送方就会只重传空缺的数据给接收方，而无需回退N步。</p>
 <p>⾸部选项的⻓度最⼤有 40 字节，指明⼀个对序号⽤掉 8 字节，因此在选项中最多只能指明 4 对序号的边界信息，也就是指明最多3个空缺范围（4对序号用掉 32字节，还需要2个字节指明选项类型和长度）。</p>
 <p>SACK文档并未有指明发送方应该怎样响应SACK，所以大多数的实现还是会回退N，重传所有未确认的数据块1000~4500。</p>
 <h4 id="对比">对比</h4>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307112136444.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="tcp可靠传输的实现">TCP可靠传输的实现</h4>
 <p>TCP的可靠传输以上述连续ARQ协议为基础做出了一些变动，并研究更多的细节如滑动窗口的实现、超时计时器如何设置超时时间、选择确认、流量控制和拥塞控制。</p>
 <p>TCP可靠传输基于4点：<strong>窗口、序号、确认和重传</strong>。其中后3点实现了可靠传输，第1点提高TCP传输效率。</p>
@@ -727,75 +747,26 @@
 <h4 id="滑动窗口的工作过程">滑动窗口的工作过程</h4>
 <p><strong>只观察发送方的发送缓冲区和接收方的接收缓冲区</strong>:</p>
 <p>1、某一时刻，A 收到了 B 的确认报⽂段：报文携带的窗口值 20 字节，确认号为 31。A 可以把落⼊发送窗⼝中的序号字节⼀次连续性全部发送出去：边发送边接收确认。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059808.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>2、下一刻A发送了31~41号字节，<strong>在确认前会保留在窗口中以便超时重传时使用</strong>。</p>
 <p>B的接收窗口显示，B没有收到31，32~33是未按需到达的数据，要临时存放在接收窗口，不能上交给应用进程。B的接收窗口也不能移动。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059274.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>3、下一刻B收到了31，B将31~33字节交付应用层，并从接收缓冲区中删除，且B接收窗口右移3个字节，发送ack=33的确认报文（假设确认报文的窗口大小字段仍是20）。A收到确认后窗口右移3字节。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121059018.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>4、当P2=P3时，可用窗口为0，会停止发送。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121100146.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="缓冲区与窗口的关联">缓冲区与窗口的关联</h4>
 <h5 id="发送方的发送缓存与发送窗口">发送方的发送缓存与发送窗口</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109594.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>发送窗⼝通常只是 发送缓存的⼀部分，具体来说 发送缓存 = 发送应用程序最后写入发送缓冲区的最后一个字节 - 发送窗口P1字节。缓冲区中，p1指针之前的数据由于已经发送和收到确认，因此被释放出缓冲区。</p>
 <h5 id="接受方的接收缓存与接收窗口">接受方的接收缓存与接收窗口</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121109001.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="流量控制">流量控制</h3>
 <p>流量控制是指<strong>动态控制滑动窗口的大小使得发送方发送数据的速率略小于或等于接收方接收的速率</strong>（接收速率其实又由应用程序取走接收缓冲区的速率决定），防止接收方的接收缓存溢出造成分组丢失。</p>
 <p>流量控制的实现是通过在接收方的ACK报文携带窗口大小（假设大小X，X=接收方的接收缓冲区的空闲空间大小）同步给发送方，使发送方调整自己的可用窗口（P3-P2部分）为X。</p>
 <p>需要注意的是发送窗口的p2-p1取决于ack号，P3-P2取决于ACK报文中的窗口大小。</p>
 <p>下面是一个流量控制的过程（不考虑拥塞的情况下）：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121117561.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <blockquote>
 <p>图中<code>rwnd</code>(receiver window)表示容许的接收方窗口。</p>
 </blockquote>
@@ -832,14 +803,7 @@
 <li>流量控制是解决端与端的发送与接收速率不匹配的问题，需要发送方同步接收方的接收速度；</li>
 <li>拥塞控制是解决端系统的通信量与网络链路资源不匹配引起的路由器和链路过载问题，需要控制端系统注入到网络的数据量和速度。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121125099.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="拥塞控制的方法">拥塞控制的方法</h4>
 <p><strong>拥塞控制需要解决的三个问题</strong></p>
 <ol>
@@ -862,14 +826,7 @@
 <p>慢开始的思路是从小到大以指数方式增加拥塞窗口的数值。慢开始发生在刚建立连接后的数据收发。</p>
 <p>一开始发送方并不清楚网络的拥塞情况，就先将cwnd初始值设置为1~2个SMSS（发送方MSS），新的RFC标准则把初始<code>cwnd</code>设置为2~4，至于取2还是3还是4，取决于SMSS有多大。</p>
 <p>在每收到⼀个对新的报⽂段的确认（重传的确认不算）后，发送方的拥塞窗⼝就增加⼀个 SMSS 的数值，因此<code>cwnd</code>会呈指数级别增长。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121443061.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>慢启动的窗口增长速度其实不慢（指数级别），之所以叫慢启动是因为它的初始<code>cwnd</code>值很小。</p>
 <p>顺带一提 ，新建立的连接会用到慢启动，TCP 还实现了 <strong>慢启动重启</strong> （SSR） 机制。这种机制会在持久连接空闲一定时间后重置拥塞窗口为初始cwnd值。道理很简单， 在连接空闲的同时，网络状况也可能发生了变化，为了避免拥塞，理应将拥塞窗 口重置回“安全的”默认值。</p>
 <p>为了不让窗口无限的指数增长，提出了慢开始门限，当窗口大小超过了慢开始门限 <code>ssthresh</code> 则使用拥塞避免算法线性增长窗口。</p>
@@ -880,14 +837,7 @@
 <p>该算法是指：当<code>cwnd</code>超过慢开始门限后，每经过一个RTT，拥塞窗口就线性增长 <code>cwnd = cwnd + 1</code>。</p>
 <h5 id="快速重传算法">快速重传算法</h5>
 <p>该算法是指：如果发送方连续收到3个重复ack号的确认，说明接收方收到了乱序的报文（某个中间报文丢失或者迟到），发送方会立即进行重传，而不是等到超时时间用完才重传，避免发送方误认为发生了网络拥塞。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121445751.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>中间报文的丢失或迟到极可能是意外丢失或迟到，而不是因为网络拥塞导致的丢失，但不排除拥塞的可能性。快速重传可以使网络的吞吐量提高20%。</p>
 <h5 id="快恢复算法">快恢复算法</h5>
 <p><strong>拥塞惩罚</strong>是指端系统检测到网络拥塞时（即发生重传时），降低自己<code>cwnd</code>窗口的行为。拥塞惩罚按超时重传和快速重传分为两种惩罚方式：</p>
@@ -897,14 +847,7 @@
 </ul>
 <p><strong>快恢复算法</strong>是指当发生快速重传时，当前拥塞窗口大小减小一半，之后直接执行拥塞避免算法线性增长<code>cwnd</code>，而不是执行慢开始算法指数增长<code>cwnd</code>。</p>
 <p>下面是TCP拥塞控制流程图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450060.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="拥塞惩罚机制">拥塞惩罚机制</h4>
 <p>整个拥塞惩罚机制逻辑如下：</p>
 <p>超时重传的情况下：</p>
@@ -917,14 +860,7 @@
 <p>• 开始执⾏拥塞避免算法，使拥塞窗⼝缓慢地线性增⼤。</p>
 <p>无论是超时重传还是快速重传，都会导致慢开始门限减半，这会导致多次惩罚后，不再会执行指数增长，而是全变成线性增长。</p>
 <h4 id="tcp拥塞控制动态流程图">TCP拥塞控制动态流程图</h4>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450440.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="主动队列管理-aqm">主动队列管理 AQM</h4>
 <p>对TCP拥塞控制影响最大的网络层策略是分组丢弃策略。该策略的内容为，到达路由器的分组会按先进先出原则放入到缓存队列中，一旦队列已满，后到达的分组会被丢弃。</p>
 <p>这种丢弃策略会导致<strong>一连串分组的丢失和超时重传，这一方向的所有TCP连接都进入慢开始状态，这种情况叫做全局同步</strong>，全局同步会导致通信量突然下降，不一会儿通信量又突然增大（因为报文指数增长）。</p>
@@ -934,14 +870,7 @@
 <p>队列⻓度L ⼩于最⼩⻔限 THmin，将新到达的分组放⼊队 列进⾏排队；</p>
 <p>队列⻓度L 超过最⼤⻔限 THmax，将新到达的分组丢弃；</p>
 <p>队列⻓度L 在最⼩⻔限 THmin 和最⼤⻔限 THmax 之间，按 照概率 p 丢弃新到达的分组。而且随着队列长度L的增加，p也会变大。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121450720.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="连接管理">连接管理</h3>
 <p>TCP连接要解决3个问题：</p>
 <ol>
@@ -951,45 +880,17 @@
 </ol>
 <h4 id="三次握手建立连接">三次握手建立连接</h4>
 <p>需要3个报文：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121459955.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>下面是连接的状态变化</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500199.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在连接之前，A和B会先创建传输控制块TCB，存储了连接相关的重要信息如 TCP连接表，指向发送和接收缓存的指针，指向重传队列的指针，seq和ack等。</p>
 <p>SYN不能携带数据，但需要消耗一个序号。ACK报文是可以携带数据的。</p>
 <p><strong>为什么建立连接是三次握手而不是两次？</strong></p>
 <p>是为了防止已失效的连接请求报文段传到了B产生错误。具体情境如下：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500639.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>A 发送的SYN报文丢失，A又重发了一个SYN报文，并建立连接成功，后来关闭了连接，通信结束。但丢失的SYN报文此时到达B，B发送第二次握手的报文（ACK报文）后直接进入连接状态，而A没有发起建立连接的请求，不会理睬这个ACK报文，但B会一直等待A发送数据报文段过来，B的资源白白浪费。</p>
 <h4 id="四次挥手断开连接">四次挥手断开连接</h4>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121500310.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>需要注意：</p>
 <p>通信双方都可以主动发起关闭连接的请求报文。</p>
 <p>FIN可以携带数据，但如果不携带数据也会消耗一个序号。</p>
@@ -1005,42 +906,14 @@
 <p>套接字的close()提供了全关闭操作，而shutdown()则提供了半关闭操作，实际应用中半关闭很少用到。</p>
 <h5 id="tcp同时打开与关闭">TCP同时打开与关闭</h5>
 <p>同时打开是指通信双方A和B，A发送SYN报文给B，并在报文段到达B之前，B也发送SYN报文给A。同时打开只会出现在A和B都是服务器端的情况下。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png"
-        data-srcset="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png, https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png 1.5x, https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png 2x"
-        data-sizes="auto"
-        alt="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png"
-        title="img" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png"
-        data-srcset="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png, https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png 1.5x, https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png 2x"
-        data-sizes="auto"
-        alt="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png" srcset="https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png?size=small, https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png?size=medium 1.5x, https://www.zbpblog.com/uploads/images/blog/00264e2cb422a246443172a1f49ad10b.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png" srcset="https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png?size=small, https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png?size=medium 1.5x, https://www.zbpblog.com/uploads/images/blog/f46e861866b408d9deac3234393875a2.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="连接建立超时">连接建立超时</h5>
 <p>如果一个客户端发起连接请求时，服务器是关闭的，那么客户端会在连接等待超时后再重新发送SYN报文，并且每次超时，超时时间都会翻倍。这一行为被称为指数回退。</p>
 <p>在Linux中net.ipv4.tcp_syn_retries参数可以配置重发SYN的次数，而net.ipv4.tcp_synack_retries则是第二次握手的SYN报文的重发次数。这两个参数通常选择一个较小值5。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121501141.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="tcp有限状态机">TCP有限状态机</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202307121458302.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="计时器">计时器</h3>
 <ul>
 <li>超时重传计时器：略；</li>
@@ -1055,43 +928,55 @@
 </blockquote>
 <h3 id="heading"></h3>
 </div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>Updated on 2023-07-11</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" data-title="计算机网络之运输层"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" data-title="计算机网络之运输层"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
-            </div>
-        </div>
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2023-07-11 17:36:16">Updated on 2023-07-11&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span><span><a href="https://github.com/cold-bin/blog/edit/main/content/posts/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c%e4%b9%8b%e8%bf%90%e8%be%93%e5%b1%82.md" title="Edit this page"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">Edit this page</a></span></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" data-title="计算机网络之运输层"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/" data-title="计算机网络之运输层"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
 
-    <div class="post-info-more">
-        <section class="post-tags"></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
-        </section>
-    </div>
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
 
-    <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" class="prev" rel="prev" title="计算机网络之网络层"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>计算机网络之网络层</a>
-            <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" class="next" rel="next" title="计算机网络之应用层">计算机网络之应用层<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%BD%91%E7%BB%9C%E5%B1%82/" class="post-nav-item" rel="prev" title="计算机网络之网络层"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>计算机网络之网络层</a>
+      <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E5%BA%94%E7%94%A8%E5%B1%82/" class="post-nav-item" rel="next" title="计算机网络之应用层">计算机网络之应用层<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-<div id="comments"><div id="gitalk" class="comment"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
-            </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
-
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-07-11T17:36:16+08:00","owner":"cold-bin","repo":"blog-comment","title":"计算机网络之运输层"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+<div class="post-reward">
+    <div class="comment">Buy me a coffee</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">Donate</label>
+    <div class="reward-ways" data-mode="fixed"><div><img loading="lazy" src="/images/alipay.jpg" data-title="阿冰 Alipay" data-alt="阿冰 Alipay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>Alipay</span>
+          </div><div><img loading="lazy" src="/images/wechatpay.png" data-title="阿冰 WeChat Pay" data-alt="阿冰 WeChat Pay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>WeChat Pay</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright order-5" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/cold-bin"target="_blank" rel="external nofollow noopener noreferrer">阿冰</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics order-4"><span class="site-time" title='Website running ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="ms-1 d-none">运行</span><span class="run-times ms-1">Website running ...</span></span></div><div class="footer-line visitor order-2">
+          <span id="busuanzi_container_site_uv" title='Total visitors'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='Total visits'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.120f067ebd6f322339e2ccccd7e87e334d7c7ea5b2bd553f325f2ae3c3ae6fe8.css" integrity="sha256-Eg8Gfr1vMiM54szM1+h+M018fqWyvVU/Ml8q48Oub+g="><link rel="preload" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><link rel="stylesheet" href="/lib/pace/themes/silver/pace-theme-minimal.1aefeadd689806308301fe332322fc3cec76f1d28a8e516afd37d31600e1e964.css" integrity="sha256-Gu/q3WiYBjCDAf4zIyL8POx28dKKjlFq/TfTFgDh6WQ="><script src="/lib/gitalk/gitalk.min.f4f9407ea35ccf4be5019cc41d70eab1eb273941bca01b3a93c91201f195a76f.js" integrity="sha256-9PlAfqNcz0vlAZzEHXDqsesnOUG8oBs6k8kSAfGVp28="></script><script src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.804e26c45f81a02b98b05bc1e378c1ff6c5d2339e0c6550aadf1419adf3a8c81.js" integrity="sha256-gE4mxF+BoCuYsFvB43jB/2xdIzngxlUKrfFBmt86jIE=" defer></script><script src="/lib/lightgallery/lightgallery.min.7de2854e7954105f2b91ff5983749c4e3c7af51e05aae279f8a5d66994a85777.js" integrity="sha256-feKFTnlUEF8rkf9Zg3ScTjx69R4FquJ5+KXWaZSoV3c=" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4fbc3ec1878e90348b71b3594d8ef27c4f10a1a4c6d5e74948d0ee59018fd87c.js" integrity="sha256-T7w+wYeOkDSLcbNZTY7yfE8QoaTG1edJSNDuWQGP2Hw=" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.821a2adb8005511c0ad9ef6f395c1b74beacc2da194cd13a4ac43d341246e085.js" integrity="sha256-ghoq24AFURwK2e9vOVwbdL6swtoZTNE6SsQ9NBJG4IU=" defer></script><script src="/lib/sharer/sharer.min.ba5171a78670b031914e623431a33a3d73c1ea9897e552ba73bc2c2da7c777b9.js" integrity="sha256-ulFxp4ZwsDGRTmI0MaM6PXPB6piX5VK6c7wsLafHd7k=" async defer></script><script src="/lib/typeit/index.umd.16f3fa3374a7eea31f19672293edc98326413002dea74b8c413a74f1b7e4f1cf.js" integrity="sha256-FvP6M3Sn7qMfGWcik+3JgyZBMALep0uMQTp08bfk8c8=" defer></script><script src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw+iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script src="/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script src="/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":50},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-07-11T17:36:16+08:00","owner":"cold-bin","repo":"blog-comment","title":"计算机网络之运输层"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"life and code.","typeit-header-subtitle-mobile":"life and code."},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"siteTime":"2023-12-28T12:00:00+00:00","typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"loop":false,"speed":100}};</script><script src="/js/theme.min.58f9858983f2742da374c22058a1768784a6955aa9a3f3b3b179c080fa0fa468.js" integrity="sha256-WPmFiYPydC2jdMIgWKF2h4SmlVqpo/OzsXnAgPoPpGg=" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-75123653-1');
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=UA-75123653-1" async></script></body>
 </html>

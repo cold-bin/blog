@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>操作系统之文件管理 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="操作系统之文件管理" />
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>操作系统之文件管理 - 阿冰的小屋</title><meta name="author" content="阿冰">
+<meta name="author-link" content="https://github.com/cold-bin">
+<meta name="description" content="[toc] 文件系统基础 文件的概念 由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文" /><meta name="keywords" content='Hugo, FixIt' /><meta itemprop="name" content="操作系统之文件管理">
+<meta itemprop="description" content="[toc] 文件系统基础 文件的概念 由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文"><meta itemprop="datePublished" content="2023-05-21T15:19:47+08:00" />
+<meta itemprop="dateModified" content="2023-05-21T15:19:47+08:00" />
+<meta itemprop="wordCount" content="13100"><meta itemprop="image" content="https://blog.coldbin.top/favicon.ico"/>
+<meta itemprop="keywords" content="" /><meta property="og:title" content="操作系统之文件管理" />
 <meta property="og:description" content="[toc] 文件系统基础 文件的概念 由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,118 +24,196 @@
 <meta name="twitter:title" content="操作系统之文件管理"/>
 <meta name="twitter:description" content="[toc] 文件系统基础 文件的概念 由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "操作系统之文件管理",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  13100 ,
-        "url": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86\/","datePublished": "2023-05-21T15:19:47+08:00","dateModified": "2023-05-21T15:19:47+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
-            "@type": "Organization",
-            "name": "阿冰","logo": {
-                    "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
-                    "width":  396 ,
-                    "height":  396 
-                }},"author": {
-                "@type": "Person",
-                "name": "阿冰"
-            },"description": ""
-    }
-    </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.04a53c8f85f60bfc901f510b07233befa08ea6546fc4a641b7a7caf06269844a.css" integrity="sha256-BKU8j4X2C/yQH1ELByM776COplRvxKZBt6fK8GJphEo="><link rel="preload" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "操作系统之文件管理",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86\/"
+    },"image": [{
+              "@type": "ImageObject",
+              "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+              "width":  396 ,
+              "height":  396 
+            }],"genre": "posts","wordcount":  13100 ,
+    "url": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86\/","datePublished": "2023-05-21T15:19:47+08:00","dateModified": "2023-05-21T15:19:47+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+      "@type": "Organization",
+      "name": "阿冰","logo": {
+          "@type": "ImageObject",
+          "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+          "width":  396 ,
+          "height":  396 
+        }},"author": {
+        "@type": "Person",
+        "name": "阿冰"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="阿冰的小屋" data-alt="阿冰的小屋" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/friends"
+                
+                
+              ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
     <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-                </a></div>
-        </div>
+      <div class="header-title">
+        <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="/favicon.ico" data-alt="/favicon.ico" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        Cancel
-                    </a>
-                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-            </a></div>
-    </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/friends"
+                  
+                  
+                ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
 </header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">操作系统之文件管理</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>操作系统</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-05-21">2023-05-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;13100 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;27 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
-                <div class="details-summary toc-title">
-                    <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><nav aria-label="breadcrumb" class="breadcrumb-container sticky">
+    <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/" title="阿冰的小屋">Home</a></li><li class="breadcrumb-item"><a href="/posts/" title="Posts">Posts</a></li><li class="breadcrumb-item active" aria-current="page">操作系统之文件管理</li>
+    </ol>
+  </nav><main class="container"><aside class="toc" id="toc-auto"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>操作系统之文件管理</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://www.gravatar.com/avatar/bbeb236273ce7a8cc349e66deaa25959?s=32&amp;d=" data-title="阿冰" data-alt="阿冰" class="avatar" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;阿冰</a></span>
+          <span class="post-category">included in <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 操作系统</a></span></div>
+      <div class="post-meta-line"><span title="published on 2023-05-21 15:19:47"><i class="fa-regular fa-calendar-alt fa-fw me-1" aria-hidden="true"></i><time datetime="2023-05-21">2023-05-21</time></span>&nbsp;<span title="Updated on 2023-05-21 15:19:47"><i class="fa-regular fa-edit fa-fw me-1" aria-hidden="true"></i><time datetime="2023-05-21">2023-05-21</time></span>&nbsp;<span title="13100 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 13200 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>27 minutes</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="操作系统之文件管理">
+              <i class="fa-regular fa-eye fa-fw me-1" aria-hidden="true"></i><span id="busuanzi_value_page_pv">-</span>&nbsp;views
+            </span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -240,7 +325,7 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>[toc]</p>
+      </div><div class="content" id="content"><p>[toc]</p>
 <h2 id="文件系统基础">文件系统基础</h2>
 <h3 id="文件的概念">文件的概念</h3>
 <p>由于系统的内存有限并且不能长期保存，故平时总是把它们以文件的形式存放在外存中，需要时再将它们调入内存。如何高效的对文件进行管理是操作系统实现的目标。</p>
@@ -311,25 +396,11 @@
 <p>顺序文件的最佳应用场合是在对诸记录进行批量存取时，即每次要读或写一大批记录时，此时，对顺序文件的存取效率是所有逻辑文件中最高的，此外，只有顺序文件才能存储在磁带上，并能有效工作。但是想要增加或删除一个文件比较困难。</p>
 <h5 id="索引文件">索引文件</h5>
 <p>对于定长记录文件，顺序文件的实现，可以方便的实现顺序存取和直接存取。然而，顺序文件对于变长记录就很难实现。为了解决变长记录检索问题，可为变长记录文件建立一张索引表，对主文件中的每个记录，在索引表中设有一个相应的表项，用于记录该记录的长度L及指向该记录的指针（指向该记录在逻辑地址空间的首址），由于索引表示按记录键排序的，因此，<strong>索引表本身是一个定长记录的顺序文件</strong>。从而可以方便实现直接存取。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629142812609-701482299.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在对索引文件进行检索时，首先根据用户（程序)提供的关键字，并利用折半查找检索索引表，从中找到相应的表项，再利用该表项给出的指向记录的指针值，去访问所需的记录。每当要向索引文件中增加一个新纪录时，便须对索引表进行修改。索引表的问题在于除了有主文件外，还需要配置一张索引表，每个记录需要有一个索引项，因此提高了存储费用。</p>
 <h5 id="索引顺序文件">索引顺序文件</h5>
 <p>其有效克服了变长记录不便于直接存取的缺点，而且所付出的代价也不算太大，它是顺序文件和索引文件相结合的产物，它<strong>将顺序文件中的所有记录分为若干个组，为顺序文件建立一张索引表，在索引表中为每组中的第一个记录建立一个索引项，其中含有该记录的键值和指向记录的指针</strong>。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629143622906-56225907.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在对索引顺序文件进行检索时，首先利用用户（程序）所提供的关键字及某种查找算法去检索索引表，找到该记录组中的第一个记录的表项，从中得到该记录组第一个记录在主文件中的位置，然后，再利用顺序查找法去查找主文件，从中找出所要求的记录。</p>
 <blockquote>
 <p>类似于字典查找，先找拼音或部首缩小范围，再找具体的字。</p>
@@ -338,14 +409,7 @@
 <p>对于直接文件，则根据给定的记录键值，直接获得指定记录的物理地址，换言之，<strong>记录键值本身就决定了记录的物理地址</strong>，这种由记录键值到记录物理地址的转换被称为键值转换。</p>
 <h5 id="哈希文件">哈希文件</h5>
 <p><strong>利用Hash函数可将记录键值转换为相应记录的地址</strong>，为了能实现文件存储空间的动态分配，通常由Hash函数所求得的并非是相应记录的地址，而是指向一目录表相应表目的指针，该表目的内容指向相应记录所在的物理块。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629144528812-1046254793.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="文件的目录结构">文件的目录结构</h4>
 <p>为了能够对文件实施有效的管理，必须对它们加以妥善组织，这主要是通过文件目录实现的，文件目录也是一种数据结构，用于标识系统中的文件及其物理地址，供检索时使用，对目录的管理要求如下：</p>
 <ul>
@@ -362,27 +426,13 @@
 <li>存取控制权限信息：文件读写权限</li>
 <li>使用信息：创建时间等</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629170530499-1935685549.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="索引节点index-node">索引节点<code>index node</code></h5>
 <blockquote>
 <p>理解<code>inode</code>，要从文件储存说起。文件储存在硬盘上，硬盘的最小存储单位叫做”扇区”（Sector）。每个扇区储存512字节（相当于0.5KB）。操作系统读取硬盘的时候，不会一个个扇区地读取，这样效率太低，而是一次性连续读取多个扇区，即一次性读取一个”块”（block）。这种由多个扇区组成的”块”，是文件存取的最小单位。”块”的大小，最常见的是4KB，即连续八个 sector组成一个 block。文件数据都储存在”块”中，那么很显然，我们还必须找到一个地方储存文件的元信息，比如文件的创建者、文件的创建日期、文件的大小等等。这种储存文件元信息的区域就叫做<code>inode</code>，中文译名为”索引节点” 。</p>
 </blockquote>
 <h6 id="inode包含内容"><code>inode</code>包含内容</h6>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png"
-        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png?size=large 2x" sizes="auto" data-title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png" data-alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629220451749-1048812791.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>Linux中目录的数据块中的每一项中都包含了文件名和其对应的<code>inode</code>。<code>inode</code>记录了文件的属性以及该文件实际存储位置，即数据块号（block number），每一个block（常见大小4KB），通过<code>inode</code>可以实现文件的查找定位。<code>inode</code>是Linux中的，Unix中是<code>vnode</code>。</p>
 <p>基本上，<code>inode</code>包含的信息至少有如下这些：（1）文件的类型 （2）文件访问权限； （3）文件的所有者与组； （4）文件的大小； （5）链接数，即指向该<code>inode</code>的文件名总数； （6）文件的状态改变时间（ctime）、最近访问时间（atime）和最近修改时间（mtime）； （7）文件特殊属性，SUID、SGID和SBIT； （8）文件内容的真正指向（pointer）。</p>
 <p>可以用stat命令，查看某个文件的<code>inode</code>信息。</p>
@@ -394,14 +444,7 @@
 <li>根据<code>inodeTable</code>中的对应关系，找到对应的block；</li>
 <li>读取文件。</li>
 </ol>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/chnshae3vr.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h6 id="inode的优点"><code>inode</code>的优点</h6>
 <ul>
 <li>对于有些无法删除的文件可以通过删除<code>inode</code>节点来删除；</li>
@@ -419,14 +462,7 @@
 <h5 id="目录结构">目录结构</h5>
 <p>目录结构的组织，关系到文件系统的存取速度，也关系到文件的共享性和安全性，目前常用的目录结构形式有单级目录、两级目录、多级目录。</p>
 <h6 id="单级目录">单级目录</h6>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629192436109-1963104738.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在整个系统中只建立一张目录表，每个文件占一个目录项，目录项中含文件名、文件扩展名、文件长度、文件类型、文件物理地址、状态位（表示目录项是否空闲）等。</p>
 <p><strong>缺点：</strong></p>
 <ul>
@@ -435,14 +471,7 @@
 <li>不便于实现多用户的文件共享：单级目录下，多个用户使用相同的文件名对一个文件进行访问，但不能实现多个用户使用不同文件名对一个文件进行访问。</li>
 </ul>
 <h6 id="两级目录">两级目录</h6>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629191430843-2061259116.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>为每个用户建立一个单独的<strong>用户文件目录UFD</strong>（User File Directory），这些文件目录具有相似的结构，由用户所有文件的文件控制块组成。此外，系统中还有一个<strong>主文件目录MFD</strong>（Master File Directory），在主文件目录中，每个用户目录文件都占有一个目录项，其目录项包括<strong>用户名和指向用户目录文件的指针</strong>。</p>
 <p><strong>优点：</strong></p>
 <ul>
@@ -456,14 +485,7 @@
 </ul>
 <h6 id="多级目录">多级目录</h6>
 <p>对于大型文件系统，通常采用三级或三级以上的目录结构，以提高对目录的检索速度和文件系统的性能。多级目录结构又称为树形目录结构，<strong>主目录被称为根目录</strong>，把<strong>数据文件称为树叶</strong>，<strong>其他的目录均作为树的结点</strong>。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/616953-20160629194037327-113223554.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <blockquote>
 <p>说明：方框代表目录文件，圆圈代表数据文件，主目录中有是哪个用户总目录A、B、C，在B用户的总目录B中，又包括三个分目录F、E、D，其中每个分目录中又包含多个文件，为提高系统的灵活性，<strong>应该允许在一个目录文件中的目录项既是作为目录文件的FCB，又是数据文件的FCB</strong>，这一信息可用目录项中的一位来指示。如用户A总目录中，目录项A是目录文件FCB，而目录项B和D则是数据文件的FCB。</p>
 </blockquote>
@@ -482,14 +504,7 @@
 <p>现代常用的两种文件共享方法有：硬链接和软链接</p>
 <h4 id="硬链接基于索引结点的共享方式">硬链接：基于索引结点的共享方式</h4>
 <p>在树形结构的目录中，当有两个或多个用户要共享一个子目录或文件时，必须将共享文件或子目录链接到两个或多个用户的目录中，才能方便地找到该文件，如图所示</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png"
-        title="输入图片说明" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/112522_90746cd6_508704.png?size=large 2x" sizes="auto" data-title="输入图片说明" data-alt="输入图片说明" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在这种共享方式中引用索引结点，即诸如文件的物理地址及其他的文件属性等信息，不再是放在目录项中，而是放在索引结点中。</p>
 <p>在文件目录中只设置文件名及指向相应索引结点的指针。在索引结点中还应有一个链接计数count,用于表示链接到本索引结点（亦即文件）上的用户目录项的数目。只有当count=0时，也就是文件没有其他用户被硬链接，此时可以删除掉文件；count&gt;0时，不能删除文件。</p>
 <p><strong>优点：</strong></p>
@@ -602,14 +617,7 @@
 <h6 id="隐式链接分配">隐式链接分配</h6>
 <p>链接分配解决了连续分配的所有问题。也就是说，链接分配可以实现文件长度动态增加，而且不存在外部碎片。</p>
 <p>在链接分配中，分配给特定文件的磁盘块不需要在磁盘上连续存在。分配给文件的每个磁盘块都包含一个指向分配给同一文件的下一个磁盘块的指针。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/212100513_86908.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>优点</strong></p>
 <ul>
 <li>链接分配没有外部碎片。通过链接的方式，所有的磁盘空闲块都能得到利用，所以也就没有外部碎片。</li>
@@ -628,14 +636,7 @@
 <p>链接分配的显式实现——文件分配表FAT。</p>
 <p>隐式链表分配的主要缺点是它不提供对特定块的随机访问。要访问一个块，我们还需要访问它之前的所有块。</p>
 <p>文件分配表克服了链表分配的缺点。在这个方案中，维护一个文件分配表，它收集所有的磁盘块链接。该表对每个磁盘块都有一个条目，并按块编号进行索引。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/825140523_44646.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>优点</strong></p>
 <ul>
 <li>使用整个磁盘块获取数据。</li>
@@ -659,14 +660,7 @@
 <p>文件分配表尽量解决尽可能多的问题，但会导致一个缺点。 块的数量越多，FAT的大小就越大。</p>
 <p>因此，我们需要为文件分配表分配更多空间。 由于文件分配表需要被缓存，因此不可能在缓存中具有尽可能多的空间。 在这里我们需要一种可以解决这些问题的新技术。</p>
 <p>索引分配方案不是维护所有磁盘指针的文件分配表，而是将一个文件中所有磁盘指针存储在一个称为索引块的磁盘块中。 索引块不包含文件数据，但它保存指向分配给该特定文件的所有磁盘块的指针。目录条目将只包含索引块地址。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/314140526_74560.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>优点</strong></p>
 <ul>
 <li>支持直接访问。</li>
@@ -698,14 +692,7 @@
 </ul>
 <p><strong>优点:</strong> 随机访问变得更好，更高效。
 <strong>缺点:</strong> 文件的访问时间会更长；文件最大大小有限。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/453140530_93344.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <blockquote>
 <p>值得注意的是，多级索引的索引层数，将决定能存储文件的容量上限，不能无休止的增加文件长度。</p>
 </blockquote>
@@ -732,55 +719,66 @@
 <h5 id="位示图法">位示图法</h5>
 <p>位图是利用二进制的一位来表示磁盘中一个盘块的使用情况，磁盘上所有的盘块都有一个二进制位与之对应。</p>
 <p>当值为 0 时，表示对应的盘块空闲，值为 1 时，表示对应的盘块已分配。它形式如下：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-1"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">1111110011111110001110110111111100111 ...
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">1111110011111110001110110111111100111 ...</span></span></code></pre></td></tr></table>
 </div>
 </div><p>盘块分配与回收过程如下：</p>
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230530115427513.png" alt="image-20230530115427513" style="zoom:50%;" />
 <p>在 Linux 文件系统就采用了位图的方式来管理空闲空间，不仅用于数据空闲块的管理，还用于 inode 空闲块的管理，因为 inode 也是存储在磁盘的，自然也要有对其管理。</p>
 </div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>Updated on 2023-05-21</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" data-title="操作系统之文件管理"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" data-title="操作系统之文件管理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
-            </div>
-        </div>
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2023-05-21 15:19:47">Updated on 2023-05-21&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span><span><a href="https://github.com/cold-bin/blog/edit/main/content/posts/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e4%b9%8b%e6%96%87%e4%bb%b6%e7%ae%a1%e7%90%86.md" title="Edit this page"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">Edit this page</a></span></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" data-title="操作系统之文件管理"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/" data-title="操作系统之文件管理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
 
-    <div class="post-info-more">
-        <section class="post-tags"></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
-        </section>
-    </div>
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
 
-    <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="prev" rel="prev" title="操作系统之内存管理"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>操作系统之内存管理</a>
-            <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" class="next" rel="next" title="操作系统之输入输出管理">操作系统之输入输出管理<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-nav-item" rel="prev" title="操作系统之内存管理"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>操作系统之内存管理</a>
+      <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/" class="post-nav-item" rel="next" title="操作系统之输入输出管理">操作系统之输入输出管理<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-<div id="comments"><div id="gitalk" class="comment"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
-            </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
-
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-05-21T15:19:47+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之文件管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+<div class="post-reward">
+    <div class="comment">Buy me a coffee</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">Donate</label>
+    <div class="reward-ways" data-mode="fixed"><div><img loading="lazy" src="/images/alipay.jpg" data-title="阿冰 Alipay" data-alt="阿冰 Alipay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>Alipay</span>
+          </div><div><img loading="lazy" src="/images/wechatpay.png" data-title="阿冰 WeChat Pay" data-alt="阿冰 WeChat Pay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>WeChat Pay</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright order-5" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/cold-bin"target="_blank" rel="external nofollow noopener noreferrer">阿冰</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics order-4"><span class="site-time" title='Website running ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="ms-1 d-none">运行</span><span class="run-times ms-1">Website running ...</span></span></div><div class="footer-line visitor order-2">
+          <span id="busuanzi_container_site_uv" title='Total visitors'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='Total visits'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.120f067ebd6f322339e2ccccd7e87e334d7c7ea5b2bd553f325f2ae3c3ae6fe8.css" integrity="sha256-Eg8Gfr1vMiM54szM1+h+M018fqWyvVU/Ml8q48Oub+g="><link rel="preload" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><link rel="stylesheet" href="/lib/pace/themes/silver/pace-theme-minimal.1aefeadd689806308301fe332322fc3cec76f1d28a8e516afd37d31600e1e964.css" integrity="sha256-Gu/q3WiYBjCDAf4zIyL8POx28dKKjlFq/TfTFgDh6WQ="><script src="/lib/gitalk/gitalk.min.f4f9407ea35ccf4be5019cc41d70eab1eb273941bca01b3a93c91201f195a76f.js" integrity="sha256-9PlAfqNcz0vlAZzEHXDqsesnOUG8oBs6k8kSAfGVp28="></script><script src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.804e26c45f81a02b98b05bc1e378c1ff6c5d2339e0c6550aadf1419adf3a8c81.js" integrity="sha256-gE4mxF+BoCuYsFvB43jB/2xdIzngxlUKrfFBmt86jIE=" defer></script><script src="/lib/lightgallery/lightgallery.min.7de2854e7954105f2b91ff5983749c4e3c7af51e05aae279f8a5d66994a85777.js" integrity="sha256-feKFTnlUEF8rkf9Zg3ScTjx69R4FquJ5+KXWaZSoV3c=" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4fbc3ec1878e90348b71b3594d8ef27c4f10a1a4c6d5e74948d0ee59018fd87c.js" integrity="sha256-T7w+wYeOkDSLcbNZTY7yfE8QoaTG1edJSNDuWQGP2Hw=" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.821a2adb8005511c0ad9ef6f395c1b74beacc2da194cd13a4ac43d341246e085.js" integrity="sha256-ghoq24AFURwK2e9vOVwbdL6swtoZTNE6SsQ9NBJG4IU=" defer></script><script src="/lib/sharer/sharer.min.ba5171a78670b031914e623431a33a3d73c1ea9897e552ba73bc2c2da7c777b9.js" integrity="sha256-ulFxp4ZwsDGRTmI0MaM6PXPB6piX5VK6c7wsLafHd7k=" async defer></script><script src="/lib/typeit/index.umd.16f3fa3374a7eea31f19672293edc98326413002dea74b8c413a74f1b7e4f1cf.js" integrity="sha256-FvP6M3Sn7qMfGWcik+3JgyZBMALep0uMQTp08bfk8c8=" defer></script><script src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw+iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script src="/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script src="/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":50},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-05-21T15:19:47+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之文件管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"life and code.","typeit-header-subtitle-mobile":"life and code."},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"siteTime":"2023-12-28T12:00:00+00:00","typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"loop":false,"speed":100}};</script><script src="/js/theme.min.58f9858983f2742da374c22058a1768784a6955aa9a3f3b3b179c080fa0fa468.js" integrity="sha256-WPmFiYPydC2jdMIgWKF2h4SmlVqpo/OzsXnAgPoPpGg=" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-75123653-1');
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=UA-75123653-1" async></script></body>
 </html>

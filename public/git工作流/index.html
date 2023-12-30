@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>Git工作流 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Git工作流" />
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Git工作流 - 阿冰的小屋</title><meta name="author" content="阿冰">
+<meta name="author-link" content="https://github.com/cold-bin">
+<meta name="description" content="关于版本控制 什么是版本控制？我为什么要关心它呢？ 版本控制是一种记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的系统。 在本书所展示的" /><meta name="keywords" content='Hugo, FixIt' /><meta itemprop="name" content="Git工作流">
+<meta itemprop="description" content="关于版本控制 什么是版本控制？我为什么要关心它呢？ 版本控制是一种记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的系统。 在本书所展示的"><meta itemprop="datePublished" content="2022-08-25T11:52:44+08:00" />
+<meta itemprop="dateModified" content="2022-08-25T11:52:44+08:00" />
+<meta itemprop="wordCount" content="11258"><meta itemprop="image" content="https://blog.coldbin.top/favicon.ico"/>
+<meta itemprop="keywords" content="" /><meta property="og:title" content="Git工作流" />
 <meta property="og:description" content="关于版本控制 什么是版本控制？我为什么要关心它呢？ 版本控制是一种记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的系统。 在本书所展示的" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/git%E5%B7%A5%E4%BD%9C%E6%B5%81/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,118 +24,196 @@
 <meta name="twitter:title" content="Git工作流"/>
 <meta name="twitter:description" content="关于版本控制 什么是版本控制？我为什么要关心它呢？ 版本控制是一种记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的系统。 在本书所展示的"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/git%E5%B7%A5%E4%BD%9C%E6%B5%81/" /><link rel="prev" href="https://blog.coldbin.top/mysql%E5%9F%BA%E7%A1%80%E7%AF%87/" /><link rel="next" href="https://blog.coldbin.top/git%E4%B9%8Bcommit%E8%A7%84%E8%8C%83%E6%8C%87%E5%8D%97/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "Git工作流",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/git%E5%B7%A5%E4%BD%9C%E6%B5%81\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  11258 ,
-        "url": "https:\/\/blog.coldbin.top\/git%E5%B7%A5%E4%BD%9C%E6%B5%81\/","datePublished": "2022-08-25T11:52:44+08:00","dateModified": "2022-08-25T11:52:44+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
-            "@type": "Organization",
-            "name": "阿冰","logo": {
-                    "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
-                    "width":  396 ,
-                    "height":  396 
-                }},"author": {
-                "@type": "Person",
-                "name": "阿冰"
-            },"description": ""
-    }
-    </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.coldbin.top/git%E5%B7%A5%E4%BD%9C%E6%B5%81/" /><link rel="prev" href="https://blog.coldbin.top/mysql%E5%9F%BA%E7%A1%80%E7%AF%87/" /><link rel="next" href="https://blog.coldbin.top/git%E4%B9%8Bcommit%E8%A7%84%E8%8C%83%E6%8C%87%E5%8D%97/" /><link rel="stylesheet" href="/css/style.min.04a53c8f85f60bfc901f510b07233befa08ea6546fc4a641b7a7caf06269844a.css" integrity="sha256-BKU8j4X2C/yQH1ELByM776COplRvxKZBt6fK8GJphEo="><link rel="preload" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Git工作流",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/blog.coldbin.top\/git%E5%B7%A5%E4%BD%9C%E6%B5%81\/"
+    },"image": [{
+              "@type": "ImageObject",
+              "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+              "width":  396 ,
+              "height":  396 
+            }],"genre": "posts","wordcount":  11258 ,
+    "url": "https:\/\/blog.coldbin.top\/git%E5%B7%A5%E4%BD%9C%E6%B5%81\/","datePublished": "2022-08-25T11:52:44+08:00","dateModified": "2022-08-25T11:52:44+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+      "@type": "Organization",
+      "name": "阿冰","logo": {
+          "@type": "ImageObject",
+          "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+          "width":  396 ,
+          "height":  396 
+        }},"author": {
+        "@type": "Person",
+        "name": "阿冰"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="阿冰的小屋" data-alt="阿冰的小屋" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/friends"
+                
+                
+              ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
     <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-                </a></div>
-        </div>
+      <div class="header-title">
+        <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="/favicon.ico" data-alt="/favicon.ico" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        Cancel
-                    </a>
-                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-            </a></div>
-    </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/friends"
+                  
+                  
+                ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
 </header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Git工作流</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/git/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>git</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-08-25">2022-08-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;11258 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;23 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
-                <div class="details-summary toc-title">
-                    <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><nav aria-label="breadcrumb" class="breadcrumb-container sticky">
+    <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/" title="阿冰的小屋">Home</a></li><li class="breadcrumb-item"><a href="/posts/" title="Posts">Posts</a></li><li class="breadcrumb-item active" aria-current="page">Git工作流</li>
+    </ol>
+  </nav><main class="container"><aside class="toc" id="toc-auto"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Git工作流</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://www.gravatar.com/avatar/bbeb236273ce7a8cc349e66deaa25959?s=32&amp;d=" data-title="阿冰" data-alt="阿冰" class="avatar" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;阿冰</a></span>
+          <span class="post-category">included in <a href="/categories/git/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> git</a></span></div>
+      <div class="post-meta-line"><span title="published on 2022-08-25 11:52:44"><i class="fa-regular fa-calendar-alt fa-fw me-1" aria-hidden="true"></i><time datetime="2022-08-25">2022-08-25</time></span>&nbsp;<span title="Updated on 2022-08-25 11:52:44"><i class="fa-regular fa-edit fa-fw me-1" aria-hidden="true"></i><time datetime="2022-08-25">2022-08-25</time></span>&nbsp;<span title="11258 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 11300 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>23 minutes</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="Git工作流">
+              <i class="fa-regular fa-eye fa-fw me-1" aria-hidden="true"></i><span id="busuanzi_value_page_pv">-</span>&nbsp;views
+            </span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -190,7 +275,14 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="关于版本控制">关于版本控制</h2>
+      </div><div class="content" id="content"><div class="details admonition note open">
+      <div class="details-summary admonition-title">
+        <i class="icon fa-solid fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden="true"></i>
+      </div>
+      <div class="details-content">
+        <div class="admonition-content">This article was last updated on 2022-08-25, the content may be out of date.</div>
+      </div>
+    </div><h2 id="关于版本控制">关于版本控制</h2>
 <p>什么是版本控制？我为什么要关心它呢？</p>
 <p>版本控制是一种记录一个或若干文件内容变化，以便将来查阅特定版本修订情况的系统。</p>
 <p>在本书所展示的例子中，我们仅对保存着软件源代码的文本文件作版本控制管理，但实际上，你可以对任何类型的文件进行版本控制。</p>
@@ -198,59 +290,24 @@
 <h3 id="本地版本控制系统">本地版本控制系统</h3>
 <p>许多人习惯用复制整个项目目录的方式来保存不同的版本，或许还会改名加上备份时间以示区别。这么做唯一的好处就是简单。不过坏处也不少：有时候会混淆所在的工作目录，一旦弄错文件丢了数据就没法撤销恢复。</p>
 <p>为了解决这个问题，人们很久以前就开发了许多种本地版本控制系统，大多都是采用某种简单的数据库来记录文件的历次更新差异（见图）。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png"
-        title="image-20220825170047827" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251700825.png?size=large 2x" sizes="auto" data-title="image-20220825170047827" data-alt="image-20220825170047827" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>其中最流行的一种叫做 rcs，现今许多计算机系统上都还看得到它的踪影。甚至在流行的 Mac OS X 系统上安装了开发者工具包之后，也可以使用 rcs 命令。它的工作原理基本上就是保存并管理文件补丁（patch）。文件补丁是一种特定格式的文本文件，记录着对应文件修订前后的内容变化。所以，根据每次修订后的补丁，rcs 可以通过不断打补丁，计算出各个版本的文件内容。</p>
 <h3 id="集中化的版本控制系统">集中化的版本控制系统</h3>
 <p>接下来人们又遇到一个问题，如何让在不同系统上的开发者协同工作？于是，集中化的版本控制系统（ Centralized Version Control Systems，简称 CVCS ）应运而生。这类系统，诸如 CVS，Subversion 以及 Perforce 等，都有一个单一的集中管理的服务器，保存所有文件的修订版本，而协同工作的人们都通过客户端连到这台服务器，取出最新的文件或者提交更新。多年以来，这已成为版本控制系统的标准做法（见图 1-2）。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png"
-        title="image-20220825170151371" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251701461.png?size=large 2x" sizes="auto" data-title="image-20220825170151371" data-alt="image-20220825170151371" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>这种做法带来了许多好处，特别是相较于老式的本地 VCS 来说。现在，每个人都可以在一定程度上看到项目中的其他人正在做些什么。而管理员也可以轻松掌控每个开发者的权限，并且管理一个 CVCS 要远比在各个客户端上维护本地数据库来得轻松容易。</p>
 <p>事分两面，有好有坏。这么做最显而易见的缺点是中央服务器的单点故障。如果宕机一小时，那么在这一小时内，谁都无法提交更新，也就无法协同工作。要是中央服务器的磁盘发生故障，碰巧没做备份，或者备份不够及时，就会有丢失数据的风险。最坏的情况是彻底丢失整个项目的所有历史更改记录，而被客户端偶然提取出来的保存在本地的某些快照数据就成了恢复数据的希望。但这样的话依然是个问题，你不能保证所有的数据都已经有人事先完整提取出来过。本地版本控制系统也存在类似问题，只要整个项目的历史记录被保存在单一位置，就有丢失所有历史更新记录的风险。</p>
 <h3 id="分布式版本控制系统">分布式版本控制系统</h3>
 <p>于是分布式版本控制系统（ Distributed Version Control System，简称 DVCS ）面世了。在这类系统中，像 Git，Mercurial，Bazaar 以及 Darcs 等，客户端并不只提取最新版本的文件快照，而是把代码仓库完整地镜像下来。这么一来，任何一处协同工作用的服务器发生故障，事后都可以用任何一个镜像出来的本地仓库恢复。因为每一次的提取操作，实际上都是一次对代码仓库的完整备份（见图）。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png"
-        title="image-20220825170331645" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251703173.png?size=large 2x" sizes="auto" data-title="image-20220825170331645" data-alt="image-20220825170331645" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>更进一步，许多这类系统都可以指定和若干不同的远端代码仓库进行交互。籍此，你就可以在同一个项目中，分别和不同工作小组的人相互协作。你可以根据需要设定不同的协作流程，比如层次模型式的工作流，而这在以前的集中式系统中是无法实现的。</p>
 <h2 id="git-基础">Git 基础</h2>
 <p>那么，简单地说，Git 究竟是怎样的一个系统呢？请注意，接下来的内容非常重要，若是理解了 Git 的思想和基本工作原理，用起来就会知其所以然，游刃有余。在开始学习 Git 的时候，请不要尝试把各种概念和其他版本控制系统（诸如 Subversion 和 Perforce 等）相比拟，否则容易混淆每个操作的实际意义。Git 在保存和处理各种信息的时候，虽然操作起来的命令形式非常相近，但它与其他版本控制系统的做法颇为不同。理解这些差异将有助于你准确地使用 Git 提供的各种工具。</p>
 <h4 id="直接记录快照而非差异比较">直接记录快照，而非差异比较</h4>
 <p>Git 和其他版本控制系统的主要差别在于，Git 只关心文件数据的整体是否发生变化，而大多数其他系统则只关心文件内容的具体差异。这类系统（CVS，Subversion，Perforce，Bazaar 等等）每次记录有哪些文件作了更新，以及都更新了哪些行的什么内容，请看图。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png"
-        title="image-20220825170701889" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251707322.png?size=large 2x" sizes="auto" data-title="image-20220825170701889" data-alt="image-20220825170701889" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>Git 并不保存这些前后变化的差异数据。实际上，Git 更像是把变化的文件作快照后，记录在一个微型的文件系统中。每次提交更新时，它会纵览一遍所有文件的指纹信息并对文件作一快照，然后保存一个指向这次快照的索引。为提高性能，若文件没有变化，Git 不会再次保存，而只对上次保存的快照作一链接。Git 的工作方式就像图 1-5 所示。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png"
-        title="image-20220825170802339" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251708719.png?size=large 2x" sizes="auto" data-title="image-20220825170802339" data-alt="image-20220825170802339" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>这是 Git 同其他系统的重要区别。它完全颠覆了传统版本控制的套路，并对各个环节的实现方式作了新的设计。Git 更像是个小型的文件系统，但它同时还提供了许多以此为基础的超强工具，而不只是一个简单的 VCS。稍后在第三章讨论 Git 分支管理的时候，我们会再看看这样的设计究竟会带来哪些好处。</p>
 <h4 id="近乎所有操作都是本地执行">近乎所有操作都是本地执行</h4>
 <p>在 Git 中的绝大多数操作都只需要访问本地文件和资源，不用连网。但如果用 CVCS 的话，差不多所有操作都需要连接网络。因为 Git 在本地磁盘上就保存着所有当前项目的历史更新，所以处理起来速度飞快。</p>
@@ -266,14 +323,7 @@
 <h4 id="文件的三种状态">文件的三种状态</h4>
 <p>好，现在请注意，接下来要讲的概念非常重要。对于任何一个文件，在 Git 内都只有三种状态：已提交（committed），已修改（modified）和已暂存（staged）。已提交表示该文件已经被安全地保存在本地数据库中了；已修改表示修改了某个文件，但还没有提交保存；已暂存表示把已修改的文件放在下次提交时要保存的清单中。</p>
 <p>由此我们看到 Git 管理项目时，文件流转的三个工作区域：Git 的工作目录，暂存区域，以及本地仓库。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png"
-        title="image-20220825171053205" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251710914.png?size=large 2x" sizes="auto" data-title="image-20220825171053205" data-alt="image-20220825171053205" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>每个项目都有一个 Git 目录（译注：如果 git clone 出来的话，就是其中 .git 的目录；如果 git clone &ndash;bare 的话，新建的目录本身就是 Git 目录。），它是 Git 用来保存元数据和对象数据库的地方。该目录非常重要，每次克隆镜像仓库的时候，实际拷贝的就是这个目录里面的数据。</p>
 <p>从项目中取出某个版本的所有文件和目录，用以开始后续工作的叫做工作目录。这些文件实际上都是从 Git 目录中的压缩对象数据库中提取出来的，接下来就可以在工作目录中对这些文件进行编辑。</p>
 <p>所谓的暂存区域只不过是个简单的文件，一般都放在 Git 目录中。有时候人们会把这个文件叫做索引文件，不过标准说法还是叫暂存区域。</p>
@@ -290,7 +340,7 @@
 <p>它通常将现有路径的当前内容作为一个整体添加，但是通过一些选项，它也可以用于添加内容，只对所应用的工作树文件进行一些更改，或删除工作树中不存在的路径了。</p>
 <p>“索引”保存工作树内容的快照，并且将该快照作为下一个提交的内容。 因此，在对工作树进行任何更改之后，并且在运行 <code>git commit</code> 命令之前，必须使用 <code>git add</code> 命令将任何新的或修改的文件添加到索引。</p>
 <p>该命令可以在提交之前多次执行。它只在运行 <code>git add</code> 命令时添加指定文件的内容; 如果希望随后的更改包含在下一个提交中，那么必须再次运行 <code>git add</code> 将新的内容添加到索引。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-1"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -321,12 +371,11 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 查看所有修改、已删除但没有提交的文件，进入一个子命令系统</span>
 </span></span><span class="line"><span class="cl">$ git add -i <span class="o">[</span>&lt;文件路径&gt;<span class="o">]</span>
-</span></span><span class="line"><span class="cl">$ git add --interactive <span class="o">[</span>&lt;文件路径&gt;<span class="o">]</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git add --interactive <span class="o">[</span>&lt;文件路径&gt;<span class="o">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-branch">git branch</h3>
 <p>操作 Git 的分支命令。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-2"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -369,12 +418,11 @@
 </span></span><span class="line"><span class="cl">$ git branch -d &lt;分支名称&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 强制删除指定的本地分支</span>
-</span></span><span class="line"><span class="cl">$ git branch -D &lt;分支名称&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git branch -D &lt;分支名称&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-checkout">git checkout</h3>
 <p>更新工作树中的文件以匹配索引或指定树中的版本。如果没有给出路径 - <code>git checkout</code> 还会更新 <code>HEAD</code> ，将指定的分支设置为当前分支。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-3"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -401,15 +449,14 @@
 </span></span><span class="line"><span class="cl">$ git checkout --orphan &lt;分支名称&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 替换掉本地的改动，新增的文件和已经添加到暂存区的内容不受影响</span>
-</span></span><span class="line"><span class="cl">$ git checkout &lt;文件路径&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git checkout &lt;文件路径&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p><code>git checkout</code> 是 git 最常用的命令之一，同时也是一个很危险的命令，因为这条命令会重写工作区。</p>
 </blockquote>
 <h3 id="git-clone">git clone</h3>
 <p>将存储库克隆到新创建的目录中，为克隆的存储库中的每个分支创建远程跟踪分支(使用 <code>git branch -r</code> 可见)，并从克隆检出的存储库作为当前活动分支的初始分支。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-4"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -428,8 +475,7 @@
 </span></span><span class="line"><span class="cl">$ git clone &lt;远程仓库的网址&gt; &lt;本地目录&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># -b 指定要克隆的分支，默认是master分支</span>
-</span></span><span class="line"><span class="cl">$ git clone &lt;远程仓库的网址&gt; -b &lt;分支名称&gt; &lt;本地目录&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git clone &lt;远程仓库的网址&gt; -b &lt;分支名称&gt; &lt;本地目录&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-stash">git stash</h3>
 <p><strong>暂存当前修改</strong></p>
@@ -437,38 +483,35 @@
 比如下面的中间状态，通过<code>git stash</code>命令推送一个新的储藏，当前的工作目录就干净了。</p>
 <p>注意：stash是本地的，不会通过<code>git push</code>命令上传到git server上。</p>
 <p>实际应用中推荐给每个stash加一个message，用于记录版本，使用<code>git stash save</code>取代<code>git stash</code>命令。示例如下：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-5"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git stash save <span class="s2">&#34;test-cmd-stash&#34;</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git stash save <span class="s2">&#34;test-cmd-stash&#34;</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>重新应用缓存的stash</strong></p>
 <p>可以通过<code>git stash pop</code>命令恢复之前缓存的工作目录</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-6"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git stash pop
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git stash pop</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这个指令将缓存堆栈中的第一个stash删除，并将对应修改应用到当前的工作目录下。</p>
 <p>你也可以使用<code>git stash apply</code>命令，将缓存堆栈中的stash多次应用到工作目录中，但并不删除stash拷贝。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-7"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git stash apply
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git stash apply</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在使用<code>git stash apply</code>命令时可以通过名字指定使用哪个stash，默认使用最近的stash（即stash@{0}）。</p>
 <p><strong>查看现有stash</strong></p>
 <p>可以使用<code>git stash list</code>命令，一个典型的输出如下：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-8"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -479,12 +522,11 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git stash list
 </span></span><span class="line"><span class="cl">stash@<span class="o">{</span>0<span class="o">}</span>: WIP on master: 049d078 added the index file
 </span></span><span class="line"><span class="cl">stash@<span class="o">{</span>1<span class="o">}</span>: WIP on master: c264051 Revert <span class="s2">&#34;added file_size&#34;</span>
-</span></span><span class="line"><span class="cl">stash@<span class="o">{</span>2<span class="o">}</span>: WIP on master: 21d80a5 added number to log
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">stash@<span class="o">{</span>2<span class="o">}</span>: WIP on master: 21d80a5 added number to log</span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>移除stash</strong></p>
 <p>可以使用<code>git stash drop</code>命令，后面可以跟着stash名字。下面是一个示例：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-9"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -499,8 +541,7 @@
 </span></span><span class="line"><span class="cl">stash@<span class="o">{</span>1<span class="o">}</span>: WIP on master: c264051 Revert <span class="s2">&#34;added file_size&#34;</span>
 </span></span><span class="line"><span class="cl">stash@<span class="o">{</span>2<span class="o">}</span>: WIP on master: 21d80a5 added number to log
 </span></span><span class="line"><span class="cl">$ git stash drop stash@<span class="o">{</span>0<span class="o">}</span>
-</span></span><span class="line"><span class="cl">Dropped stash@<span class="o">{</span>0<span class="o">}</span> <span class="o">(</span>364e91f3f268f0900bc3ee613f9f733e82aaed43<span class="o">)</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">Dropped stash@<span class="o">{</span>0<span class="o">}</span> <span class="o">(</span>364e91f3f268f0900bc3ee613f9f733e82aaed43<span class="o">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>或者使用<code>git stash clear</code>命令，删除所有缓存的stash。</p>
 <p><strong>暂存未跟踪或忽略的文件</strong></p>
@@ -517,7 +558,7 @@
 <p><code>git stash</code>命令提供了参数用于缓存上面两种类型的文件。使用<code>-u</code>或者<code>--include-untracked</code>可以stash untracked文件。使用<code>-a</code>或者<code>--all</code>命令可以stash当前目录下的所有修改。</p>
 <h3 id="git-commit">git commit</h3>
 <p>将索引的当前内容与描述更改的用户和日志消息一起存储在新的提交中。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-10"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -544,12 +585,11 @@
 </span></span><span class="line"><span class="cl">$ git commit -a -m <span class="s2">&#34;&lt;提交的描述信息&gt;&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 修改上次提交的描述信息</span>
-</span></span><span class="line"><span class="cl">$ git commit --amend
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git commit --amend</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-config">git config</h3>
 <p>主要是用来配置 Git 的相关参数，其主要操作有：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-11"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -636,8 +676,7 @@
 </span></span><span class="line"><span class="cl">$ git config --global credential.helper <span class="s1">&#39;cache --timeout=&lt;缓存时间&gt;&#39;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 配置长期存储密码</span>
-</span></span><span class="line"><span class="cl">$ git config --global credential.helper store
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git config --global credential.helper store</span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p>Git 一共有3个配置文件：</p>
@@ -650,7 +689,7 @@
 <h3 id="git-diff">git diff</h3>
 <p>用于显示提交和工作树等之间的更改。</p>
 <p>此命令比较的是工作目录中当前文件和暂存区域快照之间的差异,也就是修改之后还没有暂存起来的变化内容。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-12"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -689,12 +728,11 @@
 </span></span><span class="line"><span class="cl">$ git diff &lt;分支名称&gt; &lt;分支名称&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 查看两个分支分开后各自的改动内容</span>
-</span></span><span class="line"><span class="cl">$ git diff &lt;分支名称&gt;...&lt;分支名称&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git diff &lt;分支名称&gt;...&lt;分支名称&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-fetch">git fetch</h3>
 <p>从远程仓库获取最新的版本到本地的 tmp 分支上。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-13"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -707,24 +745,22 @@
 </span></span><span class="line"><span class="cl">$ git fetch &lt;远程仓库的别名&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 将远程仓库指定分支的最新版本取回到本地</span>
-</span></span><span class="line"><span class="cl">$ git fetch &lt;远程主机名&gt; &lt;分支名&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git fetch &lt;远程主机名&gt; &lt;分支名&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-init">git init</h3>
 <p>初始化项目所在目录，初始化后会在当前目录下出现一个名为 .git 的目录。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-14"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 初始化本地仓库，在当前目录下生成 .git 文件夹</span>
-</span></span><span class="line"><span class="cl">$ git init
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git init</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-log">git log</h3>
 <p>显示提交的记录。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-15"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -743,12 +779,11 @@
 </span></span><span class="line"><span class="cl">$ git log &lt;commit ID&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 打印指定数量的最新提交的记录</span>
-</span></span><span class="line"><span class="cl">$ git log -&lt;指定的数量&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git log -&lt;指定的数量&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-merge">git merge</h3>
 <p>用于将两个或两个以上的开发历史加入(合并)一起。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-16"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -761,24 +796,22 @@
 </span></span><span class="line"><span class="cl">$ git merge &lt;分支名称&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 把指定的分支合并到当前所在的分支下，不进行新的提交</span>
-</span></span><span class="line"><span class="cl">$ git merge --no-commit &lt;分支名称&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git merge --no-commit &lt;分支名称&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-mv">git mv</h3>
 <p>重命名文件或者文件夹。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-17"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 重命名指定的文件或者文件夹</span>
-</span></span><span class="line"><span class="cl">$ git mv &lt;源文件/文件夹&gt; &lt;目标文件/文件夹&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git mv &lt;源文件/文件夹&gt; &lt;目标文件/文件夹&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-pull">git pull</h3>
 <p>从远程仓库获取最新版本并合并到本地。 首先会执行 <code>git fetch</code>，然后执行 <code>git merge</code>，把获取的分支的 HEAD 合并到当前分支。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-18"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -793,12 +826,11 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 从origin远程仓库的main分支拉取代码到本地，一般需要加上 --allow-unrelated-histories 参数忽略提交历史的差异。然后在本地合并冲突</span>
 </span></span><span class="line"><span class="cl">$ git remote add origin 连接 <span class="c1">#（http or ssh）</span>
-</span></span><span class="line"><span class="cl">$ git pull origin main --allow-unrelated-histories
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git pull origin main --allow-unrelated-histories</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-push">git push</h3>
 <p>把本地仓库的提交推送到远程仓库。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-19"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -813,12 +845,11 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 删除指定的远程仓库的分支</span>
 </span></span><span class="line"><span class="cl">$ git push &lt;远程仓库的别名&gt; :&lt;远程分支名&gt;
-</span></span><span class="line"><span class="cl">$ git push &lt;远程仓库的别名&gt; --delete &lt;远程分支名&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git push &lt;远程仓库的别名&gt; --delete &lt;远程分支名&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-remote">git remote</h3>
 <p>操作远程库。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-20"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -857,12 +888,11 @@
 </span></span><span class="line"><span class="cl">$ git remote remove &lt;远程仓库的别名&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 修改远程仓库的 URL 地址</span>
-</span></span><span class="line"><span class="cl">$ git remote set-url &lt;远程仓库的别名&gt; &lt;新的远程仓库URL地址&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git remote set-url &lt;远程仓库的别名&gt; &lt;新的远程仓库URL地址&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-reset">git reset</h3>
 <p>还原提交记录，版本回退</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-21"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -897,24 +927,22 @@
 </span></span><span class="line"><span class="cl">$ git reset --soft &lt;commit ID&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 将 HEAD 的指向改变，撤销到指定的提交记录，文件也修改了</span>
-</span></span><span class="line"><span class="cl">$ git reset --hard &lt;commit ID&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git reset --hard &lt;commit ID&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-revert">git revert</h3>
 <p>生成一个新的提交来撤销某次提交，此次提交之前的所有提交都会被保留。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-22"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 生成一个新的提交来撤销某次提交</span>
-</span></span><span class="line"><span class="cl">$ git revert &lt;commit ID&gt;
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git revert &lt;commit ID&gt;</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-rm">git rm</h3>
 <p>删除文件或者文件夹。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-23"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -933,20 +961,18 @@
 </span></span><span class="line"><span class="cl">$ git rm -r &lt;文件夹路径&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 移除跟踪指定的文件，在本地仓库的文件夹中保留该文件</span>
-</span></span><span class="line"><span class="cl">$ git rm --cached
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git rm --cached</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="git-status">git status</h3>
 <p>用于显示工作目录和暂存区的状态。使用此命令能看到那些修改被暂存到了, 哪些没有, 哪些文件没有被 Git tracked 到。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-24"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 查看本地仓库的状态</span>
-</span></span><span class="line"><span class="cl">$ git status
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git status</span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p><code>git status</code> 不显示已经 <code>commit</code> 到项目历史中去的信息。
@@ -954,7 +980,7 @@
 </blockquote>
 <h3 id="git-tag">git tag</h3>
 <p>操作标签的命令。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-25"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1003,8 +1029,7 @@
 </span></span><span class="line"><span class="cl">$ git push &lt;远程仓库的别名&gt; &lt;标签名称&gt;
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 将本地所有的标签全部提交到远程仓库</span>
-</span></span><span class="line"><span class="cl">$ git push &lt;远程仓库的别名&gt; –tags
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">$ git push &lt;远程仓库的别名&gt; –tags</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="分支合并冲突">分支合并冲突</h2>
 <p>由于多人同时进行开发，有时候会同时修改一个文件，或者多分支开发，合并的时候就很容易引发冲突，下面是一个制造冲突和解决冲突的例子。</p>
@@ -1024,7 +1049,7 @@
 <ol>
 <li>
 <p>然后执行以下命令</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-26"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1033,31 +1058,16 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git add .
 </span></span><span class="line"><span class="cl">git commit -m<span class="s2">&#34;修改main.js&#34;</span>
-</span></span><span class="line"><span class="cl">git push origin master
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">git push origin master</span></span></code></pre></td></tr></table>
 </div>
 </div></li>
 <li>
 <p>出现以下提示</p>
 </li>
 <li>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png"
-        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png?size=large 2x" sizes="auto" data-title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png" data-alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251817188.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>意思是被拒绝了,要先执行 <code>git pull</code> 命令</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202208251818272.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>因为两位同学同时修改了同一行代码,所有 git 不知如何取舍(如果同学 a 修改了第一行,同学 b 修改了第二行,那么 git 会智能的合并),只好把合并代码这个事情交给开发者去处理,上图中<code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> 到<code>========</code>的代码是 B 同学的代码,<code>======</code>到<code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; a248f68a5fcbcbe4cc887bee3dfc3cfd1cf7147b</code> 的代码是同学a的代码,括号的 Incoming Change 的意思是从外面来的修改,<code>a248f68a5fcbcbe4cc887bee3dfc3cfd1cf7147b</code> 是仓库是冲突的版本号,你可以通过 <code>git log</code> 看到详细的信息</p>
 <p>你可以根据具体情况去合并代码,取 a 的代码或者取 b 的代码,或者 a 取一点,b 取一点,具体情况具体分析. 手动删除这些特殊符号，并选择某个修改内容进行提交，就可以解决冲突。</p>
 </li>
@@ -1110,7 +1120,7 @@
 如果要在dev分支上开发，就必须创建远程origin的dev分支到本地
 <code>git checkout -b dev origin/dev</code>，创建并且切换到dev分支，并将远程库origin/dev弄下来
 如果最新提交和你推送的提交有冲突，先用<code>git pull</code>把最新提交抓下来，然后在本地合并，解决冲突，再提交。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-27"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1131,8 +1141,7 @@
 </span></span><span class="line"><span class="cl">    git pull &lt;remote&gt; &lt;branch&gt;
 </span></span><span class="line"><span class="cl">If you wish to <span class="nb">set</span> tracking information <span class="k">for</span> this branch you can <span class="k">do</span> so with:
 </span></span><span class="line"><span class="cl">    git branch --set-upstream-to<span class="o">=</span>origin/&lt;branch&gt; dev
-</span></span><span class="line"><span class="cl"><span class="c1"># 原因是没有指定本地dev分支与远程origin/dev分支的链接，根据提示，设置dev和origin/dev的链接</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="c1"># 原因是没有指定本地dev分支与远程origin/dev分支的链接，根据提示，设置dev和origin/dev的链接</span></span></span></code></pre></td></tr></table>
 </div>
 </div></li>
 <li>
@@ -1150,43 +1159,55 @@
 </li>
 </ul>
 </div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>Updated on 2022-08-25</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/git%E5%B7%A5%E4%BD%9C%E6%B5%81/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/git%E5%B7%A5%E4%BD%9C%E6%B5%81/" data-title="Git工作流"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/git%E5%B7%A5%E4%BD%9C%E6%B5%81/" data-title="Git工作流"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
-            </div>
-        </div>
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2022-08-25 11:52:44">Updated on 2022-08-25&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/git%E5%B7%A5%E4%BD%9C%E6%B5%81/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span><span><a href="https://github.com/cold-bin/blog/edit/main/content/posts/git%e5%b7%a5%e4%bd%9c%e6%b5%81.md" title="Edit this page"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">Edit this page</a></span></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/git%E5%B7%A5%E4%BD%9C%E6%B5%81/" data-title="Git工作流"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/git%E5%B7%A5%E4%BD%9C%E6%B5%81/" data-title="Git工作流"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
 
-    <div class="post-info-more">
-        <section class="post-tags"></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
-        </section>
-    </div>
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
 
-    <div class="post-nav"><a href="/mysql%E5%9F%BA%E7%A1%80%E7%AF%87/" class="prev" rel="prev" title="MySQL基础篇"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>MySQL基础篇</a>
-            <a href="/git%E4%B9%8Bcommit%E8%A7%84%E8%8C%83%E6%8C%87%E5%8D%97/" class="next" rel="next" title="Git之commit规范指南">Git之commit规范指南<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/mysql%E5%9F%BA%E7%A1%80%E7%AF%87/" class="post-nav-item" rel="prev" title="MySQL基础篇"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>MySQL基础篇</a>
+      <a href="/git%E4%B9%8Bcommit%E8%A7%84%E8%8C%83%E6%8C%87%E5%8D%97/" class="post-nav-item" rel="next" title="Git之commit规范指南">Git之commit规范指南<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-<div id="comments"><div id="gitalk" class="comment"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
-            </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
-
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2022-08-25T11:52:44+08:00","owner":"cold-bin","repo":"blog-comment","title":"Git工作流"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+<div class="post-reward">
+    <div class="comment">Buy me a coffee</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">Donate</label>
+    <div class="reward-ways" data-mode="fixed"><div><img loading="lazy" src="/images/alipay.jpg" data-title="阿冰 Alipay" data-alt="阿冰 Alipay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>Alipay</span>
+          </div><div><img loading="lazy" src="/images/wechatpay.png" data-title="阿冰 WeChat Pay" data-alt="阿冰 WeChat Pay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>WeChat Pay</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright order-5" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/cold-bin"target="_blank" rel="external nofollow noopener noreferrer">阿冰</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics order-4"><span class="site-time" title='Website running ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="ms-1 d-none">运行</span><span class="run-times ms-1">Website running ...</span></span></div><div class="footer-line visitor order-2">
+          <span id="busuanzi_container_site_uv" title='Total visitors'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='Total visits'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.120f067ebd6f322339e2ccccd7e87e334d7c7ea5b2bd553f325f2ae3c3ae6fe8.css" integrity="sha256-Eg8Gfr1vMiM54szM1+h+M018fqWyvVU/Ml8q48Oub+g="><link rel="preload" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><link rel="stylesheet" href="/lib/pace/themes/silver/pace-theme-minimal.1aefeadd689806308301fe332322fc3cec76f1d28a8e516afd37d31600e1e964.css" integrity="sha256-Gu/q3WiYBjCDAf4zIyL8POx28dKKjlFq/TfTFgDh6WQ="><script src="/lib/gitalk/gitalk.min.f4f9407ea35ccf4be5019cc41d70eab1eb273941bca01b3a93c91201f195a76f.js" integrity="sha256-9PlAfqNcz0vlAZzEHXDqsesnOUG8oBs6k8kSAfGVp28="></script><script src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.804e26c45f81a02b98b05bc1e378c1ff6c5d2339e0c6550aadf1419adf3a8c81.js" integrity="sha256-gE4mxF+BoCuYsFvB43jB/2xdIzngxlUKrfFBmt86jIE=" defer></script><script src="/lib/lightgallery/lightgallery.min.7de2854e7954105f2b91ff5983749c4e3c7af51e05aae279f8a5d66994a85777.js" integrity="sha256-feKFTnlUEF8rkf9Zg3ScTjx69R4FquJ5+KXWaZSoV3c=" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4fbc3ec1878e90348b71b3594d8ef27c4f10a1a4c6d5e74948d0ee59018fd87c.js" integrity="sha256-T7w+wYeOkDSLcbNZTY7yfE8QoaTG1edJSNDuWQGP2Hw=" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.821a2adb8005511c0ad9ef6f395c1b74beacc2da194cd13a4ac43d341246e085.js" integrity="sha256-ghoq24AFURwK2e9vOVwbdL6swtoZTNE6SsQ9NBJG4IU=" defer></script><script src="/lib/sharer/sharer.min.ba5171a78670b031914e623431a33a3d73c1ea9897e552ba73bc2c2da7c777b9.js" integrity="sha256-ulFxp4ZwsDGRTmI0MaM6PXPB6piX5VK6c7wsLafHd7k=" async defer></script><script src="/lib/typeit/index.umd.16f3fa3374a7eea31f19672293edc98326413002dea74b8c413a74f1b7e4f1cf.js" integrity="sha256-FvP6M3Sn7qMfGWcik+3JgyZBMALep0uMQTp08bfk8c8=" defer></script><script src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw+iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script src="/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script src="/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":50},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2022-08-25T11:52:44+08:00","owner":"cold-bin","repo":"blog-comment","title":"Git工作流"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"life and code.","typeit-header-subtitle-mobile":"life and code."},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"siteTime":"2023-12-28T12:00:00+00:00","typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"loop":false,"speed":100}};</script><script src="/js/theme.min.58f9858983f2742da374c22058a1768784a6955aa9a3f3b3b179c080fa0fa468.js" integrity="sha256-WPmFiYPydC2jdMIgWKF2h4SmlVqpo/OzsXnAgPoPpGg=" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-75123653-1');
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=UA-75123653-1" async></script></body>
 </html>

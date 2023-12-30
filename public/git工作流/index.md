@@ -680,3 +680,9 @@ $ git push <远程仓库的别名> –tags
   2. 如合并冲突，则解决冲突
   3. 如没有冲突或解决后，再commit 并push到远程库
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/git%E5%B7%A5%E4%BD%9C%E6%B5%81/  
+

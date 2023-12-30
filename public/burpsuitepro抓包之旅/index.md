@@ -121,3 +121,9 @@ proxy->intercept-->intercept is off=>intercept is on
 
 todo
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/burpsuitepro%E6%8A%93%E5%8C%85%E4%B9%8B%E6%97%85/  
+

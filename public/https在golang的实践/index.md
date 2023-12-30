@@ -258,3 +258,9 @@ A: 会被抓包，HTTPS 只防止用户在不知情的情况下通信被监听�
 >
 > [^1]:https://cloud.tencent.com/developer/article/1601995 ↩
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/https%E5%9C%A8golang%E7%9A%84%E5%AE%9E%E8%B7%B5/  
+

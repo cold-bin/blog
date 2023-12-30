@@ -77,3 +77,9 @@ mul bx
 ;结果： (ax)=4240H，(dx)=000FH     （F4240H=1000000）
 ```
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%97%AE%E9%A2%98/  
+

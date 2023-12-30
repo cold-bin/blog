@@ -445,3 +445,9 @@ IO设备传输中出现的错误很多，如网络上的堵塞和传输过载等
 
 注意：read、send和resend都是操作系统的基本输入输出命令，分别用来读、发送和重发数据。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E7%AE%A1%E7%90%86/  
+

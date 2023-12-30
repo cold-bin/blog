@@ -237,3 +237,9 @@ size of testStruct4 / testStruct4's a size: 8 / 0
 PASS
 ```
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E7%9A%84%E7%BB%93%E6%9E%84%E4%BD%93%E5%86%85%E5%AD%98%E5%AF%B9%E9%BD%90/  
+

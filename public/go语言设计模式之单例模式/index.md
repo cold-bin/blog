@@ -78,3 +78,9 @@ func GetLazyInstance() Logger {
 ```
 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/  
+

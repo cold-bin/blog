@@ -695,3 +695,9 @@ call(frametype, fn, args, uint32(frametype.size), uint32(retOffset))
 
 Go 语言的 [`reflect`](https://golang.org/pkg/reflect/) 包为我们提供了多种能力，包括如何使用反射来动态修改变量、判断类型是否实现了某些接口以及动态调用方法等功能，通过分析反射包中方法的原理能帮助我们理解之前看起来比较怪异、令人困惑的现象。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/  
+

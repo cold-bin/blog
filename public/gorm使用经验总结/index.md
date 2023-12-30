@@ -1142,3 +1142,9 @@ db.Transaction(func(tx *gorm.DB) error {
 GORM 支持嵌套事务，可以回滚事务中的事务而不用担心外层事务回滚.
 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/gorm%E4%BD%BF%E7%94%A8%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/  
+

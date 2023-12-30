@@ -25,3 +25,9 @@
 6. 串处理指令
    对内存中的批量数据进行处理，`movsb、movsw、cmps、scas、lods、stos`等。若要使用这些指令方便地进行批量数据的处理，则需要和`rep、repe、repne` 等前缀指令配合使用。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%80%BB%E7%BB%93/  
+

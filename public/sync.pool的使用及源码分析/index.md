@@ -308,3 +308,9 @@ func init() {
 
 ![image-20220923225531884](https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209232255837.png)
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/sync.pool%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8A%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/  
+

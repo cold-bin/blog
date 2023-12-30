@@ -1568,3 +1568,9 @@ public class RedisHandler implements InitializingBean {
 ```
 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%A4%9A%E7%BA%A7%E7%BC%93%E5%AD%98/  
+

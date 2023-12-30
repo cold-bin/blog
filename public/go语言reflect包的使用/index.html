@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>Go语言reflect包的使用 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Go语言reflect包的使用" />
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Go语言reflect包的使用 - 阿冰的小屋</title><meta name="author" content="阿冰">
+<meta name="author-link" content="https://github.com/cold-bin">
+<meta name="description" content="Go语言reflect包的使用 反射包使用 map and slice 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 func MapAndSlice() { stringSlice := make([]string,0) stringMap := make(map[string]string) sliceType := reflect.TypeOf(stringSlice) mapType := reflect.TypeOf(stringMap) rMap := reflect.MakeMap(mapType) rSlice := reflect.MakeSlice(sliceType,0,0) k := &#34;first&#34; rMap.SetMapIndex(reflect.ValueOf(k),reflect.ValueOf(&#34;test&#34;)) i :=" /><meta name="keywords" content='go编程技巧' /><meta itemprop="name" content="Go语言reflect包的使用">
+<meta itemprop="description" content="Go语言reflect包的使用 反射包使用 map and slice 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 func MapAndSlice() { stringSlice := make([]string,0) stringMap := make(map[string]string) sliceType := reflect.TypeOf(stringSlice) mapType := reflect.TypeOf(stringMap) rMap := reflect.MakeMap(mapType) rSlice := reflect.MakeSlice(sliceType,0,0) k := &#34;first&#34; rMap.SetMapIndex(reflect.ValueOf(k),reflect.ValueOf(&#34;test&#34;)) i :="><meta itemprop="datePublished" content="2022-09-02T19:26:22+08:00" />
+<meta itemprop="dateModified" content="2022-09-02T19:26:22+08:00" />
+<meta itemprop="wordCount" content="6281"><meta itemprop="image" content="https://blog.coldbin.top/favicon.ico"/>
+<meta itemprop="keywords" content="go编程技巧," /><meta property="og:title" content="Go语言reflect包的使用" />
 <meta property="og:description" content="Go语言reflect包的使用 反射包使用 map and slice 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 func MapAndSlice() { stringSlice := make([]string,0) stringMap := make(map[string]string) sliceType := reflect.TypeOf(stringSlice) mapType := reflect.TypeOf(stringMap) rMap := reflect.MakeMap(mapType) rSlice := reflect.MakeSlice(sliceType,0,0) k := &#34;first&#34; rMap.SetMapIndex(reflect.ValueOf(k),reflect.ValueOf(&#34;test&#34;)) i :=" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,118 +24,196 @@
 <meta name="twitter:title" content="Go语言reflect包的使用"/>
 <meta name="twitter:description" content="Go语言reflect包的使用 反射包使用 map and slice 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 func MapAndSlice() { stringSlice := make([]string,0) stringMap := make(map[string]string) sliceType := reflect.TypeOf(stringSlice) mapType := reflect.TypeOf(stringMap) rMap := reflect.MakeMap(mapType) rSlice := reflect.MakeSlice(sliceType,0,0) k := &#34;first&#34; rMap.SetMapIndex(reflect.ValueOf(k),reflect.ValueOf(&#34;test&#34;)) i :="/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" /><link rel="prev" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80unsafe%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" /><link rel="next" href="https://blog.coldbin.top/mysql%E6%9E%B6%E6%9E%84%E7%AF%87/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "Go语言reflect包的使用",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","keywords": "go编程技巧","wordcount":  6281 ,
-        "url": "https:\/\/blog.coldbin.top\/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8\/","datePublished": "2022-09-02T19:26:22+08:00","dateModified": "2022-09-02T19:26:22+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
-            "@type": "Organization",
-            "name": "阿冰","logo": {
-                    "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
-                    "width":  396 ,
-                    "height":  396 
-                }},"author": {
-                "@type": "Person",
-                "name": "阿冰"
-            },"description": ""
-    }
-    </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" /><link rel="prev" href="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80unsafe%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" /><link rel="next" href="https://blog.coldbin.top/mysql%E6%9E%B6%E6%9E%84%E7%AF%87/" /><link rel="stylesheet" href="/css/style.min.04a53c8f85f60bfc901f510b07233befa08ea6546fc4a641b7a7caf06269844a.css" integrity="sha256-BKU8j4X2C/yQH1ELByM776COplRvxKZBt6fK8GJphEo="><link rel="preload" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Go语言reflect包的使用",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/blog.coldbin.top\/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8\/"
+    },"image": [{
+              "@type": "ImageObject",
+              "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+              "width":  396 ,
+              "height":  396 
+            }],"genre": "posts","keywords": "go编程技巧","wordcount":  6281 ,
+    "url": "https:\/\/blog.coldbin.top\/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8\/","datePublished": "2022-09-02T19:26:22+08:00","dateModified": "2022-09-02T19:26:22+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+      "@type": "Organization",
+      "name": "阿冰","logo": {
+          "@type": "ImageObject",
+          "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+          "width":  396 ,
+          "height":  396 
+        }},"author": {
+        "@type": "Person",
+        "name": "阿冰"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="阿冰的小屋" data-alt="阿冰的小屋" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/friends"
+                
+                
+              ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
     <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-                </a></div>
-        </div>
+      <div class="header-title">
+        <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="/favicon.ico" data-alt="/favicon.ico" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        Cancel
-                    </a>
-                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-            </a></div>
-    </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/friends"
+                  
+                  
+                ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
 </header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Go语言reflect包的使用</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/golang/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>golang</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-09-02">2022-09-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;6281 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;13 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
-                <div class="details-summary toc-title">
-                    <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><nav aria-label="breadcrumb" class="breadcrumb-container sticky">
+    <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/" title="阿冰的小屋">Home</a></li><li class="breadcrumb-item"><a href="/posts/" title="Posts">Posts</a></li><li class="breadcrumb-item active" aria-current="page">Go语言reflect包的使用</li>
+    </ol>
+  </nav><main class="container"><aside class="toc" id="toc-auto"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Go语言reflect包的使用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://www.gravatar.com/avatar/bbeb236273ce7a8cc349e66deaa25959?s=32&amp;d=" data-title="阿冰" data-alt="阿冰" class="avatar" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;阿冰</a></span>
+          <span class="post-category">included in <a href="/categories/golang/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> golang</a></span></div>
+      <div class="post-meta-line"><span title="published on 2022-09-02 19:26:22"><i class="fa-regular fa-calendar-alt fa-fw me-1" aria-hidden="true"></i><time datetime="2022-09-02">2022-09-02</time></span>&nbsp;<span title="Updated on 2022-09-02 19:26:22"><i class="fa-regular fa-edit fa-fw me-1" aria-hidden="true"></i><time datetime="2022-09-02">2022-09-02</time></span>&nbsp;<span title="6281 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 6300 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>13 minutes</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="Go语言reflect包的使用">
+              <i class="fa-regular fa-eye fa-fw me-1" aria-hidden="true"></i><span id="busuanzi_value_page_pv">-</span>&nbsp;views
+            </span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li><a href="#go语言reflect包的使用">Go语言reflect包的使用</a>
       <ul>
@@ -160,12 +245,19 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="go语言reflect包的使用">Go语言reflect包的使用</h1>
+      </div><div class="content" id="content"><div class="details admonition note open">
+      <div class="details-summary admonition-title">
+        <i class="icon fa-solid fa-pencil-alt fa-fw" aria-hidden="true"></i>Note<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden="true"></i>
+      </div>
+      <div class="details-content">
+        <div class="admonition-content">This article was last updated on 2022-09-02, the content may be out of date.</div>
+      </div>
+    </div><h1 id="go语言reflect包的使用">Go语言reflect包的使用</h1>
 <h2 id="反射包使用">反射包使用</h2>
 <ul>
 <li>map and slice</li>
 </ul>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-1"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -208,13 +300,12 @@
 </span></span><span class="line"><span class="cl">    <span class="nx">strings</span> <span class="o">:=</span> <span class="nx">rSlice</span><span class="p">.</span><span class="nf">Interface</span><span class="p">().([]</span><span class="kt">string</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">strings</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>function</li>
 </ul>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-2"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -239,13 +330,12 @@
 </span></span><span class="line"><span class="cl">        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;calling %s took %v\n&#34;</span><span class="p">,</span> <span class="nx">runtime</span><span class="p">.</span><span class="nf">FuncForPC</span><span class="p">(</span><span class="nx">vf</span><span class="p">.</span><span class="nf">Pointer</span><span class="p">()).</span><span class="nf">Name</span><span class="p">(),</span> <span class="nx">end</span><span class="p">.</span><span class="nf">Sub</span><span class="p">(</span><span class="nx">start</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">out</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}).</span><span class="nf">Interface</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>struct</li>
 </ul>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-3"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -276,13 +366,12 @@
 </span></span><span class="line"><span class="cl">    <span class="nx">st</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">StructOf</span><span class="p">(</span><span class="nx">sfs</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="nx">so</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">st</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">so</span><span class="p">.</span><span class="nf">Interface</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>获取type typeOf valueOf</li>
 </ul>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-4"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -331,13 +420,12 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="nx">i</span> <span class="o">:=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="p">&lt;</span> <span class="nx">t</span><span class="p">.</span><span class="nf">NumField</span><span class="p">()</span> <span class="p">;</span><span class="nx">i</span><span class="o">++</span>  <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;name:%v&#34;</span><span class="p">,</span><span class="nx">v</span><span class="p">.</span><span class="nf">Elem</span><span class="p">().</span><span class="nf">Field</span><span class="p">(</span><span class="nx">i</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>反射调用struct方法</li>
 </ul>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-5"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -352,8 +440,7 @@
 </span></span><span class="line"><span class="cl">    <span class="nx">args</span> <span class="o">:=</span> <span class="p">[]</span><span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">{</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="p">}</span> <span class="c1">//构造一个类型为reflect.Value的切片
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">setNameMethod</span><span class="p">.</span><span class="nf">Call</span><span class="p">(</span><span class="nx">args</span><span class="p">)</span> <span class="c1">//返回Value类型
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;User.Age = &#34;</span><span class="p">,</span><span class="nx">m</span><span class="p">.</span><span class="nx">Age</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="s">&#34;User.Age = &#34;</span><span class="p">,</span><span class="nx">m</span><span class="p">.</span><span class="nx">Age</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>还有很多反射api就不逐一介绍了，翻翻源码就行</li>
@@ -366,20 +453,13 @@
 <li>要修改反射对象，其值必须可设置；</li>
 </ol>
 <h3 id="第一法则">第一法则</h3>
-<p>反射的第一法则是我们能将 Go 语言的 <code>interface{}</code> 变量转换成反射对象。很多读者可能会对这以法则产生困惑 — 为什么是从 <code>interface{}</code> 变量到反射对象？当我们执行 <code>reflect.ValueOf(1)</code> 时，虽然看起来是获取了基本类型 <code>int</code> 对应的反射类型，但是由于 <a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a>、<a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 两个方法的入参都是 <code>interface{}</code> 类型，所以在方法执行的过程中发生了类型转换。</p>
+<p>反射的第一法则是我们能将 Go 语言的 <code>interface{}</code> 变量转换成反射对象。很多读者可能会对这以法则产生困惑 — 为什么是从 <code>interface{}</code> 变量到反射对象？当我们执行 <code>reflect.ValueOf(1)</code> 时，虽然看起来是获取了基本类型 <code>int</code> 对应的反射类型，但是由于 <a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>、<a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 两个方法的入参都是 <code>interface{}</code> 类型，所以在方法执行的过程中发生了类型转换。</p>
 <p>因为Go 语言的函数调用都是值传递的，所以变量会在函数调用时进行类型转换。基本类型 <code>int</code> 会转换成 <code>interface{}</code> 类型，这也就是为什么第一条法则是从接口到反射对象。</p>
-<p>上面提到的 <a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a> 和 <a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 函数就能完成这里的转换，如果我们认为 Go 语言的类型和反射类型处于两个不同的世界，那么这两个函数就是连接这两个世界的桥梁。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png"
-        title="golang-interface-to-reflection" /></p>
+<p>上面提到的 <a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 和 <a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 函数就能完成这里的转换，如果我们认为 Go 语言的类型和反射类型处于两个不同的世界，那么这两个函数就是连接这两个世界的桥梁。</p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031117610.png?size=large 2x" sizes="auto" data-title="golang-interface-to-reflection" data-alt="golang-interface-to-reflection" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>图 接口到反射对象</strong></p>
-<p>我们可以通过以下例子简单介绍它们的作用，<a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a> 获取了变量 <code>author</code> 的类型，<a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 获取了变量的值 <code>draven</code>。如果我们知道了一个变量的类型和值，那么就意味着我们知道了这个变量的全部信息。</p>
-<div class="highlight"><div class="chroma">
+<p>我们可以通过以下例子简单介绍它们的作用，<a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 获取了变量 <code>author</code> 的类型，<a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 获取了变量的值 <code>draven</code>。如果我们知道了一个变量的类型和值，那么就意味着我们知道了这个变量的全部信息。</p>
+<div class="highlight" id="id-6"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -414,8 +494,7 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="err">$</span> <span class="k">go</span> <span class="nx">run</span> <span class="nx">main</span><span class="p">.</span><span class="k">go</span>
 </span></span><span class="line"><span class="cl"><span class="nx">TypeOf</span> <span class="nx">author</span><span class="p">:</span> <span class="kt">string</span>
-</span></span><span class="line"><span class="cl"><span class="nx">ValueOf</span> <span class="nx">author</span><span class="p">:</span> <span class="nx">draven</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="nx">ValueOf</span> <span class="nx">author</span><span class="p">:</span> <span class="nx">draven</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>有了变量的类型之后，我们可以通过 <code>Method</code> 方法获得类型实现的方法，通过 <code>Field</code> 获取类型包含的全部字段。对于不同的类型，我们也可以调用不同的方法获取相关信息：</p>
 <ul>
@@ -430,28 +509,20 @@
 <p>……</p>
 </li>
 </ul>
-<p>总而言之，使用 <a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a> 和 <a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 能够获取 Go 语言中的变量对应的反射对象。一旦获取了反射对象，我们就能得到跟当前类型相关数据和操作，并可以使用这些运行时获取的结构执行方法。</p>
+<p>总而言之，使用 <a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 和 <a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 能够获取 Go 语言中的变量对应的反射对象。一旦获取了反射对象，我们就能得到跟当前类型相关数据和操作，并可以使用这些运行时获取的结构执行方法。</p>
 <h3 id="第二法则">第二法则</h3>
-<p>反射的第二法则是我们可以从反射对象可以获取 <code>interface{}</code> 变量。既然能够将接口类型的变量转换成反射对象，那么一定需要其他方法将反射对象还原成接口类型的变量，<a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener noreffer "><code>reflect</code></a> 中的 <a href="https://draveness.me/golang/tree/reflect.Value.Interface" target="_blank" rel="noopener noreffer "><code>reflect.Value.Interface</code></a> 就能完成这项工作：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png"
-        title="golang-reflection-to-interface" /></p>
+<p>反射的第二法则是我们可以从反射对象可以获取 <code>interface{}</code> 变量。既然能够将接口类型的变量转换成反射对象，那么一定需要其他方法将反射对象还原成接口类型的变量，<a href="https://golang.org/pkg/reflect/"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 中的 <a href="https://draveness.me/golang/tree/reflect.Value.Interface"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.Interface</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 就能完成这项工作：</p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031118204.png?size=large 2x" sizes="auto" data-title="golang-reflection-to-interface" data-alt="golang-reflection-to-interface" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>图 反射对象到接口</strong></p>
-<p>不过调用 <a href="https://draveness.me/golang/tree/reflect.Value.Interface" target="_blank" rel="noopener noreffer "><code>reflect.Value.Interface</code></a> 方法只能获得 <code>interface{}</code> 类型的变量，如果想要将其还原成最原始的状态还需要经过如下所示的显式类型转换：</p>
-<div class="highlight"><div class="chroma">
+<p>不过调用 <a href="https://draveness.me/golang/tree/reflect.Value.Interface"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.Interface</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 方法只能获得 <code>interface{}</code> 类型的变量，如果想要将其还原成最原始的状态还需要经过如下所示的显式类型转换：</p>
+<div class="highlight" id="id-7"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">v</span> <span class="o">:=</span> <span class="nx">reflect</span><span class="p">.</span><span class="nf">ValueOf</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="nx">v</span><span class="p">.</span><span class="nf">Interface</span><span class="p">().(</span><span class="kt">int</span><span class="p">)</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="nx">v</span><span class="p">.</span><span class="nf">Interface</span><span class="p">().(</span><span class="kt">int</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>从反射对象到接口值的过程是从接口值到反射对象的镜面过程，两个过程都需要经历两次转换</p>
 <ul>
@@ -468,19 +539,12 @@
 </ul>
 </li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png"
-        title="golang-bidirectional-reflection" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031119865.png?size=large 2x" sizes="auto" data-title="golang-bidirectional-reflection" data-alt="golang-bidirectional-reflection" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>图 接口和反射对象的双向转换</strong></p>
 <p>当然不是所有的变量都需要类型转换这一过程。如果变量本身就是 <code>interface{}</code> 类型的，那么它不需要类型转换，因为类型转换这一过程一般都是隐式的，所以我不太需要关心它，只有在我们需要将反射对象转换回基本类型时才需要显式的转换操作。</p>
 <h3 id="第三法则">第三法则</h3>
-<p>Go 语言反射的最后一条法则是与值是否可以被更改有关，如果我们想要更新一个 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a>，那么它持有的值一定是可以被更新的，假设我们有以下代码：</p>
-<div class="highlight"><div class="chroma">
+<p>Go 语言反射的最后一条法则是与值是否可以被更改有关，如果我们想要更新一个 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，那么它持有的值一定是可以被更新的，假设我们有以下代码：</p>
+<div class="highlight" id="id-8"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -521,12 +585,11 @@
 </span></span><span class="line"><span class="cl"><span class="nx">reflect</span><span class="p">.</span><span class="nx">Value</span><span class="p">.</span><span class="nf">SetInt</span><span class="p">(</span><span class="mh">0x100dc0</span><span class="p">,</span> <span class="mh">0x414020</span><span class="p">,</span> <span class="mh">0x82</span><span class="p">,</span> <span class="mh">0x1840</span><span class="p">,</span> <span class="mh">0xa</span><span class="p">,</span> <span class="mh">0x0</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">local</span><span class="o">/</span><span class="k">go</span><span class="o">/</span><span class="nx">src</span><span class="o">/</span><span class="nx">reflect</span><span class="o">/</span><span class="nx">value</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">1606</span> <span class="o">+</span><span class="mh">0x40</span>
 </span></span><span class="line"><span class="cl"><span class="nx">main</span><span class="p">.</span><span class="nf">main</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">	<span class="o">/</span><span class="nx">tmp</span><span class="o">/</span><span class="nx">sandbox590309925</span><span class="o">/</span><span class="nx">prog</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">11</span> <span class="o">+</span><span class="mh">0xe0</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">	<span class="o">/</span><span class="nx">tmp</span><span class="o">/</span><span class="nx">sandbox590309925</span><span class="o">/</span><span class="nx">prog</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">11</span> <span class="o">+</span><span class="mh">0xe0</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>运行上述代码会导致程序崩溃并报出 “reflect: reflect.flag.mustBeAssignable using unaddressable value” 错误，仔细思考一下就能够发现出错的原因：由于 Go 语言的函数调用都是传值的，所以我们得到的反射对象跟最开始的变量没有任何关系，那么直接修改反射对象无法改变原始变量，程序为了防止错误就会崩溃。</p>
 <p>想要修改原变量只能使用如下的方法：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-9"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -547,16 +610,15 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="err">$</span> <span class="k">go</span> <span class="nx">run</span> <span class="nx">reflect</span><span class="p">.</span><span class="k">go</span>
-</span></span><span class="line"><span class="cl"><span class="mi">10</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="mi">10</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ol>
-<li>调用 <a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 获取变量指针；</li>
-<li>调用 <a href="https://draveness.me/golang/tree/reflect.Value.Elem" target="_blank" rel="noopener noreffer "><code>reflect.Value.Elem</code></a> 获取指针指向的变量；</li>
-<li>调用 <a href="https://draveness.me/golang/tree/reflect.Value.SetInt" target="_blank" rel="noopener noreffer "><code>reflect.Value.SetInt</code></a> 更新变量的值：</li>
+<li>调用 <a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 获取变量指针；</li>
+<li>调用 <a href="https://draveness.me/golang/tree/reflect.Value.Elem"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.Elem</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 获取指针指向的变量；</li>
+<li>调用 <a href="https://draveness.me/golang/tree/reflect.Value.SetInt"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.SetInt</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 更新变量的值：</li>
 </ol>
-<p>由于 Go 语言的函数调用都是值传递的，所以我们只能只能用迂回的方式改变原变量：先获取指针对应的 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a>，再通过 <a href="https://draveness.me/golang/tree/reflect.Value.Elem" target="_blank" rel="noopener noreffer "><code>reflect.Value.Elem</code></a> 方法得到可以被设置的变量，我们可以通过下面的代码理解这个过程：</p>
-<div class="highlight"><div class="chroma">
+<p>由于 Go 语言的函数调用都是值传递的，所以我们只能只能用迂回的方式改变原变量：先获取指针对应的 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，再通过 <a href="https://draveness.me/golang/tree/reflect.Value.Elem"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.Elem</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 方法得到可以被设置的变量，我们可以通过下面的代码理解这个过程：</p>
+<div class="highlight" id="id-10"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -569,28 +631,20 @@
 </span></span><span class="line"><span class="cl">	<span class="nx">i</span> <span class="o">:=</span> <span class="mi">1</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">v</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">i</span>
 </span></span><span class="line"><span class="cl">	<span class="o">*</span><span class="nx">v</span> <span class="p">=</span> <span class="mi">10</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果不能直接操作 <code>i</code> 变量修改其持有的值，我们就只能获取 <code>i</code> 变量所在地址并使用 <code>*v</code> 修改所在地址中存储的整数。</p>
 <h2 id="反射底层原理刨析">反射底层原理刨析</h2>
-<p>虽然在大多数的应用和服务中并不常见，但是很多框架都依赖 Go 语言的反射机制简化代码。因为 Go 语言的语法元素很少、设计简单，所以它没有特别强的表达能力，但是 Go 语言的 <a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener noreffer "><code>reflect</code></a> 包能够弥补它在语法上<a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a>的一些劣势。</p>
-<p><a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener noreffer "><code>reflect</code></a> 实现了运行时的反射能力，能够让程序操作不同类型的对象。反射包中有两对非常重要的函数和类型，两个函数分别是：</p>
+<p>虽然在大多数的应用和服务中并不常见，但是很多框架都依赖 Go 语言的反射机制简化代码。因为 Go 语言的语法元素很少、设计简单，所以它没有特别强的表达能力，但是 Go 语言的 <a href="https://golang.org/pkg/reflect/"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 包能够弥补它在语法上<a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>的一些劣势。</p>
+<p><a href="https://golang.org/pkg/reflect/"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 实现了运行时的反射能力，能够让程序操作不同类型的对象。反射包中有两对非常重要的函数和类型，两个函数分别是：</p>
 <ul>
-<li><a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a> 能获取类型信息；</li>
-<li><a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 能获取数据的运行时表示；</li>
+<li><a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 能获取类型信息；</li>
+<li><a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 能获取数据的运行时表示；</li>
 </ul>
-<p>两个类型是 <a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a> 和 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a>，它们与函数是一一对应的关系：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png"
-        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png" /></p>
-<p>类型 <a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a> 是反射包定义的一个接口，我们可以使用 <a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a> 函数获取任意变量的类型，<a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a> 接口中定义了一些有趣的方法，<code>MethodByName</code> 可以获取当前类型对应方法的引用、<code>Implements</code> 可以判断当前类型是否实现了某个接口：</p>
-<div class="highlight"><div class="chroma">
+<p>两个类型是 <a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 和 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，它们与函数是一一对应的关系：</p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png?size=large 2x" sizes="auto" data-title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png" data-alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031115965.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>类型 <a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是反射包定义的一个接口，我们可以使用 <a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 函数获取任意变量的类型，<a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 接口中定义了一些有趣的方法，<code>MethodByName</code> 可以获取当前类型对应方法的引用、<code>Implements</code> 可以判断当前类型是否实现了某个接口：</p>
+<div class="highlight" id="id-11"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -613,11 +667,10 @@
 </span></span><span class="line"><span class="cl">        <span class="o">...</span>
 </span></span><span class="line"><span class="cl">        <span class="nf">Implements</span><span class="p">(</span><span class="nx">u</span> <span class="nx">Type</span><span class="p">)</span> <span class="kt">bool</span>
 </span></span><span class="line"><span class="cl">        <span class="o">...</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>反射包中 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 的类型与 <a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a> 不同，它被声明成了结构体。这个结构体没有对外暴露的字段，但是提供了获取或者写入数据的方法：</p>
-<div class="highlight"><div class="chroma">
+</div><p>反射包中 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 的类型与 <a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 不同，它被声明成了结构体。这个结构体没有对外暴露的字段，但是提供了获取或者写入数据的方法：</p>
+<div class="highlight" id="id-12"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -636,13 +689,12 @@
 </span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">v</span> <span class="nx">Value</span><span class="p">)</span> <span class="nf">Addr</span><span class="p">()</span> <span class="nx">Value</span>
 </span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">v</span> <span class="nx">Value</span><span class="p">)</span> <span class="nf">Bool</span><span class="p">()</span> <span class="kt">bool</span>
 </span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="p">(</span><span class="nx">v</span> <span class="nx">Value</span><span class="p">)</span> <span class="nf">Bytes</span><span class="p">()</span> <span class="p">[]</span><span class="kt">byte</span>
-</span></span><span class="line"><span class="cl"><span class="o">...</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="o">...</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>反射包中的所有方法基本都是围绕着 <a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a> 和 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 两个类型设计的。我们通过 <a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a>、<a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 可以将一个普通的变量转换成反射包中提供的 <a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a> 和 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a>，随后就可以使用反射包中的方法对它们进行复杂的操作。</p>
+</div><p>反射包中的所有方法基本都是围绕着 <a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 和 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 两个类型设计的。我们通过 <a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>、<a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 可以将一个普通的变量转换成反射包中提供的 <a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 和 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，随后就可以使用反射包中的方法对它们进行复杂的操作。</p>
 <h3 id="类型和值">类型和值</h3>
-<p>Go 语言的 <code>interface{}</code> 类型在语言内部是通过 <a href="https://draveness.me/golang/tree/reflect.emptyInterface" target="_blank" rel="noopener noreffer "><code>reflect.emptyInterface</code></a> 结体表示的，其中的 <code>rtype</code> 字段用于表示变量的类型，另一个 <code>word</code> 字段指向内部封装的数据：</p>
-<div class="highlight"><div class="chroma">
+<p>Go 语言的 <code>interface{}</code> 类型在语言内部是通过 <a href="https://draveness.me/golang/tree/reflect.emptyInterface"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.emptyInterface</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 结体表示的，其中的 <code>rtype</code> 字段用于表示变量的类型，另一个 <code>word</code> 字段指向内部封装的数据：</p>
+<div class="highlight" id="id-13"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -653,11 +705,10 @@
 <pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">type</span> <span class="nx">emptyInterface</span> <span class="kd">struct</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">typ</span>  <span class="o">*</span><span class="nx">rtype</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">word</span> <span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>用于获取变量类型的 <a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a> 函数将传入的变量隐式转换成 <a href="https://draveness.me/golang/tree/reflect.emptyInterface" target="_blank" rel="noopener noreffer "><code>reflect.emptyInterface</code></a> 类型并获取其中存储的类型信息 <a href="https://draveness.me/golang/tree/reflect.rtype" target="_blank" rel="noopener noreffer "><code>reflect.rtype</code></a>：</p>
-<div class="highlight"><div class="chroma">
+</div><p>用于获取变量类型的 <a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 函数将传入的变量隐式转换成 <a href="https://draveness.me/golang/tree/reflect.emptyInterface"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.emptyInterface</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 类型并获取其中存储的类型信息 <a href="https://draveness.me/golang/tree/reflect.rtype"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.rtype</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>：</p>
+<div class="highlight" id="id-14"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -682,11 +733,10 @@
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="kc">nil</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">t</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><a href="https://draveness.me/golang/tree/reflect.rtype" target="_blank" rel="noopener noreffer "><code>reflect.rtype</code></a> 是一个实现了 <a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a> 接口的结构体，该结构体实现的 <a href="https://draveness.me/golang/tree/reflect.rtype.String" target="_blank" rel="noopener noreffer "><code>reflect.rtype.String</code></a> 方法可以帮助我们获取当前类型的名称：</p>
-<div class="highlight"><div class="chroma">
+</div><p><a href="https://draveness.me/golang/tree/reflect.rtype"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.rtype</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是一个实现了 <a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 接口的结构体，该结构体实现的 <a href="https://draveness.me/golang/tree/reflect.rtype.String"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.rtype.String</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 方法可以帮助我们获取当前类型的名称：</p>
+<div class="highlight" id="id-15"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -703,12 +753,11 @@
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nx">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">s</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a> 的实现原理其实并不复杂，它只是将一个 <code>interface{}</code> 变量转换成了内部的 <a href="https://draveness.me/golang/tree/reflect.emptyInterface" target="_blank" rel="noopener noreffer "><code>reflect.emptyInterface</code></a> 表示，然后从中获取相应的类型信息。</p>
-<p>用于获取接口值 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 的函数 <a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 实现也非常简单，在该函数中我们先调用了 <a href="https://draveness.me/golang/tree/reflect.escapes" target="_blank" rel="noopener noreffer "><code>reflect.escapes</code></a> 保证当前值逃逸到堆上，然后通过 <a href="https://draveness.me/golang/tree/reflect.unpackEface" target="_blank" rel="noopener noreffer "><code>reflect.unpackEface</code></a> 从接口中获取 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 结构体：</p>
-<div class="highlight"><div class="chroma">
+</div><p><a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 的实现原理其实并不复杂，它只是将一个 <code>interface{}</code> 变量转换成了内部的 <a href="https://draveness.me/golang/tree/reflect.emptyInterface"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.emptyInterface</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 表示，然后从中获取相应的类型信息。</p>
+<p>用于获取接口值 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 的函数 <a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 实现也非常简单，在该函数中我们先调用了 <a href="https://draveness.me/golang/tree/reflect.escapes"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.escapes</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 保证当前值逃逸到堆上，然后通过 <a href="https://draveness.me/golang/tree/reflect.unpackEface"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.unpackEface</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 从接口中获取 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 结构体：</p>
+<div class="highlight" id="id-16"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -755,12 +804,11 @@
 </span></span><span class="line"><span class="cl">		<span class="nx">f</span> <span class="o">|=</span> <span class="nx">flagIndir</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">Value</span><span class="p">{</span><span class="nx">t</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">word</span><span class="p">,</span> <span class="nx">f</span><span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><a href="https://draveness.me/golang/tree/reflect.unpackEface" target="_blank" rel="noopener noreffer "><code>reflect.unpackEface</code></a> 会将传入的接口转换成 <a href="https://draveness.me/golang/tree/reflect.emptyInterface" target="_blank" rel="noopener noreffer "><code>reflect.emptyInterface</code></a>，然后将具体类型和指针包装成 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 结构体后返回。</p>
-<p><a href="https://draveness.me/golang/tree/reflect.TypeOf" target="_blank" rel="noopener noreffer "><code>reflect.TypeOf</code></a> 和 <a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 的实现都很简单。我们已经分析了这两个函数的实现，现在需要了解编译器在调用函数之前做了哪些工作：</p>
-<div class="highlight"><div class="chroma">
+</div><p><a href="https://draveness.me/golang/tree/reflect.unpackEface"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.unpackEface</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 会将传入的接口转换成 <a href="https://draveness.me/golang/tree/reflect.emptyInterface"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.emptyInterface</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，然后将具体类型和指针包装成 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 结构体后返回。</p>
+<p><a href="https://draveness.me/golang/tree/reflect.TypeOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.TypeOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 和 <a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 的实现都很简单。我们已经分析了这两个函数的实现，现在需要了解编译器在调用函数之前做了哪些工作：</p>
+<div class="highlight" id="id-17"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -801,14 +849,13 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">MOVQ</span>	<span class="nx">AX</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_19</span><span class="o">+</span><span class="mi">280</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span> <span class="c1">// autotmp_19+280(SP) = type.int(SB)
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">LEAQ</span>	<span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_20</span><span class="o">+</span><span class="mi">56</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">CX</span>  <span class="c1">// CX = 20
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">MOVQ</span>	<span class="nx">CX</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_19</span><span class="o">+</span><span class="mi">288</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span> <span class="c1">// autotmp_19+288(SP) = 20
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">...</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">...</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>从上面这段截取的汇编语言，我们可以发现在函数调用之前已经发生了类型转换，上述指令将 <code>int</code> 类型的变量转换成了占用 16 字节 <code>autotmp_19+280(SP) ~ autotmp_19+288(SP)</code> 的接口，两个 <code>LEAQ</code> 指令分别获取了类型的指针 <code>type.int(SB)</code> 以及变量 <code>i</code> 所在的地址。</p>
-<p>当我们想要将一个变量转换成反射对象时，Go 语言会在编译期间完成类型转换，将变量的类型和值转换成了 <code>interface{}</code> 并等待运行期间使用 <a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener noreffer "><code>reflect</code></a> 包获取接口中存储的信息。</p>
+<p>当我们想要将一个变量转换成反射对象时，Go 语言会在编译期间完成类型转换，将变量的类型和值转换成了 <code>interface{}</code> 并等待运行期间使用 <a href="https://golang.org/pkg/reflect/"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 包获取接口中存储的信息。</p>
 <h3 id="更新变量">更新变量</h3>
-<p>当我们想要更新 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 时，就需要调用 <a href="https://draveness.me/golang/tree/reflect.Value.Set" target="_blank" rel="noopener noreffer "><code>reflect.Value.Set</code></a> 更新反射对象，该方法会调用 <a href="https://draveness.me/golang/tree/reflect.flag.mustBeAssignable" target="_blank" rel="noopener noreffer "><code>reflect.flag.mustBeAssignable</code></a> 和 <a href="https://draveness.me/golang/tree/reflect.flag.mustBeExported" target="_blank" rel="noopener noreffer "><code>reflect.flag.mustBeExported</code></a> 分别检查当前反射对象是否是可以被设置的以及字段是否是对外公开的：</p>
-<div class="highlight"><div class="chroma">
+<p>当我们想要更新 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 时，就需要调用 <a href="https://draveness.me/golang/tree/reflect.Value.Set"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.Set</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 更新反射对象，该方法会调用 <a href="https://draveness.me/golang/tree/reflect.flag.mustBeAssignable"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.flag.mustBeAssignable</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 和 <a href="https://draveness.me/golang/tree/reflect.flag.mustBeExported"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.flag.mustBeExported</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 分别检查当前反射对象是否是可以被设置的以及字段是否是对外公开的：</p>
+<div class="highlight" id="id-18"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -831,11 +878,10 @@
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">x</span> <span class="p">=</span> <span class="nx">x</span><span class="p">.</span><span class="nf">assignTo</span><span class="p">(</span><span class="s">&#34;reflect.Set&#34;</span><span class="p">,</span> <span class="nx">v</span><span class="p">.</span><span class="nx">typ</span><span class="p">,</span> <span class="nx">target</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">typedmemmove</span><span class="p">(</span><span class="nx">v</span><span class="p">.</span><span class="nx">typ</span><span class="p">,</span> <span class="nx">v</span><span class="p">.</span><span class="nx">ptr</span><span class="p">,</span> <span class="nx">x</span><span class="p">.</span><span class="nx">ptr</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><a href="https://draveness.me/golang/tree/reflect.Value.Set" target="_blank" rel="noopener noreffer "><code>reflect.Value.Set</code></a> 会调用 <a href="https://draveness.me/golang/tree/reflect.Value.assignTo" target="_blank" rel="noopener noreffer "><code>reflect.Value.assignTo</code></a> 并返回一个新的反射对象，这个返回的反射对象指针会直接覆盖原反射变量。</p>
-<div class="highlight"><div class="chroma">
+</div><p><a href="https://draveness.me/golang/tree/reflect.Value.Set"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.Set</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 会调用 <a href="https://draveness.me/golang/tree/reflect.Value.assignTo"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.assignTo</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 并返回一个新的反射对象，这个返回的反射对象指针会直接覆盖原反射变量。</p>
+<div class="highlight" id="id-19"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -878,28 +924,26 @@
 </span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="nx">Value</span><span class="p">{</span><span class="nx">dst</span><span class="p">,</span> <span class="nx">target</span><span class="p">,</span> <span class="nx">flagIndir</span> <span class="p">|</span> <span class="nf">flag</span><span class="p">(</span><span class="nx">Interface</span><span class="p">)}</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="nb">panic</span><span class="p">(</span><span class="nx">context</span> <span class="o">+</span> <span class="s">&#34;: value of type &#34;</span> <span class="o">+</span> <span class="nx">v</span><span class="p">.</span><span class="nx">typ</span><span class="p">.</span><span class="nf">String</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; is not assignable to type &#34;</span> <span class="o">+</span> <span class="nx">dst</span><span class="p">.</span><span class="nf">String</span><span class="p">())</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><a href="https://draveness.me/golang/tree/reflect.Value.assignTo" target="_blank" rel="noopener noreffer "><code>reflect.Value.assignTo</code></a> 会根据当前和被设置的反射对象类型创建一个新的 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 结构体</p>
+</div><p><a href="https://draveness.me/golang/tree/reflect.Value.assignTo"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.assignTo</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 会根据当前和被设置的反射对象类型创建一个新的 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 结构体</p>
 <ul>
 <li>如果两个反射对象的类型是可以被直接替换，就会直接返回目标反射对象</li>
 <li>如果当前反射对象是接口并且目标对象实现了接口，就会把目标对象简单包装成接口值</li>
 </ul>
-<p>在变量更新的过程中，<a href="https://draveness.me/golang/tree/reflect.Value.assignTo" target="_blank" rel="noopener noreffer "><code>reflect.Value.assignTo</code></a> 返回的 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 中的指针会覆盖当前反射对象中的指针实现变量的更新。</p>
+<p>在变量更新的过程中，<a href="https://draveness.me/golang/tree/reflect.Value.assignTo"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.assignTo</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 返回的 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 中的指针会覆盖当前反射对象中的指针实现变量的更新。</p>
 <h3 id="实现协议">实现协议</h3>
-<p><a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener noreffer "><code>reflect</code></a> 包还为我们提供了 <a href="https://draveness.me/golang/tree/reflect.rtype.Implements" target="_blank" rel="noopener noreffer "><code>reflect.rtype.Implements</code></a> 方法可以用于判断某些类型是否遵循特定的接口。在 Go 语言中获取结构体的反射类型 <a href="https://draveness.me/golang/tree/reflect.Type" target="_blank" rel="noopener noreffer "><code>reflect.Type</code></a> 还是比较容易的，但是想要获得接口类型需要通过以下方式：</p>
-<div class="highlight"><div class="chroma">
+<p><a href="https://golang.org/pkg/reflect/"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 包还为我们提供了 <a href="https://draveness.me/golang/tree/reflect.rtype.Implements"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.rtype.Implements</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 方法可以用于判断某些类型是否遵循特定的接口。在 Go 语言中获取结构体的反射类型 <a href="https://draveness.me/golang/tree/reflect.Type"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Type</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 还是比较容易的，但是想要获得接口类型需要通过以下方式：</p>
+<div class="highlight" id="id-20"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">((</span><span class="o">*</span><span class="p">&lt;</span><span class="kd">interface</span><span class="p">&gt;)(</span><span class="kc">nil</span><span class="p">)).</span><span class="nf">Elem</span><span class="p">()</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nx">reflect</span><span class="p">.</span><span class="nf">TypeOf</span><span class="p">((</span><span class="o">*</span><span class="p">&lt;</span><span class="kd">interface</span><span class="p">&gt;)(</span><span class="kc">nil</span><span class="p">)).</span><span class="nf">Elem</span><span class="p">()</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Go</p>
 <p>我们通过一个例子在介绍如何判断一个类型是否实现了某个接口。假设我们需要判断如下代码中的 <code>CustomError</code> 是否实现了 Go 语言标准库中的 <code>error</code> 接口：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-21"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -930,15 +974,14 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">customErrorPtr</span><span class="p">.</span><span class="nf">Implements</span><span class="p">(</span><span class="nx">typeOfError</span><span class="p">))</span> <span class="c1">// #=&gt; true
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">customError</span><span class="p">.</span><span class="nf">Implements</span><span class="p">(</span><span class="nx">typeOfError</span><span class="p">))</span> <span class="c1">// #=&gt; false
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>CustomError</code> 类型并没有实现 <code>error</code> 接口；</li>
 <li><code>*CustomError</code> 指针类型实现了 <code>error</code> 接口；</li>
 </ul>
-<p>抛开上述的执行结果不谈，我们来分析一下 <a href="https://draveness.me/golang/tree/reflect.rtype.Implements" target="_blank" rel="noopener noreffer "><code>reflect.rtype.Implements</code></a> 方法的工作原理：</p>
-<div class="highlight"><div class="chroma">
+<p>抛开上述的执行结果不谈，我们来分析一下 <a href="https://draveness.me/golang/tree/reflect.rtype.Implements"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.rtype.Implements</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 方法的工作原理：</p>
+<div class="highlight" id="id-22"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -959,11 +1002,10 @@
 </span></span><span class="line"><span class="cl">		<span class="nb">panic</span><span class="p">(</span><span class="s">&#34;reflect: non-interface type passed to Type.Implements&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">implements</span><span class="p">(</span><span class="nx">u</span><span class="p">.(</span><span class="o">*</span><span class="nx">rtype</span><span class="p">),</span> <span class="nx">t</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><a href="https://draveness.me/golang/tree/reflect.rtype.Implements" target="_blank" rel="noopener noreffer "><code>reflect.rtype.Implements</code></a> 会检查传入的类型是不是接口，如果不是接口或者是空值就会直接崩溃并中止当前程序。在参数没有问题的情况下，上述方法会调用私有函数 <a href="https://draveness.me/golang/tree/reflect.implements" target="_blank" rel="noopener noreffer "><code>reflect.implements</code></a> 判断类型之间是否有实现关系：</p>
-<div class="highlight"><div class="chroma">
+</div><p><a href="https://draveness.me/golang/tree/reflect.rtype.Implements"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.rtype.Implements</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 会检查传入的类型是不是接口，如果不是接口或者是空值就会直接崩溃并中止当前程序。在参数没有问题的情况下，上述方法会调用私有函数 <a href="https://draveness.me/golang/tree/reflect.implements"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.implements</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 判断类型之间是否有实现关系：</p>
+<div class="highlight" id="id-23"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1010,23 +1052,15 @@
 </span></span><span class="line"><span class="cl">		<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="kc">false</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果接口中不包含任何方法，就意味着这是一个空的接口，任意类型都自动实现该接口，这时会直接返回 <code>true</code>。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png"
-        title="golang-type-implements-interface" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209031123910.png?size=large 2x" sizes="auto" data-title="golang-type-implements-interface" data-alt="golang-type-implements-interface" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>图 类型实现接口</strong></p>
-<p>在其他情况下，由于方法都是按照字母序存储的，<a href="https://draveness.me/golang/tree/reflect.implements" target="_blank" rel="noopener noreffer "><code>reflect.implements</code></a> 会维护两个用于遍历接口和类型方法的索引 <code>i</code> 和 <code>j</code> 判断类型是否实现了接口，因为最多只会进行 <code>n</code> 次比较（类型的方法数量），所以整个过程的时间复杂度是 O(n)。</p>
+<p>在其他情况下，由于方法都是按照字母序存储的，<a href="https://draveness.me/golang/tree/reflect.implements"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.implements</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 会维护两个用于遍历接口和类型方法的索引 <code>i</code> 和 <code>j</code> 判断类型是否实现了接口，因为最多只会进行 <code>n</code> 次比较（类型的方法数量），所以整个过程的时间复杂度是 O(n)。</p>
 <h3 id="方法调用">方法调用</h3>
-<p>作为一门静态语言，如果我们想要通过 <a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener noreffer "><code>reflect</code></a> 包利用反射在运行期间执行方法不是一件容易的事情，下面的十几行代码就使用反射来执行 <code>Add(0, 1)</code> 函数：</p>
-<div class="highlight"><div class="chroma">
+<p>作为一门静态语言，如果我们想要通过 <a href="https://golang.org/pkg/reflect/"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 包利用反射在运行期间执行方法不是一件容易的事情，下面的十几行代码就使用反射来执行 <code>Add(0, 1)</code> 函数：</p>
+<div class="highlight" id="id-24"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1071,18 +1105,17 @@
 </span></span><span class="line"><span class="cl">		<span class="k">return</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Println</span><span class="p">(</span><span class="nx">result</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">Int</span><span class="p">())</span> <span class="c1">// #=&gt; 1
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ol>
-<li>通过 <a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 获取函数 <code>Add</code> 对应的反射对象；</li>
-<li>调用 <a href="https://draveness.me/golang/tree/reflect.rtype.NumIn" target="_blank" rel="noopener noreffer "><code>reflect.rtype.NumIn</code></a> 获取函数的入参个数；</li>
-<li>多次调用 <a href="https://draveness.me/golang/tree/reflect.ValueOf" target="_blank" rel="noopener noreffer "><code>reflect.ValueOf</code></a> 函数逐一设置 <code>argv</code> 数组中的各个参数；</li>
-<li>调用反射对象 <code>Add</code> 的 <a href="https://draveness.me/golang/tree/reflect.Value.Call" target="_blank" rel="noopener noreffer "><code>reflect.Value.Call</code></a> 方法并传入参数列表；</li>
+<li>通过 <a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 获取函数 <code>Add</code> 对应的反射对象；</li>
+<li>调用 <a href="https://draveness.me/golang/tree/reflect.rtype.NumIn"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.rtype.NumIn</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 获取函数的入参个数；</li>
+<li>多次调用 <a href="https://draveness.me/golang/tree/reflect.ValueOf"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.ValueOf</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 函数逐一设置 <code>argv</code> 数组中的各个参数；</li>
+<li>调用反射对象 <code>Add</code> 的 <a href="https://draveness.me/golang/tree/reflect.Value.Call"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.Call</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 方法并传入参数列表；</li>
 <li>获取返回值数组、验证数组的长度以及类型并打印其中的数据；</li>
 </ol>
 <p>使用反射来调用方法非常复杂，原本只需要一行代码就能完成的工作，现在需要十几行代码才能完成，但这也是在静态语言中使用动态特性需要付出的成本。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-25"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1095,20 +1128,19 @@
 </span></span><span class="line"><span class="cl">	<span class="nx">v</span><span class="p">.</span><span class="nf">mustBe</span><span class="p">(</span><span class="nx">Func</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">	<span class="nx">v</span><span class="p">.</span><span class="nf">mustBeExported</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">v</span><span class="p">.</span><span class="nf">call</span><span class="p">(</span><span class="s">&#34;Call&#34;</span><span class="p">,</span> <span class="nx">in</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><a href="https://draveness.me/golang/tree/reflect.Value.Call" target="_blank" rel="noopener noreffer "><code>reflect.Value.Call</code></a> 是运行时调用方法的入口，它通过两个 <code>MustBe</code> 开头的方法确定了当前反射对象的类型是函数以及可见性，随后调用 <a href="https://draveness.me/golang/tree/reflect.Value.call" target="_blank" rel="noopener noreffer "><code>reflect.Value.call</code></a> 完成方法调用，这个私有方法的执行过程会分成以下的几个部分</p>
+</div><p><a href="https://draveness.me/golang/tree/reflect.Value.Call"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.Call</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 是运行时调用方法的入口，它通过两个 <code>MustBe</code> 开头的方法确定了当前反射对象的类型是函数以及可见性，随后调用 <a href="https://draveness.me/golang/tree/reflect.Value.call"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value.call</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 完成方法调用，这个私有方法的执行过程会分成以下的几个部分</p>
 <ol>
 <li>检查输入参数以及类型的合法性</li>
-<li>将传入的 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 参数数组设置到栈上</li>
+<li>将传入的 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 参数数组设置到栈上</li>
 <li>通过函数指针和输入参数调用函数</li>
 <li>从栈上获取函数的返回值</li>
 </ol>
-<p>我们将按照上面的顺序分析使用 <a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener noreffer "><code>reflect</code></a> 进行函数调用的几个过程。</p>
+<p>我们将按照上面的顺序分析使用 <a href="https://golang.org/pkg/reflect/"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 进行函数调用的几个过程。</p>
 <h4 id="参数检查">参数检查</h4>
-<p>参数检查是通过反射调用方法的第一步，在参数检查期间我们会从反射对象中取出当前的函数指针 <code>unsafe.Pointer</code>，如果该函数指针是方法，那么我们会通过 <a href="https://draveness.me/golang/tree/reflect.methodReceiver" target="_blank" rel="noopener noreffer "><code>reflect.methodReceiver</code></a> 获取方法的接收者和函数指针。</p>
-<div class="highlight"><div class="chroma">
+<p>参数检查是通过反射调用方法的第一步，在参数检查期间我们会从反射对象中取出当前的函数指针 <code>unsafe.Pointer</code>，如果该函数指针是方法，那么我们会通过 <a href="https://draveness.me/golang/tree/reflect.methodReceiver"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.methodReceiver</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 获取方法的接收者和函数指针。</p>
+<div class="highlight" id="id-26"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1153,13 +1185,12 @@
 </span></span><span class="line"><span class="cl">		<span class="k">if</span> <span class="nx">xt</span><span class="p">,</span> <span class="nx">targ</span> <span class="o">:=</span> <span class="nx">in</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nf">Type</span><span class="p">(),</span> <span class="nx">t</span><span class="p">.</span><span class="nf">In</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span> <span class="p">!</span><span class="nx">xt</span><span class="p">.</span><span class="nf">AssignableTo</span><span class="p">(</span><span class="nx">targ</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">			<span class="nb">panic</span><span class="p">(</span><span class="s">&#34;reflect: &#34;</span> <span class="o">+</span> <span class="nx">op</span> <span class="o">+</span> <span class="s">&#34; using &#34;</span> <span class="o">+</span> <span class="nx">xt</span><span class="p">.</span><span class="nf">String</span><span class="p">()</span> <span class="o">+</span> <span class="s">&#34; as type &#34;</span> <span class="o">+</span> <span class="nx">targ</span><span class="p">.</span><span class="nf">String</span><span class="p">())</span>
 </span></span><span class="line"><span class="cl">		<span class="p">}</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>上述方法还会检查传入参数的个数以及参数的类型与函数签名中的类型是否可以匹配，任何参数的不匹配都会导致整个程序的崩溃中止。</p>
 <h4 id="准备参数">准备参数</h4>
 <p>当我们已经对当前方法的参数完成验证后，就会进入函数调用的下一个阶段，为函数调用准备参数，在前面函数调用一节中，我们已经介绍过 Go 语言的函数调用惯例，函数或者方法在调用时，所有的参数都会被依次放到栈上。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-27"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1212,16 +1243,15 @@
 </span></span><span class="line"><span class="cl">		<span class="nx">v</span> <span class="p">=</span> <span class="nx">v</span><span class="p">.</span><span class="nf">assignTo</span><span class="p">(</span><span class="s">&#34;reflect.Value.Call&#34;</span><span class="p">,</span> <span class="nx">targ</span><span class="p">,</span> <span class="nx">addr</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">		<span class="o">*</span><span class="p">(</span><span class="o">*</span><span class="nx">unsafe</span><span class="p">.</span><span class="nx">Pointer</span><span class="p">)(</span><span class="nx">addr</span><span class="p">)</span> <span class="p">=</span> <span class="nx">v</span><span class="p">.</span><span class="nx">ptr</span>
 </span></span><span class="line"><span class="cl">		<span class="nx">off</span> <span class="o">+=</span> <span class="nx">n</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ol>
-<li>通过 <a href="https://draveness.me/golang/tree/reflect.funcLayout" target="_blank" rel="noopener noreffer "><code>reflect.funcLayout</code></a> 计算当前函数需要的参数和返回值的栈布局，也就是每一个参数和返回值所占的空间大小；</li>
+<li>通过 <a href="https://draveness.me/golang/tree/reflect.funcLayout"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.funcLayout</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 计算当前函数需要的参数和返回值的栈布局，也就是每一个参数和返回值所占的空间大小；</li>
 <li>如果当前函数有返回值，需要为当前函数的参数和返回值分配一片内存空间 <code>args</code>；</li>
 <li>如果当前函数是方法，需要向将方法的接收接收者者拷贝到 <code>args</code> 内存中；</li>
 <li>将所有函数的参数按照顺序依次拷贝到对应 <code>args</code> 内存中
 <ol>
-<li>使用 <a href="https://draveness.me/golang/tree/reflect.funcLayout" target="_blank" rel="noopener noreffer "><code>reflect.funcLayout</code></a> 返回的参数计算参数在内存中的位置；</li>
+<li>使用 <a href="https://draveness.me/golang/tree/reflect.funcLayout"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.funcLayout</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 返回的参数计算参数在内存中的位置；</li>
 <li>将参数拷贝到内存空间中；</li>
 </ol>
 </li>
@@ -1229,15 +1259,14 @@
 <p>准备参数是计算各个参数和返回值占用的内存空间并将所有的参数都拷贝内存空间对应位置的过程，该过程会考虑函数和方法、返回值数量以及参数类型带来的差异。</p>
 <h4 id="调用函数">调用函数</h4>
 <p>准备好调用函数需要的全部参数后，就会通过下面的代码执行函数指针了。我们会向该函数传入栈类型、函数指针、参数和返回值的内存空间、栈的大小以及返回值的偏移量：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-28"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nf">call</span><span class="p">(</span><span class="nx">frametype</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nb">uint32</span><span class="p">(</span><span class="nx">frametype</span><span class="p">.</span><span class="nx">size</span><span class="p">),</span> <span class="nb">uint32</span><span class="p">(</span><span class="nx">retOffset</span><span class="p">))</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="nf">call</span><span class="p">(</span><span class="nx">frametype</span><span class="p">,</span> <span class="nx">fn</span><span class="p">,</span> <span class="nx">args</span><span class="p">,</span> <span class="nb">uint32</span><span class="p">(</span><span class="nx">frametype</span><span class="p">.</span><span class="nx">size</span><span class="p">),</span> <span class="nb">uint32</span><span class="p">(</span><span class="nx">retOffset</span><span class="p">))</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>上述函数实际上并不存在，它会在编译期间链接到 <a href="https://draveness.me/golang/tree/reflect.reflectcall" target="_blank" rel="noopener noreffer "><code>reflect.reflectcall</code></a> 这个用汇编实现的函数上，我们在这里不会分析该函数的具体实现，感兴趣的读者可以自行了解其实现原理。</p>
+</div><p>上述函数实际上并不存在，它会在编译期间链接到 <a href="https://draveness.me/golang/tree/reflect.reflectcall"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.reflectcall</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 这个用汇编实现的函数上，我们在这里不会分析该函数的具体实现，感兴趣的读者可以自行了解其实现原理。</p>
 <h4 id="处理返回值">处理返回值</h4>
 <p>当函数调用结束之后，就会开始处理函数的返回值</p>
 <ul>
@@ -1246,11 +1275,11 @@
 <ol>
 <li>将 <code>args</code> 中与输入参数有关的内存空间清空</li>
 <li>创建一个 <code>nout</code> 长度的切片用于保存由反射对象构成的返回值数组</li>
-<li>从函数对象中获取返回值的类型和内存大小，将 <code>args</code> 内存中的数据转换成 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 类型并存储到切片中</li>
+<li>从函数对象中获取返回值的类型和内存大小，将 <code>args</code> 内存中的数据转换成 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 类型并存储到切片中</li>
 </ol>
 </li>
 </ul>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-29"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1301,50 +1330,61 @@
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">ret</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>由 <a href="https://draveness.me/golang/tree/reflect.Value" target="_blank" rel="noopener noreffer "><code>reflect.Value</code></a> 构成的 <code>ret</code> 数组会被返回到调用方，到这里为止使用反射实现函数调用的过程就结束了。</p>
+</div><p>由 <a href="https://draveness.me/golang/tree/reflect.Value"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect.Value</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 构成的 <code>ret</code> 数组会被返回到调用方，到这里为止使用反射实现函数调用的过程就结束了。</p>
 <h2 id="小结">小结</h2>
-<p>Go 语言的 <a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener noreffer "><code>reflect</code></a> 包为我们提供了多种能力，包括如何使用反射来动态修改变量、判断类型是否实现了某些接口以及动态调用方法等功能，通过分析反射包中方法的原理能帮助我们理解之前看起来比较怪异、令人困惑的现象。</p>
+<p>Go 语言的 <a href="https://golang.org/pkg/reflect/"target="_blank" rel="external nofollow noopener noreferrer"><code>reflect</code><i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 包为我们提供了多种能力，包括如何使用反射来动态修改变量、判断类型是否实现了某些接口以及动态调用方法等功能，通过分析反射包中方法的原理能帮助我们理解之前看起来比较怪异、令人困惑的现象。</p>
 </div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>Updated on 2022-09-02</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="Go语言reflect包的使用"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="Go语言reflect包的使用"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
-            </div>
-        </div>
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2022-09-02 19:26:22">Updated on 2022-09-02&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span><span><a href="https://github.com/cold-bin/blog/edit/main/content/posts/go%e8%af%ad%e8%a8%80reflect%e5%8c%85%e7%9a%84%e4%bd%bf%e7%94%a8.md" title="Edit this page"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">Edit this page</a></span></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="Go语言reflect包的使用"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80reflect%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" data-title="Go语言reflect包的使用"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
 
-    <div class="post-info-more">
-        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/go%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/">go编程技巧</a></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
-        </section>
-    </div>
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href='/tags/go%E7%BC%96%E7%A8%8B%E6%8A%80%E5%B7%A7/' class="post-tag">go编程技巧</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
 
-    <div class="post-nav"><a href="/go%E8%AF%AD%E8%A8%80unsafe%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" class="prev" rel="prev" title="Go语言unsafe包的使用"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Go语言unsafe包的使用</a>
-            <a href="/mysql%E6%9E%B6%E6%9E%84%E7%AF%87/" class="next" rel="next" title="MySQL架构篇">MySQL架构篇<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/go%E8%AF%AD%E8%A8%80unsafe%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="prev" title="Go语言unsafe包的使用"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Go语言unsafe包的使用</a>
+      <a href="/mysql%E6%9E%B6%E6%9E%84%E7%AF%87/" class="post-nav-item" rel="next" title="MySQL架构篇">MySQL架构篇<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-<div id="comments"><div id="gitalk" class="comment"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
-            </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
-
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2022-09-02T19:26:22+08:00","owner":"cold-bin","repo":"blog-comment","title":"Go语言reflect包的使用"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+<div class="post-reward">
+    <div class="comment">Buy me a coffee</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">Donate</label>
+    <div class="reward-ways" data-mode="fixed"><div><img loading="lazy" src="/images/alipay.jpg" data-title="阿冰 Alipay" data-alt="阿冰 Alipay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>Alipay</span>
+          </div><div><img loading="lazy" src="/images/wechatpay.png" data-title="阿冰 WeChat Pay" data-alt="阿冰 WeChat Pay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>WeChat Pay</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright order-5" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/cold-bin"target="_blank" rel="external nofollow noopener noreferrer">阿冰</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics order-4"><span class="site-time" title='Website running ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="ms-1 d-none">运行</span><span class="run-times ms-1">Website running ...</span></span></div><div class="footer-line visitor order-2">
+          <span id="busuanzi_container_site_uv" title='Total visitors'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='Total visits'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.120f067ebd6f322339e2ccccd7e87e334d7c7ea5b2bd553f325f2ae3c3ae6fe8.css" integrity="sha256-Eg8Gfr1vMiM54szM1+h+M018fqWyvVU/Ml8q48Oub+g="><link rel="preload" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><link rel="stylesheet" href="/lib/pace/themes/silver/pace-theme-minimal.1aefeadd689806308301fe332322fc3cec76f1d28a8e516afd37d31600e1e964.css" integrity="sha256-Gu/q3WiYBjCDAf4zIyL8POx28dKKjlFq/TfTFgDh6WQ="><script src="/lib/gitalk/gitalk.min.f4f9407ea35ccf4be5019cc41d70eab1eb273941bca01b3a93c91201f195a76f.js" integrity="sha256-9PlAfqNcz0vlAZzEHXDqsesnOUG8oBs6k8kSAfGVp28="></script><script src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.804e26c45f81a02b98b05bc1e378c1ff6c5d2339e0c6550aadf1419adf3a8c81.js" integrity="sha256-gE4mxF+BoCuYsFvB43jB/2xdIzngxlUKrfFBmt86jIE=" defer></script><script src="/lib/lightgallery/lightgallery.min.7de2854e7954105f2b91ff5983749c4e3c7af51e05aae279f8a5d66994a85777.js" integrity="sha256-feKFTnlUEF8rkf9Zg3ScTjx69R4FquJ5+KXWaZSoV3c=" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4fbc3ec1878e90348b71b3594d8ef27c4f10a1a4c6d5e74948d0ee59018fd87c.js" integrity="sha256-T7w+wYeOkDSLcbNZTY7yfE8QoaTG1edJSNDuWQGP2Hw=" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.821a2adb8005511c0ad9ef6f395c1b74beacc2da194cd13a4ac43d341246e085.js" integrity="sha256-ghoq24AFURwK2e9vOVwbdL6swtoZTNE6SsQ9NBJG4IU=" defer></script><script src="/lib/sharer/sharer.min.ba5171a78670b031914e623431a33a3d73c1ea9897e552ba73bc2c2da7c777b9.js" integrity="sha256-ulFxp4ZwsDGRTmI0MaM6PXPB6piX5VK6c7wsLafHd7k=" async defer></script><script src="/lib/typeit/index.umd.16f3fa3374a7eea31f19672293edc98326413002dea74b8c413a74f1b7e4f1cf.js" integrity="sha256-FvP6M3Sn7qMfGWcik+3JgyZBMALep0uMQTp08bfk8c8=" defer></script><script src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw+iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script src="/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script src="/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":50},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2022-09-02T19:26:22+08:00","owner":"cold-bin","repo":"blog-comment","title":"Go语言reflect包的使用"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"life and code.","typeit-header-subtitle-mobile":"life and code."},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"siteTime":"2023-12-28T12:00:00+00:00","typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"loop":false,"speed":100}};</script><script src="/js/theme.min.58f9858983f2742da374c22058a1768784a6955aa9a3f3b3b179c080fa0fa468.js" integrity="sha256-WPmFiYPydC2jdMIgWKF2h4SmlVqpo/OzsXnAgPoPpGg=" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-75123653-1');
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=UA-75123653-1" async></script></body>
 </html>

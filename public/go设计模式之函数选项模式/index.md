@@ -72,3 +72,9 @@ func WithMinIdle(minIdle int) Option {
 ```
 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E5%87%BD%E6%95%B0%E9%80%89%E9%A1%B9%E6%A8%A1%E5%BC%8F/  
+

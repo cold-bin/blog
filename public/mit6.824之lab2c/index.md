@@ -111,3 +111,9 @@ ok      6.5840/raft     130.406s
 
 ```
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mit6.824%E4%B9%8Blab2c/  
+

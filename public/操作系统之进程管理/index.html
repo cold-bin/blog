@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>操作系统之进程管理 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="操作系统之进程管理" />
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>操作系统之进程管理 - 阿冰的小屋</title><meta name="author" content="阿冰">
+<meta name="author-link" content="https://github.com/cold-bin">
+<meta name="description" content="[TOC] 什么是进程？ 概念 进程（process）：是一个具有一定独立功能的程序，关于某个数据集合的一次运行活动，是操作系统资源分配的基本单位 要点 进程" /><meta name="keywords" content='Hugo, FixIt' /><meta itemprop="name" content="操作系统之进程管理">
+<meta itemprop="description" content="[TOC] 什么是进程？ 概念 进程（process）：是一个具有一定独立功能的程序，关于某个数据集合的一次运行活动，是操作系统资源分配的基本单位 要点 进程"><meta itemprop="datePublished" content="2023-03-17T14:55:42+08:00" />
+<meta itemprop="dateModified" content="2023-03-17T14:55:42+08:00" />
+<meta itemprop="wordCount" content="22503"><meta itemprop="image" content="https://blog.coldbin.top/favicon.ico"/>
+<meta itemprop="keywords" content="" /><meta property="og:title" content="操作系统之进程管理" />
 <meta property="og:description" content="[TOC] 什么是进程？ 概念 进程（process）：是一个具有一定独立功能的程序，关于某个数据集合的一次运行活动，是操作系统资源分配的基本单位 要点 进程" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,118 +24,196 @@
 <meta name="twitter:title" content="操作系统之进程管理"/>
 <meta name="twitter:description" content="[TOC] 什么是进程？ 概念 进程（process）：是一个具有一定独立功能的程序，关于某个数据集合的一次运行活动，是操作系统资源分配的基本单位 要点 进程"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "操作系统之进程管理",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  22503 ,
-        "url": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86\/","datePublished": "2023-03-17T14:55:42+08:00","dateModified": "2023-03-17T14:55:42+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
-            "@type": "Organization",
-            "name": "阿冰","logo": {
-                    "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
-                    "width":  396 ,
-                    "height":  396 
-                }},"author": {
-                "@type": "Person",
-                "name": "阿冰"
-            },"description": ""
-    }
-    </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/" /><link rel="next" href="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.04a53c8f85f60bfc901f510b07233befa08ea6546fc4a641b7a7caf06269844a.css" integrity="sha256-BKU8j4X2C/yQH1ELByM776COplRvxKZBt6fK8GJphEo="><link rel="preload" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "操作系统之进程管理",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86\/"
+    },"image": [{
+              "@type": "ImageObject",
+              "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+              "width":  396 ,
+              "height":  396 
+            }],"genre": "posts","wordcount":  22503 ,
+    "url": "https:\/\/blog.coldbin.top\/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86\/","datePublished": "2023-03-17T14:55:42+08:00","dateModified": "2023-03-17T14:55:42+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+      "@type": "Organization",
+      "name": "阿冰","logo": {
+          "@type": "ImageObject",
+          "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+          "width":  396 ,
+          "height":  396 
+        }},"author": {
+        "@type": "Person",
+        "name": "阿冰"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="阿冰的小屋" data-alt="阿冰的小屋" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/friends"
+                
+                
+              ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
     <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-                </a></div>
-        </div>
+      <div class="header-title">
+        <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="/favicon.ico" data-alt="/favicon.ico" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        Cancel
-                    </a>
-                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-            </a></div>
-    </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/friends"
+                  
+                  
+                ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
 </header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">操作系统之进程管理</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>操作系统</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-03-17">2023-03-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;22503 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;45 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
-                <div class="details-summary toc-title">
-                    <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><nav aria-label="breadcrumb" class="breadcrumb-container sticky">
+    <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/" title="阿冰的小屋">Home</a></li><li class="breadcrumb-item"><a href="/posts/" title="Posts">Posts</a></li><li class="breadcrumb-item active" aria-current="page">操作系统之进程管理</li>
+    </ol>
+  </nav><main class="container"><aside class="toc" id="toc-auto"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>操作系统之进程管理</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://www.gravatar.com/avatar/bbeb236273ce7a8cc349e66deaa25959?s=32&amp;d=" data-title="阿冰" data-alt="阿冰" class="avatar" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;阿冰</a></span>
+          <span class="post-category">included in <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 操作系统</a></span></div>
+      <div class="post-meta-line"><span title="published on 2023-03-17 14:55:42"><i class="fa-regular fa-calendar-alt fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-17">2023-03-17</time></span>&nbsp;<span title="Updated on 2023-03-17 14:55:42"><i class="fa-regular fa-edit fa-fw me-1" aria-hidden="true"></i><time datetime="2023-03-17">2023-03-17</time></span>&nbsp;<span title="22503 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 22600 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>45 minutes</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="操作系统之进程管理">
+              <i class="fa-regular fa-eye fa-fw me-1" aria-hidden="true"></i><span id="busuanzi_value_page_pv">-</span>&nbsp;views
+            </span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -343,7 +428,7 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>[TOC]</p>
+      </div><div class="content" id="content"><p>[TOC]</p>
 <h2 id="什么是进程">什么是进程？</h2>
 <h3 id="概念">概念</h3>
 <ul>
@@ -427,14 +512,7 @@
 <h5 id="用户级线程ult">用户级线程（ULT）</h5>
 <p>在用户空间实现的线程，叫用户级线程。OS无法感知用户级线程的存在，此时线程的创建、调度、切换、运行、销毁都是用户空间实现的，内核空间并没有参与，OS只是在起初给多个用户级线程所在的进程分配资源。剩下的线程调度和切换等线程的管理工作都是由应用程序完成的，OS并没有参与其中。</p>
 <p>CPU分配到程序P，由程序P完成用户线程调度，分配资源</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2021071907442526.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>优点：</strong></p>
 <ul>
 <li>线程的切换不需要转到内核空间，节省了模式切换的开销</li>
@@ -449,14 +527,7 @@
 <h5 id="内核级线程klt">内核级线程（KLT）</h5>
 <p>在内核空间实现的线程，叫内核级线程。进程里的所有线程的管理工作都交由内核态来完成。当然，每个内核线程都会设置一个内核线程控制块（类似于PCB的作用）用以内核的感知和控制。</p>
 <p>进程P通过轻量级进程LWP调用内核KLT，内核线程通过调度器Thread Scheduler调度将任务映射到相应的CPU上</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719065706292.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <blockquote>
 <p>但是，程序一般不会直接去使用内核线程，而是通过去使用内核线程的一种高级接口叫轻量级进程（Light Weight Process）去操作内核线程（官方定义名称，在大多数系统中，LWP与普通进程的区别也在于它只有一个最小的执行上下文和调度程序所需的统计信息，而这也是它之所以被称为轻量级的原因）。并且它们之间的关系是1:1存在。需要注意的是只有先支持内核线程，才能有轻量级进程。</p>
 </blockquote>
@@ -475,14 +546,7 @@
 <h5 id="混合实现">混合实现</h5>
 <p>使用用户线程和内核级线程混合实现这种方式，分别使用了用户线程和内核级线程的优点。在这种混合模式中，用户线程与内核级线程的数量比是不定的，即为N:M的关系。</p>
 <p>进程P多个用户级线程开启，线程的创建、销毁、切换都是有自己来，但是线程调度、处理器映射通过分配轻量级进程来做系统调用。算是一种折中的做法吧</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20210719074840178.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="总结">总结</h4>
 <p><strong>进程</strong></p>
 <ul>
@@ -500,14 +564,7 @@
 <h2 id="进程是怎么运行的">进程是怎么运行的？</h2>
 <h3 id="进程状态">进程状态</h3>
 <p>进程阻塞原因以I/O请求为例</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991"
-        title="这里写图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20160906192211991?size=large 2x" sizes="auto" data-title="这里写图片描述" data-alt="这里写图片描述" class="suffix-invalid suffix-invalid__small suffix-invalid__large" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="五种基本状态">五种基本状态</h4>
 <h5 id="就绪ready">就绪（Ready）</h5>
 <p>进程已经准备好，已分配到所需资源，只要分配到CPU就能够立即运行</p>
@@ -550,14 +607,7 @@
 <li>
 <p>原语图</p>
 <p>创建原语（create）、阻塞原语（block）、唤醒原语（wakeup）、撤销原语（destroy）</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png"
-        title="image-20230408213922993" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408213922993.png?size=large 2x" sizes="auto" data-title="image-20230408213922993" data-alt="image-20230408213922993" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 </ul>
 <h4 id="创建">创建</h4>
@@ -569,8 +619,8 @@
 </ul>
 <h5 id="引进创建进程的典型事件">引进创建进程的典型事件</h5>
 <ol>
-<li>用户登录：在<a href="https://baike.baidu.com/item/%e5%88%86%e6%97%b6%e7%b3%bb%e7%bb%9f/9706663?fr=aladdin" target="_blank" rel="noopener noreffer ">分时系统</a>中，用户在终端键入登录命令后，若登录成功，系统将为该用户建立一个进程。</li>
-<li>作业调度：在<a href="https://baike.baidu.com/item/%e5%a4%9a%e9%81%93%e6%89%b9%e5%a4%84%e7%90%86%e7%b3%bb%e7%bb%9f" target="_blank" rel="noopener noreffer ">多道批处理系统</a>中，当作业调度程序按一定算法调度到某些作业时，便将它们存入内存，为它们创建进程。</li>
+<li>用户登录：在<a href="https://baike.baidu.com/item/%e5%88%86%e6%97%b6%e7%b3%bb%e7%bb%9f/9706663?fr=aladdin"target="_blank" rel="external nofollow noopener noreferrer">分时系统<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>中，用户在终端键入登录命令后，若登录成功，系统将为该用户建立一个进程。</li>
+<li>作业调度：在<a href="https://baike.baidu.com/item/%e5%a4%9a%e9%81%93%e6%89%b9%e5%a4%84%e7%90%86%e7%b3%bb%e7%bb%9f"target="_blank" rel="external nofollow noopener noreferrer">多道批处理系统<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>中，当作业调度程序按一定算法调度到某些作业时，便将它们存入内存，为它们创建进程。</li>
 <li>提供服务：当运行中用户程序提出某种请求，系统将专门创建一个进程来提供用户所需要的服务，如需要打印文件时，创建打印进程。</li>
 <li>应用请求：用户进程自己创建新进程，与创建者进程以并发的形式完成特定任务。</li>
 </ol>
@@ -624,14 +674,7 @@
 <blockquote>
 <p>进程的挂起与激活操作分别通过suspend原语和active原语实现。值得注意的是：静止阻塞和静止就绪不是进程的五大基本状态之一。之后，直接<strong>在外存里放着</strong>，需要用的时候再加载到内存里</p>
 </blockquote>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png"
-        title="image-20230408222631030" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230408222631030.png?size=large 2x" sizes="auto" data-title="image-20230408222631030" data-alt="image-20230408222631030" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="进程的挂起">进程的挂起</h5>
 <p>当系统中出现了引起进程挂起的事件，OS利用<strong>挂起原语suspend</strong>将指定进程或处于阻塞状态的进程挂起。
 <strong>执行过程</strong>：首先检查被挂起进程的状态，如果是就绪状态，就改为就绪挂起状态；如果是阻塞状态，就改为阻塞挂起状态；为了方便用户或父进程考查该进程的运行情况，把该进程的PCB复制到某指定的内存区域（<strong>一般挂起状态的进程存在于外存</strong>）。<strong>如果被挂起进程正在执行，就重新进行调度。（也就是说，正在执行的进程不能被突然挂起，需要等到该进程调度到活动阻塞或活动就绪状态才行）</strong></p>
@@ -657,14 +700,7 @@
 </li>
 <li>
 <p><strong>调度层次：</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png"
-        title="image-20230413142916306" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230413142916306.png?size=large 2x" sizes="auto" data-title="image-20230413142916306" data-alt="image-20230413142916306" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <ol>
 <li>高级调度（作业调度）
 <ul>
@@ -773,13 +809,12 @@
 <h5 id="hrrn高响应比优先调度">HRRN（高响应比优先调度）</h5>
 <p>HRRN（Highest Response Ratio Next）调度算法是介于先来先服务算法与最短进程优先算法之间的一种折中算法。先来先服务算法只考虑进程的等待时间而忽视了进程的执行时间，而最短进程优先调度算法只考虑用户估计的进程的执行时间而忽视了就绪进程的等待时间。</p>
 <p>为此需要定义响应比<code>Rp</code>:</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-1"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">Rp=（等待时间+预计执行时间）/执行时间=响应时间/执行时间
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">Rp=（等待时间+预计执行时间）/执行时间=响应时间/执行时间</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><strong>定义：</strong> <code>Rp</code>较大的进程获得处理机使用权</li>
@@ -842,14 +877,7 @@
 </li>
 </ul>
 <h5 id="mfq多级反馈队列调度">MFQ（多级反馈队列调度）</h5>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png"
-        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png?size=large 2x" sizes="auto" data-title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png" data-alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230418230103007.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <ul>
 <li>
 <p><strong>定义：</strong> 设置多个按优先级排序的就绪队列。优先级从高到低，时间片从小到大。新进程采用队列降级法</p>
@@ -901,7 +929,7 @@
 <ul>
 <li>
 <p><strong>定义</strong></p>
-<p><strong>进程间通信就是在不同进程之间传播或交换信息</strong>，那么不同进程之间存在着什么双方都可以访问的介质呢？进程的用户空间是互相独立的，一般而言是不能互相访问的，唯一的例外是共享<a href="https://so.csdn.net/so/search?q=%e5%86%85%e5%ad%98&amp;spm=1001.2101.3001.7020" target="_blank" rel="noopener noreffer ">内存</a>区。另外，系统空间是“公共场所”，各进程均可以访问，所以内核也可以提供这样的条件。此外，还有双方都可以访问的外设。在这个意义上，两个进程当然也可以通过磁盘上的普通文件交换信息，或者通过“注册表”或其它数据库中的某些表项和记录交换信息。广义上这也是进程间通信的手段，但是一般都不把这算作“进程间通信”。进程间通信（IPC，Inter Process Communication）是一组编程接口，让程序员能够协调不同的进程，使之能在一个操作系统里同时运行，并相互传递、交换信息。IPC方法包括<strong>管道（PIPE）</strong>、<strong>消息队列</strong>、<strong>信号</strong>、<strong>共享存储</strong>以及<strong>套接字（Socket）</strong>。</p>
+<p><strong>进程间通信就是在不同进程之间传播或交换信息</strong>，那么不同进程之间存在着什么双方都可以访问的介质呢？进程的用户空间是互相独立的，一般而言是不能互相访问的，唯一的例外是共享<a href="https://so.csdn.net/so/search?q=%e5%86%85%e5%ad%98&amp;spm=1001.2101.3001.7020"target="_blank" rel="external nofollow noopener noreferrer">内存<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>区。另外，系统空间是“公共场所”，各进程均可以访问，所以内核也可以提供这样的条件。此外，还有双方都可以访问的外设。在这个意义上，两个进程当然也可以通过磁盘上的普通文件交换信息，或者通过“注册表”或其它数据库中的某些表项和记录交换信息。广义上这也是进程间通信的手段，但是一般都不把这算作“进程间通信”。进程间通信（IPC，Inter Process Communication）是一组编程接口，让程序员能够协调不同的进程，使之能在一个操作系统里同时运行，并相互传递、交换信息。IPC方法包括<strong>管道（PIPE）</strong>、<strong>消息队列</strong>、<strong>信号</strong>、<strong>共享存储</strong>以及<strong>套接字（Socket）</strong>。</p>
 </li>
 <li>
 <p>为什么需要进程间通信呢？</p>
@@ -914,93 +942,67 @@
 <p>例如：有个4kb大小的管道，那么写的时候，就是</p>
 </blockquote>
 <p>如果你学过 Linux 命令，那你肯定很熟悉<code>|</code>这个竖线。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-2"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ps auxf <span class="p">|</span> grep mysql
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ps auxf <span class="p">|</span> grep mysql</span></span></code></pre></td></tr></table>
 </div>
 </div><p>上面命令行里的<code>|</code>竖线就是一个<strong>管道</strong>，它的功能是将前一个命令<code>ps auxf</code>的输出，作为后一个命令<code>grep mysql</code>的输入，从这功能描述，可以看出<strong>管道传输数据是单向的</strong>，如果想相互通信，我们需要创建两个管道才行.</p>
 <p>同时，我们得知上面这种管道是没有名字，所以<code>|</code>表示的管道称为<strong>匿名管道</strong>，用完了就销毁。</p>
 <p>管道还有另外一个类型是<strong>命名管道</strong>，也被叫做 <code>FIFO</code>，因为数据是先进先出的传输方式。</p>
 <p>在使用命名管道前，先需要通过 <code>mkfifo</code> 命令来创建，并且指定管道名字：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-3"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mkfifo myPipe
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mkfifo myPipe</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>myPipe</code>就是这个管道的名称，基于 Linux 一切皆文件的理念，所以管道也是以文件的方式存在，我们可以用<code>ls</code>看一下，这个文件的类型是 <code>p</code>，也就是 <code>pipe</code>（管道） 的意思：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-4"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ ls -l
-</span></span><span class="line"><span class="cl">prw-r--r--. 1 root    root         0 Jul 17 02:45 myPipe
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">prw-r--r--. 1 root    root         0 Jul 17 02:45 myPipe</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接下来，我们往<code>myPipe</code>这个管道写入数据：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-5"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;hello&#34;</span> &gt; myPipe  <span class="c1"># 将数据写进管道</span>
-</span></span><span class="line"><span class="cl">                       <span class="c1"># 停住了 ...</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">                       <span class="c1"># 停住了 ...</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>你操作了后，你会发现命令执行后就停在这了，这是因为管道里的内容没有被读取，只有当管道里的数据被读完后，命令才可以正常退出。</p>
 <p>于是，我们执行另外一个命令来读取这个管道里的数据：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-6"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat &lt; myPipe  <span class="c1"># 读取管道里的数据</span>
-</span></span><span class="line"><span class="cl">hello
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">hello</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到，管道里的内容被读取出来了，并打印在了终端上，另外一方面，<code>echo</code> 那个命令也正常退出了。</p>
 <p>我们可以看出，<strong>管道这种通信方式效率低，不适合进程间频繁地交换数据</strong>。当然，它的好处，自然就是简单，同时也我们很容易得知管道里的数据已经被另一个进程读取了。</p>
 <p>我们可以得知，<strong>对于匿名管道，它的通信范围是存在父子关系的进程</strong>。因为管道没有实体，也就是没有管道文件，只能通过 <code>fork</code> 来复制父进程 <code>fd</code> 文件描述符，来达到通的目的。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1d944ad85ebe0e7476bd119f6a97cc5a.webp?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在 shell 里面执行 <code>A | B</code>命令的时候，A 进程和 B 进程都是 shell 创建出来的子进程，A 和 B 之间不存在父子关系，它俩的父进程都是 shell。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/29ce27dff99b4a0caeb24c856b95e2ff.webp?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>另外，<strong>对于命名管道，它可以在不相关的进程间也能相互通信</strong>。因为命令管道，提前创建了一个类型为管道的设备文件，在进程里只要使用这个设备文件，就可以相互通信。</p>
 <h4 id="消息队列">消息队列</h4>
 <p>前面说到管道的通信方式是效率低的，因此管道不适合进程间频繁地交换数据。对于这个问题，<strong>消息队列</strong>的通信模式就可以解决。</p>
 <p>比如，A 进程要给 B 进程发送消息，A 进程把数据放在对应的消息队列后就可以正常返回了，B 进程需要的时候再去读取数据就可以了。同理，B 进程要给 A 进程发送消息也是如此。</p>
 <p>再来，<strong>消息队列是保存在内核中的消息链表</strong>，在发送数据时，会分成一个一个独立的数据单元，也就是消息体（数据块），消息体是用户自定义的数据类型，消息的发送方和接收方要约定好消息体的数据类型，所以每个消息体都是固定大小的存储块，不像管道是无格式的字节流数据。如果进程从消息队列中读取了消息体，内核就会把这个消息体删除。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png"
-        title="image.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230419212810460.png?size=large 2x" sizes="auto" data-title="image.png" data-alt="image.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>消息队列生命周期随内核，如果没有释放消息队列或者没有关闭操作系统，消息队列会一直存在，而前面提到的匿名管道的生命周期，是随进程的创建而建立，随进程的结束而销毁。</p>
 <h5 id="缺点">缺点</h5>
 <p><strong>消息队列通信过程中，存在用户态与内核态之间的数据拷贝开销</strong>，因为进程写入数据到内核中的消息队列时，会发生从用户态拷贝数据到内核态的过程，同理另一进程读取内核中的消息数据时，会发生从内核态拷贝数据到用户态的过程。</p>
@@ -1008,14 +1010,7 @@
 <p>消息队列的读取和写入的过程，都会有发生用户态与内核态之间的消息拷贝过程。那<strong>共享内存</strong>的方式，就很好的解决了这一问题。</p>
 <p>现代操作系统，对于内存管理，采用的是虚拟内存技术，也就是每个进程都有自己独立的虚拟内存空间，不同进程的虚拟内存映射到不同的物理内存中。所以，即使进程 A 和 进程 B 的虚拟地址是一样的，其实访问的是不同的物理内存地址，对于数据的增删查改互不影响。</p>
 <p><strong>共享内存的机制，就是拿出一块虚拟地址空间来，映射到相同的物理内存中</strong>。这样这个进程写入的东西，另外一个进程马上就能看到了，都不需要拷贝来拷贝去，传来传去，大大提高了进程间通信的速度。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cab021fe38d7ae359bc338299ab8e2e9.webp?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <blockquote>
 <p>Linux系统<code>mmap</code>的实现机制</p>
 </blockquote>
@@ -1030,14 +1025,7 @@
 </ul>
 <p>P 操作是用在进入共享资源之前，V 操作是用在离开共享资源之后，这两个操作是必须成对出现的。
 接下来，举个例子，如果要使得两个进程互斥访问共享内存，我们可以初始化信号量为 <code>1</code>。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f33f5c0459d2d3c11c4f4c8b93371f5d.webp?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>具体的过程如下：</p>
 <ul>
 <li>
@@ -1052,14 +1040,7 @@
 另外，在多进程里，每个进程并不一定是顺序执行的，它们基本是以各自独立的、不可预知的速度向前推进，但有时候我们又希望多个进程能密切合作，以实现一个共同的任务。</p>
 <p>例如，进程 A 是负责生产数据，而进程 B 是负责读取数据，这两个进程是相互合作、相互依赖的，进程 A 必须先生产了数据，进程 B 才能读取到数据，所以执行是有前后顺序的。</p>
 <p>那么这时候，就可以用信号量来实现多进程同步的方式，我们可以初始化信号量为 <code>0</code>。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/a60a8505b9b6d083df04b8d14e2c2203.webp?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>具体过程：</p>
 </li>
 <li>
@@ -1076,7 +1057,7 @@
 <h4 id="信号">信号</h4>
 <p>信号一般用于一些异常情况下的进程间通信，是一种异步通信，它的数据结构一般就是一个数字.</p>
 <p>在 Linux 操作系统中， 为了响应各种各样的事件，提供了几十种信号，分别代表不同的意义。我们可以通过 <code>kill -l</code> 命令，查看所有的信号：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-7"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1107,8 +1088,7 @@
 </span></span><span class="line"><span class="cl">48<span class="o">)</span> SIGRTMIN+14 49<span class="o">)</span> SIGRTMIN+15 50<span class="o">)</span> SIGRTMAX-14 51<span class="o">)</span> SIGRTMAX-13 52<span class="o">)</span> SIGRTMAX-12
 </span></span><span class="line"><span class="cl">53<span class="o">)</span> SIGRTMAX-11 54<span class="o">)</span> SIGRTMAX-10 55<span class="o">)</span> SIGRTMAX-9  56<span class="o">)</span> SIGRTMAX-8  57<span class="o">)</span> SIGRTMAX-7
 </span></span><span class="line"><span class="cl">58<span class="o">)</span> SIGRTMAX-6  59<span class="o">)</span> SIGRTMAX-5  60<span class="o">)</span> SIGRTMAX-4  61<span class="o">)</span> SIGRTMAX-3  62<span class="o">)</span> SIGRTMAX-2
-</span></span><span class="line"><span class="cl">63<span class="o">)</span> SIGRTMAX-1  64<span class="o">)</span> SIGRTMAX
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">63<span class="o">)</span> SIGRTMAX-1  64<span class="o">)</span> SIGRTMAX</span></span></code></pre></td></tr></table>
 </div>
 </div><p>运行在 shell 终端的进程，我们可以通过键盘输入某些组合键的时候，给进程发送信号。例如</p>
 <ul>
@@ -1128,14 +1108,7 @@
 <p>前面提到的管道、消息队列、共享内存、信号量和信号都是在同一台主机上进行进程间通信，那要想<strong>跨网络与不同主机上的进程之间通信，就需要 Socket 通信了。</strong></p>
 <p>实际上，Socket 通信不仅可以跨网络与不同主机的进程间通信，还可以在同主机上进程间通信。​</p>
 <h4 id="总结-1">总结</h4>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png"
-        title="进程通信方式总结" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/b468dba042e240749114f81684b25ca7.png?size=large 2x" sizes="auto" data-title="进程通信方式总结" data-alt="进程通信方式总结" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="进程同步">进程同步</h3>
 <h4 id="概念-1">概念</h4>
 <ol>
@@ -1172,7 +1145,7 @@
 <li>**退出区：**解锁（unlock），唤醒其他进程</li>
 <li>**剩余区：**剩余代码</li>
 </ol>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-8"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1191,8 +1164,7 @@
 </span></span><span class="line"><span class="cl">	临界区
 </span></span><span class="line"><span class="cl">	退出区
 </span></span><span class="line"><span class="cl">	剩余区
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div><h5 id="临界资源访问原则">临界资源访问原则</h5>
 <ul>
@@ -1207,14 +1179,7 @@
 </blockquote>
 <h5 id="单标志法">单标志法</h5>
 <p><strong>算法思想</strong>：两个进程在<strong>访问完临界区后</strong>会把临界区的权限转交给另一个进程。也就是说<strong>每个进程进入临界区的权限只能被另一个进程赋予</strong>。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ba95d3f2-cfee-4a7a-a1d9-afa3979297e8.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>turn的初始值为0，即刚开始值允许0号进程进入临界区。</p>
 <p>若P1先上执行机运行，则会一直卡在⑤。直到P1的时间片用完，发生调度，切换P0上处理机运行。代码①不会卡住P0，P0可以正常访问临界区，在P0访问临界区期间即使切换会P1，P1依然会被卡在⑤。只有P0在退出区将turn改为1后，P1才能进入临界区。</p>
 <p>因此，该算法<strong>可以实现“同一时刻最多只允许一个进程访问临界区”</strong>。</p>
@@ -1222,37 +1187,16 @@
 <p>因此，<strong>单标记法</strong>存在的<strong>主要问题</strong>是：<strong>违背“空闲让进”原则和“让权等待”</strong>。</p>
 <h5 id="双标志先检查法">双标志先检查法</h5>
 <p><strong>算法思想</strong>：设置一个布尔型数组flag[]，数组中各个元素用来<strong>标记各进程想进入临界区的意愿</strong>，比如“falg[0]=ture”意味着0号进程P0现在向进入临界区。每个进程在进入临界区之前先检查当前有没有别的进程想进入临界区，如果没有，则把自身对应的标志flag[i]设置为true，之后开始访问临界区。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/99787266-adba-4848-a9a4-a6d6f83b162c.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>在高并发的情况下，有可能按照①⑤②⑥③&hellip;的顺序执行，那么P0和P1将会同时访问临界区。因此，双标志先检查法的<strong>主要问题</strong>是:<strong>违反“忙则等待”原则和“让权等待”</strong>。</p>
 <p>原因在于<strong>进入区</strong>的“检查”和“上锁”不是原子的。&ldquo;检查” 后，“上锁”前可能已经发生进程切换。</p>
 <h5 id="双标志后检查法">双标志后检查法</h5>
 <p><strong>算法思想</strong>:双标志先检查法的改版。前一个算法的问题是先“检查”后“上锁”，但是这两个操作不是原子的，因此导致了两个进程同时进入临界区的问题。因此，人们又想到先“上锁”后“检查”的方法，来避免上述问题。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/3a327896-7e61-4433-8ca8-921a3a95f75f.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>高并发下，按照①⑤②&hellip;的顺序执行，PO 和P1将都无法进入临界区。因此，双标志后检查法虽然<strong>解决了“忙则等待”的</strong>问题，但是<strong>又违背了“空闲让进”、“让权等待”和“有限等待”原则</strong>，会因各进程都长期无法访问临界资源而产生“<strong>饥饿</strong>”现象。两个进程都争着想进入临界区，但是谁也不让谁，最后谁都无法进入临界区。</p>
 <h5 id="peterson-算法">Peterson 算法</h5>
 <p><strong>算法思想</strong>：结合双标记法、单标记法的思想。如果双方都争着想进入临界区，那可以让进程尝试“孔融让梨”（谦让）。做一个有礼貌的进程。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/0a282835-ed41-4f97-b402-eeadfee0996c.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>Peterson算法用软件方法解决了进程互斥问题，<strong>遵循了空闲让进、忙则等待、有限等待三个原则</strong>，但是依然<strong>未遵循让权等待</strong>的原则。</p>
 <p>Peterson算法相较于之前三种软件解决方案来说，是最好的，但依然不够好。</p>
 <h4 id="互斥硬件实现基本方法">互斥硬件实现基本方法</h4>
@@ -1265,7 +1209,7 @@
 </ul>
 <h5 id="test-and-set指令">Test-And-Set指令</h5>
 <p>简称TS指令，也有些地方称为TestAndSetLock指令，或者TSL指令。TSL指令是用硬件实现的，执行的过程不允许被中断，属于原子操作。以下是用C语言描述的逻辑。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-9"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1303,7 +1247,7 @@
 <p>缺点：仍然不满足让权等待原则（无法进入临界区时释放处理机）。 原因：暂时无法进入临界区的进程会占用CPU并循环执行TSL指令，从而导致忙等。</p>
 <h5 id="swap指令">swap指令</h5>
 <p>Swap指令，又叫XCHG指令，是用硬件实现的原子操作，执行的过程中不允许被中断。以下是C语言描述的逻辑</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-10"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1349,40 +1293,12 @@
 </blockquote>
 <h5 id="整形信号量">整形信号量</h5>
 <p>简而言之，就是使用整型变量作为信号量，用以表示系统中某种资源的数量。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ac3f6dfe09d04aaab6e051c6a3d0e58b.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="记录型信号量">记录型信号量</h5>
 <p>整型信号量的缺陷是存在“忙等”问题（自旋），因此人们又提出了“记录型信号量”，即用记录型数据结构表示的信号量。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png"
-        title="在这里插入图片描述" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png"
-        title="在这里插入图片描述" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/ee8ceaeac9c8438caa95ed9381bac0d8.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1e29731fe2c74260bf602154e80f4d93.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/7d9264a9e912485d9c09bab6153c8665.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="信号量实现进程的互斥">信号量实现进程的互斥</h5>
 <ol>
 <li>分析并发进程的关键活动，划定临界区(如:对临界资源打印机的访问就应放在临界区)</li>
@@ -1395,14 +1311,7 @@
 P、V操作必须成对出现。
 缺少P(mutex)就不能保证临界资源的互斥访问。缺少V(mutex)会导致资源永不被释放，等待进程永不被唤醒。</p>
 </blockquote>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/d83683c7ec344958820f4390937aa2d9.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="信号量实现进程的同步">信号量实现进程的同步</h5>
 <ol>
 <li>分析什么地方需要实现“同步关系”，即必须保证“一前一后”执行的两个操作(或两句代码)</li>
@@ -1410,14 +1319,7 @@ P、V操作必须成对出现。
 <li>在“前操作”之后执行V(S)</li>
 <li>在“后操作”之前执行P(S)</li>
 </ol>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2ec4ca70faa4478b9521e949f5f14241.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>具体实现</strong></p>
 <blockquote>
 <ul>
@@ -1426,14 +1328,7 @@ P、V操作必须成对出现。
 </li>
 <li>
 <p>若先执行到P(S)操作，由于S=0，S&ndash; 后S=-1，表示此时没有可用资源，因此P操作中会执行block原语，主动请求阻塞。之后当执行完代码2，继而执行V(S)操作，S++， 使S变回0。由于此时有进程在该信号量对应的阻塞队列中，因此会在V操作中执行wakeup原语，唤醒P2进程。这样P2就可以继续执行代码4了</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/f2d8eeed730a4a528ed25a6b2de8836b.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 </ul>
 </blockquote>
@@ -1446,14 +1341,7 @@ P、V操作必须成对出现。
 <li>在“前操作”之后对相应的同步变量执行V操作</li>
 <li>在“后操作”之前对相应的同步变量执行P操作</li>
 </ol>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/9254f9e4c74f462fac622e3bcd996919.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="管程">管程</h4>
 <p>前面的信号量机制实现的进程同步与互斥，会使大量的同步操作分散在各个进程中，为了减少这一现象，我们就要引入——管程。</p>
 <p>一个管程包含一个数据结构和能为并发进程所执行（在该操作系统上）的一组操作，这组操作能同步进程和改变管程中的数据。</p>
@@ -1499,7 +1387,7 @@ P、V操作必须成对出现。
 <p><strong>问题分析</strong></p>
 <p>由于缓冲区是临界资源必须互斥使用，因此需要设置一个互斥信号量mutex，缓冲区有两种状态：进程正在访问和没有进程正在访问，因此可以给mutex赋初值为1。</p>
 <p>缓冲区中的大小是生产者和消费者都可以进行操作的，当缓冲区满时，生产者要等待消费者取走产品，按一定次序访问这属于同步关系；当缓冲区空时，消费者要等待生产者生产产品，按一定次序访问这属于同步关系，因此需要设置两个同步信号量，full和empty;</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-11"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1508,11 +1396,10 @@ P、V操作必须成对出现。
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">Semaphore mutex = 1; //互斥信号量实现对缓冲区的互斥访问
 </span></span><span class="line"><span class="cl">Semaphore empty = n; //同步信号量，表示空闲缓冲区的数量，初值为有界缓冲区大小n
-</span></span><span class="line"><span class="cl">Semaphore full = 0;  //同步信号量，表示产品数量，也是非空缓冲区数量，初值为0
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">Semaphore full = 0;  //同步信号量，表示产品数量，也是非空缓冲区数量，初值为0</span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>伪代码实现</strong></p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-12"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1561,18 +1448,10 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">   V(empty); //增加一个空闲缓冲区，前操作后进行v操作
 </span></span><span class="line"><span class="cl">   使用产品;
 </span></span><span class="line"><span class="cl">  }
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>不能交换P操作顺序，否则会出现死锁</strong></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/61cf91c0e1da4d4bb33f1291e322ecb7.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="多生产者-多消费者问题">多生产者-多消费者问题</h5>
 <p><strong>问题描述</strong></p>
 <p>桌子上有一个盘子，每次只能向其中放入一个水果。爸爸只向盘子中放苹果，妈妈只向盘子中放橘子，儿子专等着吃盘子中的橘子，女儿专等着吃盘子中的苹果。只有盘子为空时，爸爸妈妈才能往盘子里<strong>放一个水果</strong>。仅当盘子中有自己需要的水果时，儿子或女儿可以从盘子中取出水果。</p>
@@ -1585,16 +1464,9 @@ P、V操作必须成对出现。
 <li>母亲将橘子放入盘子后，儿子才能取橘子</li>
 <li>只有盘子为空时，父亲或母亲才能放入水果</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/cae63e80390f480e8c8e81baf70ed39b.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><strong>伪代码实现</strong></p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-13"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1697,8 +1569,7 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">  V(plate);
 </span></span><span class="line"><span class="cl">  吃掉橘子
 </span></span><span class="line"><span class="cl">     }
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="读者-写者问题">读者-写者问题</h4>
 <p><strong>问题描述</strong></p>
@@ -1716,7 +1587,7 @@ P、V操作必须成对出现。
 <p><code>P(rw)</code>和<code>V(rw)</code>其实就是对共享文件的加锁和解锁，既然各个读进程可以同时访问文件，而读进程和写进程需要互斥访问文件，那么就让<strong>第一个读进程对文件进行加锁，最后一个读进程对文件解锁</strong>，如何知道是还有几个读进程呢？就需要设置一个整形变量<code>count</code>来记录当前有几个读进程在在访问文件。</p>
 <p>解决上述问题后，我们再来看这一种情况:</p>
 <p>当两个读进程并发来访问文件时，有可能第一个进程还没来的及进行<code>count++</code>，第二个进程就就已经过了判断<code>count</code>是否为<code>0</code>的操作了，这个时候第二个进程也被阻塞在<code>P(rw)</code>，再次出现了上述问题，该如何解决？其实仔细分析可知道会出现这种情况在于对<code>count</code>的判断和赋值没办法保证一致性，即不是原语操作，为了解决这个问题我们要引入一个互斥信号量<code>mutex</code>来保证对<code>count</code>的判断和赋值是一个互斥的操作。</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-14"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1773,11 +1644,10 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">    V(rw);            //最后一个读进程负责解锁
 </span></span><span class="line"><span class="cl">      V(mutex);
 </span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在这个算法中，读进程是优先的，如果有一个读进程正在访问文件，这个时候来了一堆读进程和一个写进程，那么读进程一直在访问文件，写进程可能一直等待，发生”饿死“，如何解决这个问题？</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-15"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1848,8 +1718,7 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">    V(rw);             //最后一个读进程负责解锁
 </span></span><span class="line"><span class="cl">      V(mutex);
 </span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div><p>加入互斥信号量<code>w</code>就可以解决写者饿死的问题了，当一个读者在读文件时此时<code>w</code>已经被解锁了，这个时候一个写者进程尝试访问文件，先对<code>w</code>进行加锁，然后阻塞在<code>rw</code>，此时读者进程再来就会被阻塞在<code>w</code>，等待写进程执行.</p>
 <h4 id="哲学家进餐问题">哲学家进餐问题</h4>
@@ -1865,7 +1734,7 @@ P、V操作必须成对出现。
 <li>信号量设置。定义互斥信号量数组<code>chopstick[5]={1,1,1,1,1}</code>用于实现对<code>5</code>个筷子的互斥访问。并对哲学家按0~4编号，哲学家<code>i</code>左边的筷子编号为<code>i</code>，右边的筷子编号为<code>(i+1)%5</code>。</li>
 </ol>
 <p><strong>伪代码实现</strong></p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-16"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1892,8 +1761,7 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">	进食;
 </span></span><span class="line"><span class="cl">	V(chopstick[i]); // 吃完后，放下左筷子
 </span></span><span class="line"><span class="cl">	V(chopstick[(i+1) % 5]);// 放下右筷子
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p>这种解法会导致死锁，每个哲学家都拿一只筷子然后等待其他人放下筷子</p>
@@ -1901,7 +1769,7 @@ P、V操作必须成对出现。
 <ol>
 <li>最多允许4个哲学家同时去拿左边的筷子；</li>
 </ol>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-17"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1934,13 +1802,12 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">	V(chopstick[i]); // 吃完后，放下左筷子
 </span></span><span class="line"><span class="cl">	V(chopstick[(i+1) % 5]);// 放下右筷子
 </span></span><span class="line"><span class="cl">	V(count);
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
 <li>仅当一个哲学家左右两边的筷子都可用时，才允许他拿筷子；</li>
 </ol>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-18"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1977,10 +1844,9 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">    V(fchopstick[i]);          //放左
 </span></span><span class="line"><span class="cl">	V(chopstick[(i+1) % 5]);   //放右
 </span></span><span class="line"><span class="cl">                 
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div><div class="highlight" id="id-19"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -2005,13 +1871,12 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">    Wait(chopstick[(i+1)%5]，chopstick[i]);
 </span></span><span class="line"><span class="cl">    进餐;          
 </span></span><span class="line"><span class="cl">    Signal(chopstick[(i+1) % 5],chopstick[i]);     
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="3">
 <li>给所有哲学家编号，奇数号的哲学家必须首先拿左边的筷子，偶数号的哲学家则反之</li>
 </ol>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-20"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -2050,8 +1915,7 @@ P、V操作必须成对出现。
 </span></span><span class="line"><span class="cl">    进餐;
 </span></span><span class="line"><span class="cl">	V(chopstick[i]);    //放左
 </span></span><span class="line"><span class="cl">    V(chopstick[(i+1) % 5]);   // 放右     
-</span></span><span class="line"><span class="cl">}
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">}</span></span></code></pre></td></tr></table>
 </div>
 </div></blockquote>
 <h2 id="如何处理死锁问题">如何处理死锁问题？</h2>
@@ -2137,42 +2001,14 @@ P、V操作必须成对出现。
 <li>如果一个进程的请求会导致死锁，则不启动该进程</li>
 <li>如果一个进程的增加资源请求会导致死锁，则拒绝该申请。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125164249992-1856910147.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="银行家算法">银行家算法</h5>
 <p>避免死锁的具体实现通常利用<strong>银行家算法</strong></p>
 <p>银行家算法的实质就是**要设法保证系统动态分配资源后不进入不安全状态，以避免可能产生的死锁。**即没当进程提出资源请求且系统的资源能够满足该请求时，系统将判断满足此次资源请求后系统状态是否安全，如果判断结果为安全，则给该进程分配资源，否则不分配资源，申请资源的进程将阻塞。</p>
 <p>银行家算法的执行有个前提条件，即要求进程预先提出自己的最大资源请求，并假设系统拥有固定的资源总量。下面介绍银行家算法所用的主要的数据结构。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png"
-        title="image-20230511143708450" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png"
-        title="img" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png"
-        title="img" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230511143708450.png?size=large 2x" sizes="auto" data-title="image-20230511143708450" data-alt="image-20230511143708450" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171020518-1171969079.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/1358881-20191125171200431-333419697.png?size=large 2x" sizes="auto" data-title="img" data-alt="img" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="死锁检测和解除">死锁检测和解除</h3>
 <h4 id="死锁检测">死锁检测</h4>
 <p>为了能对系统是否已发生了死锁进行检测，必须:</p>
@@ -2180,22 +2016,8 @@ P、V操作必须成对出现。
 <li>用<strong>某种数据结构</strong>来保存资源的请求和分配信息:</li>
 <li>提供<strong>一种算法</strong>， 利用上述信息来检测系统是否已进入死锁状态。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png"
-        title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png" /></p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png?size=large 2x" sizes="auto" data-title="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png" data-alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223155030313.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/2020022315510292.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>如果系统中剩余的可用资源数足够满足进程的需求，那么这个进程暂时是不会阻塞的，可以顺利地执行下去。如果这个进程执行结束了把资源归还系统，就可能使某些正在等待资源的进程被激活，并顺利地执行下去。相应的，这些被激活的进程执行完了之后又会归还一些资源，这样可能又会激活另外一 些阻塞的进程。</p>
 <ul>
 <li>
@@ -2212,14 +2034,7 @@ P、V操作必须成对出现。
 </li>
 <li>
 <p>进程Pi所释放的资源，可以唤醒某些因等待这些资源而阻塞的进程，原来的阻塞进程可能变为非阻塞进程。在下图中，P2 就满足这样的条件。根据中的方法进行一系列简化后，若能消去图中所有的边，则称该图是可完全简化的。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png"
-        title="在这里插入图片描述" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/20200223160213575.png?size=large 2x" sizes="auto" data-title="在这里插入图片描述" data-alt="在这里插入图片描述" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 </li>
 </ul>
 <blockquote>
@@ -2237,43 +2052,55 @@ P、V操作必须成对出现。
 <li>进程回退法。让一个或多个死锁进程回退到足以避免死锁的地步。这就要求系统要记录进程的历史信息，设置还原点。</li>
 </ol>
 </div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>Updated on 2023-03-17</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" data-title="操作系统之进程管理"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" data-title="操作系统之进程管理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
-            </div>
-        </div>
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2023-03-17 14:55:42">Updated on 2023-03-17&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span><span><a href="https://github.com/cold-bin/blog/edit/main/content/posts/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e4%b9%8b%e8%bf%9b%e7%a8%8b%e7%ae%a1%e7%90%86.md" title="Edit this page"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">Edit this page</a></span></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" data-title="操作系统之进程管理"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" data-title="操作系统之进程管理"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
 
-    <div class="post-info-more">
-        <section class="post-tags"></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
-        </section>
-    </div>
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
 
-    <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="prev" rel="prev" title="操作系统之概述"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>操作系统之概述</a>
-            <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="next" rel="next" title="操作系统之内存管理">操作系统之内存管理<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E6%A6%82%E8%BF%B0/" class="post-nav-item" rel="prev" title="操作系统之概述"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>操作系统之概述</a>
+      <a href="/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B9%8B%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-nav-item" rel="next" title="操作系统之内存管理">操作系统之内存管理<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-<div id="comments"><div id="gitalk" class="comment"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
-            </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
-
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-03-17T14:55:42+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之进程管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+<div class="post-reward">
+    <div class="comment">Buy me a coffee</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">Donate</label>
+    <div class="reward-ways" data-mode="fixed"><div><img loading="lazy" src="/images/alipay.jpg" data-title="阿冰 Alipay" data-alt="阿冰 Alipay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>Alipay</span>
+          </div><div><img loading="lazy" src="/images/wechatpay.png" data-title="阿冰 WeChat Pay" data-alt="阿冰 WeChat Pay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>WeChat Pay</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright order-5" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/cold-bin"target="_blank" rel="external nofollow noopener noreferrer">阿冰</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics order-4"><span class="site-time" title='Website running ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="ms-1 d-none">运行</span><span class="run-times ms-1">Website running ...</span></span></div><div class="footer-line visitor order-2">
+          <span id="busuanzi_container_site_uv" title='Total visitors'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='Total visits'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.120f067ebd6f322339e2ccccd7e87e334d7c7ea5b2bd553f325f2ae3c3ae6fe8.css" integrity="sha256-Eg8Gfr1vMiM54szM1+h+M018fqWyvVU/Ml8q48Oub+g="><link rel="preload" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><link rel="stylesheet" href="/lib/pace/themes/silver/pace-theme-minimal.1aefeadd689806308301fe332322fc3cec76f1d28a8e516afd37d31600e1e964.css" integrity="sha256-Gu/q3WiYBjCDAf4zIyL8POx28dKKjlFq/TfTFgDh6WQ="><script src="/lib/gitalk/gitalk.min.f4f9407ea35ccf4be5019cc41d70eab1eb273941bca01b3a93c91201f195a76f.js" integrity="sha256-9PlAfqNcz0vlAZzEHXDqsesnOUG8oBs6k8kSAfGVp28="></script><script src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.804e26c45f81a02b98b05bc1e378c1ff6c5d2339e0c6550aadf1419adf3a8c81.js" integrity="sha256-gE4mxF+BoCuYsFvB43jB/2xdIzngxlUKrfFBmt86jIE=" defer></script><script src="/lib/lightgallery/lightgallery.min.7de2854e7954105f2b91ff5983749c4e3c7af51e05aae279f8a5d66994a85777.js" integrity="sha256-feKFTnlUEF8rkf9Zg3ScTjx69R4FquJ5+KXWaZSoV3c=" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4fbc3ec1878e90348b71b3594d8ef27c4f10a1a4c6d5e74948d0ee59018fd87c.js" integrity="sha256-T7w+wYeOkDSLcbNZTY7yfE8QoaTG1edJSNDuWQGP2Hw=" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.821a2adb8005511c0ad9ef6f395c1b74beacc2da194cd13a4ac43d341246e085.js" integrity="sha256-ghoq24AFURwK2e9vOVwbdL6swtoZTNE6SsQ9NBJG4IU=" defer></script><script src="/lib/sharer/sharer.min.ba5171a78670b031914e623431a33a3d73c1ea9897e552ba73bc2c2da7c777b9.js" integrity="sha256-ulFxp4ZwsDGRTmI0MaM6PXPB6piX5VK6c7wsLafHd7k=" async defer></script><script src="/lib/typeit/index.umd.16f3fa3374a7eea31f19672293edc98326413002dea74b8c413a74f1b7e4f1cf.js" integrity="sha256-FvP6M3Sn7qMfGWcik+3JgyZBMALep0uMQTp08bfk8c8=" defer></script><script src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw+iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script src="/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script src="/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":50},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-03-17T14:55:42+08:00","owner":"cold-bin","repo":"blog-comment","title":"操作系统之进程管理"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"life and code.","typeit-header-subtitle-mobile":"life and code."},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"siteTime":"2023-12-28T12:00:00+00:00","typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"loop":false,"speed":100}};</script><script src="/js/theme.min.58f9858983f2742da374c22058a1768784a6955aa9a3f3b3b179c080fa0fa468.js" integrity="sha256-WPmFiYPydC2jdMIgWKF2h4SmlVqpo/OzsXnAgPoPpGg=" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-75123653-1');
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=UA-75123653-1" async></script></body>
 </html>

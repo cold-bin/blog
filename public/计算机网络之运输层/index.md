@@ -916,3 +916,9 @@ A进入TIME-WAIT状态后，必须经过时间等待计时器设置的时间2MSL
 
 ### 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E8%BF%90%E8%BE%93%E5%B1%82/  
+

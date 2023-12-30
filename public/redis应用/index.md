@@ -3842,3 +3842,9 @@ Redis中的HLL是基于string结构实现的，单个HLL的内存**永远小于1
 
 经过测试：我们会发生他的误差是在允许范围内，并且内存占用极小
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/redis%E5%BA%94%E7%94%A8/  
+

@@ -259,3 +259,9 @@ func bytesToString(b []byte) string {
 
 虽然这种方式更高效率，但是不推荐大家使用，前面也提高到了，这要是不安全的，使用当不当会出现极大的隐患，一些严重的情况`recover`也不能捕获。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80unsafe%E5%8C%85%E7%9A%84%E4%BD%BF%E7%94%A8/  
+

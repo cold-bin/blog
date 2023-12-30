@@ -146,3 +146,9 @@ GO111MODULE=auto，默认值，go命令行将会根据当前目录来决定是�
 
   
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mod%E5%92%8Cgopath%E4%BE%9D%E8%B5%96%E7%AE%A1%E7%90%86/  
+

@@ -52,3 +52,9 @@ git config --global https.proxy http://127.0.0.1:7890
 ```
 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E8%AE%B0%E4%B8%80%E6%AC%A1github%E5%9B%BE%E5%BA%8A%E4%B8%8A%E4%BC%A0%E5%BC%82%E5%B8%B8%E7%9A%84bug/  
+

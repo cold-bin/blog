@@ -73,3 +73,9 @@ go是在用户态自己实现了一个可以自扩缩容的栈内存。
 
 运行时只会在栈内存使用不足 1/4 时进行缩容，缩容也会调用扩容时使用的 [`runtime.copystack`](https://draveness.me/golang/tree/runtime.copystack) 开辟新的栈空间。触发栈的缩容时，新栈的大小会是原始栈的一半，不过如果新栈的大小低于程序的最低限制 2KB，那么缩容的过程就会停止。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E6%A0%88%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/  
+

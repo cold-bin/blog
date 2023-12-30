@@ -1,16 +1,16 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>linux - Category - 阿冰的小屋</title>
-        <link>https://blog.coldbin.top/categories/linux/</link>
-        <description>linux - Category - 阿冰的小屋</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>cold-bin@qq.com (阿冰)</managingEditor>
-            <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Tue, 10 Jan 2023 19:46:21 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/categories/linux/" rel="self" type="application/rss+xml" /><item>
-    <title>Linux常用命令</title>
-    <link>https://blog.coldbin.top/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</link>
-    <pubDate>Tue, 10 Jan 2023 19:46:21 &#43;0800</pubDate>
-    <author>阿冰</author>
-    <guid>https://blog.coldbin.top/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</guid>
-    <description><![CDATA[linux常用命令 零、linux初窥 一、命令行操作体验 在 linux 中，最最重要的就是命令，这就包含了 2 个过程，输入和输出 输入：输入当然就是打开终端，]]></description>
+  <channel>
+    <title>linux - Category - 阿冰的小屋</title>
+    <link>https://blog.coldbin.top/categories/linux/</link>
+    <description>linux - Category - 阿冰的小屋</description>
+    <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>cold-bin@qq.com (阿冰)</managingEditor>
+      <webMaster>cold-bin@qq.com (阿冰)</webMaster><copyright>本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明</copyright><lastBuildDate>Tue, 10 Jan 2023 19:46:21 &#43;0800</lastBuildDate><atom:link href="https://blog.coldbin.top/categories/linux/" rel="self" type="application/rss+xml" /><item>
+  <title>Linux常用命令</title>
+  <link>https://blog.coldbin.top/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</link>
+  <pubDate>Tue, 10 Jan 2023 19:46:21 &#43;0800</pubDate>
+  <author>阿冰</author>
+  <guid>https://blog.coldbin.top/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</guid>
+  <description><![CDATA[linux常用命令 零、linux初窥 一、命令行操作体验 在 linux 中，最最重要的就是命令，这就包含了 2 个过程，输入和输出 输入：输入当然就是打开终端，]]></description>
 </item>
 </channel>
 </rss>

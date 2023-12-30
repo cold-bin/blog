@@ -62,3 +62,9 @@ GC主要作用于堆区。
 - [`runtime.GC`](https://draveness.me/golang/tree/runtime.GC) — 用户程序手动触发垃圾收集；
 - [`runtime.mallocgc`](https://draveness.me/golang/tree/runtime.mallocgc) — 只要申请内存时，堆大小达到控制器计算的触发堆的大小就会触发垃圾收集；
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6/  
+

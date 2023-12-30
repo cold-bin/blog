@@ -2285,3 +2285,9 @@ mysql –h host2 –uroot –p
 
 但如果是恶意地把整个集群删除，那就需要考虑跨机房备份，跨城市备份。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mysql%E6%97%A5%E5%BF%97%E4%B8%8E%E5%A4%87%E4%BB%BD%E7%AF%87/  
+

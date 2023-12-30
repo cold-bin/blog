@@ -133,3 +133,9 @@ shr al, 1  ;将al中的数据右移一位执行后（al）=01000000b，CF=1。
 >
 > - 对端口的读写实际上就是遵照“先传地址，再操作数据”的原则，本质上就是对和CPU相联的芯片里面的寄存器进行读写。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E7%AB%AF%E5%8F%A3/  
+

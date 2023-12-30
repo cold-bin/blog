@@ -421,3 +421,9 @@ help:
 
 这样就很方便地通过一个make命令完成对项目的构建。
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/makefile%E5%9C%A8go%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%AE%9E%E8%B7%B5/  
+

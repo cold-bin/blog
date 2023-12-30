@@ -2799,3 +2799,9 @@ insert into student(id,name) values(3,'王五');
 
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202210202207002.png" alt="image-20220715141515370" style="float:left;" />
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mysql%E4%BA%8B%E5%8A%A1%E7%AF%87/  
+

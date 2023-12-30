@@ -115,3 +115,9 @@ end start
 ;可执行文件中的程序被加载入内存后，CPU的CS:IP被设置指向这个入口，从而开始执行程序中的第一条指令
 ```
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E5%8C%85%E5%90%AB%E5%A4%9A%E4%B8%AA%E6%AE%B5%E7%9A%84%E7%A8%8B%E5%BA%8F/  
+

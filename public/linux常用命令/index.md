@@ -2744,3 +2744,9 @@ telnet [-8acdEfFKLrx][-b<主机别名>][-e<脱离字符>][-k<域名>][-l<用户�
 telnet 192.168.0.5 
 ```
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/  
+

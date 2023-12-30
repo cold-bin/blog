@@ -407,3 +407,9 @@
 * 各用户使用经过特殊挑选的不同码型，因此彼此不会造成干扰。
 * 这种系统发送的信号有很强的抗干扰能力，其频谱类似于白噪声，不易被敌人发现。 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E4%B9%8B%E7%89%A9%E7%90%86%E5%B1%82/  
+

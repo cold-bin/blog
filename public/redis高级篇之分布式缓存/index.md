@@ -813,3 +813,9 @@ spring:
 
 
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/  
+

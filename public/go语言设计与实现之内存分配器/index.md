@@ -55,3 +55,9 @@ go划分了对象大小的级别，按照对象的不同大小，采用不同的
 
 暂略
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/go%E8%AF%AD%E8%A8%80%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8/  
+

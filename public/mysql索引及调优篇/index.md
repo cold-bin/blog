@@ -7258,3 +7258,9 @@ SET SESSION MAX_EXECUTION_TIME=2000; #指定该会话中SELECT语句的超时时
 
 <img src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/202209241459764.png" alt="image-20220707223420496" style="float:left;" />
 
+
+---
+
+> Author: [阿冰](https://github.com/cold-bin)  
+> URL: https://blog.coldbin.top/mysql%E7%B4%A2%E5%BC%95%E5%8F%8A%E8%B0%83%E4%BC%98%E7%AF%87/  
+

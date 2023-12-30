@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="robots" content="noodp" />
-        <title>Redis高级篇之分布式缓存 - 阿冰的小屋</title><meta name="Description" content="记录生活与学习的点滴..."><meta property="og:title" content="Redis高级篇之分布式缓存" />
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Redis高级篇之分布式缓存 - 阿冰的小屋</title><meta name="author" content="阿冰">
+<meta name="author-link" content="https://github.com/cold-bin">
+<meta name="description" content="[toc] 基于Redis集群解决单机Redis存在的问题 单机的Redis存在四大问题： 分布式缓存 1.Redis持久化 Redis有两种持久化方案： RD" /><meta name="keywords" content='Hugo, FixIt' /><meta itemprop="name" content="Redis高级篇之分布式缓存">
+<meta itemprop="description" content="[toc] 基于Redis集群解决单机Redis存在的问题 单机的Redis存在四大问题： 分布式缓存 1.Redis持久化 Redis有两种持久化方案： RD"><meta itemprop="datePublished" content="2023-01-15T17:26:41+08:00" />
+<meta itemprop="dateModified" content="2023-01-15T17:26:41+08:00" />
+<meta itemprop="wordCount" content="10201"><meta itemprop="image" content="https://blog.coldbin.top/favicon.ico"/>
+<meta itemprop="keywords" content="" /><meta property="og:title" content="Redis高级篇之分布式缓存" />
 <meta property="og:description" content="[toc] 基于Redis集群解决单机Redis存在的问题 单机的Redis存在四大问题： 分布式缓存 1.Redis持久化 Redis有两种持久化方案： RD" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" /><meta property="og:image" content="https://blog.coldbin.top/favicon.ico"/><meta property="article:section" content="posts" />
@@ -17,118 +24,196 @@
 <meta name="twitter:title" content="Redis高级篇之分布式缓存"/>
 <meta name="twitter:description" content="[toc] 基于Redis集群解决单机Redis存在的问题 单机的Redis存在四大问题： 分布式缓存 1.Redis持久化 Redis有两种持久化方案： RD"/>
 <meta name="application-name" content="阿冰的小屋">
-<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="canonical" href="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" /><link rel="prev" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8Bcall%E5%92%8Cret%E6%8C%87%E4%BB%A4/" /><link rel="next" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" /><link rel="stylesheet" href="/css/style.min.cf6878db51c51b2d04ae155284a4403dbee8db33e16c066f954c95279c271fcd.css" integrity="sha256-z2h421HFGy0ErhVShKRAPb7o2zPhbAZvlUyVJ5wnH80="><link rel="preload" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0df5a33710e433de1f5415b1d47e4130ca7466aee5b81955f1045c4844bbb3ed.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
-    {
-        "@context": "http://schema.org",
-        "@type": "BlogPosting",
-        "headline": "Redis高级篇之分布式缓存",
-        "inLanguage": "zh-CN",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https:\/\/blog.coldbin.top\/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98\/"
-        },"image": ["https:\/\/blog.coldbin.top\/favicon.ico"],"genre": "posts","wordcount":  10201 ,
-        "url": "https:\/\/blog.coldbin.top\/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98\/","datePublished": "2023-01-15T17:26:41+08:00","dateModified": "2023-01-15T17:26:41+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
-            "@type": "Organization",
-            "name": "阿冰","logo": {
-                    "@type": "ImageObject",
-                    "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
-                    "width":  396 ,
-                    "height":  396 
-                }},"author": {
-                "@type": "Person",
-                "name": "阿冰"
-            },"description": ""
-    }
-    </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-
-        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+<meta name="apple-mobile-web-app-title" content="阿冰的小屋"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" /><link rel="prev" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8Bcall%E5%92%8Cret%E6%8C%87%E4%BB%A4/" /><link rel="next" href="https://blog.coldbin.top/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" /><link rel="stylesheet" href="/css/style.min.04a53c8f85f60bfc901f510b07233befa08ea6546fc4a641b7a7caf06269844a.css" integrity="sha256-BKU8j4X2C/yQH1ELByM776COplRvxKZBt6fK8GJphEo="><link rel="preload" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.0934b1fc0d3a766d41d3adf5e7a115875e66e98ebba408d965a41cf3d2cb4ab5.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU="></noscript><link rel="preload" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.5fbaeb9f8e25d7e0143bae61d4b1802c16ce7390b96ceb2d498b0d96ff4c853f.css" integrity="sha256-X7rrn44l1+AUO65h1LGALBbOc5C5bOstSYsNlv9MhT8="></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Redis高级篇之分布式缓存",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/blog.coldbin.top\/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98\/"
+    },"image": [{
+              "@type": "ImageObject",
+              "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+              "width":  396 ,
+              "height":  396 
+            }],"genre": "posts","wordcount":  10201 ,
+    "url": "https:\/\/blog.coldbin.top\/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98\/","datePublished": "2023-01-15T17:26:41+08:00","dateModified": "2023-01-15T17:26:41+08:00","license": "本博客内容仅供教育和信息分享，不对准确性和完整性做保证，使用需谨慎。未经允许，禁止复制或商业使用。外部链接概不负责。随时可能更新，使用本博客默认遵循免责声明","publisher": {
+      "@type": "Organization",
+      "name": "阿冰","logo": {
+          "@type": "ImageObject",
+          "url": "https:\/\/blog.coldbin.top\/images\/avatar.png",
+          "width":  396 ,
+          "height":  396 
+        }},"author": {
+        "@type": "Person",
+        "name": "阿冰"
+      },"description": ""
+  }
+  </script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="阿冰的小屋" data-alt="阿冰的小屋" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-desktop" class="typeit header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/"
+                
+                
+              ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/friends/friends"
+                
+                
+              ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about/"
+                
+                
+              ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="Switch Theme">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
     <div class="header-wrapper">
-        <div class="header-title">
-            <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
-        </div>
-        <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/"> 主页 </a><a class="menu-item" href="/posts/"> 归档 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                    <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-                </a></div>
-        </div>
+      <div class="header-title">
+        <a href="/" title="阿冰的小屋"><img loading="lazy" src="/favicon.ico" data-title="/favicon.ico" data-alt="/favicon.ico" class="logo" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span class="header-title-text">阿冰的小屋</span></a><span id="typeit-header-subtitle-mobile" class="typeit header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
     </div>
-</header><header class="mobile" id="header-mobile">
-    <div class="header-container">
-        <div class="header-wrapper">
-            <div class="header-title">
-                <a href="/" title="阿冰的小屋"><img
-        class="lazyload logo"
-        src="/svg/loading.min.svg"
-        data-src="/favicon.ico"
-        data-srcset="/favicon.ico, /favicon.ico 1.5x, /favicon.ico 2x"
-        data-sizes="auto"
-        alt="/favicon.ico"
-        title="/favicon.ico" />阿冰的小屋</a>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
-        </div>
-        <div class="menu" id="menu-mobile"><div class="search-wrapper">
-                    <div class="search mobile" id="search-mobile">
-                        <input type="text" placeholder="搜索文章标题或内容" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
-                            <i class="fas fa-search fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
-                            <i class="fas fa-times-circle fa-fw" aria-hidden="true"></i>
-                        </a>
-                        <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
-                        </span>
-                    </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-                        Cancel
-                    </a>
-                </div><a class="menu-item" href="/" title="">主页</a><a class="menu-item" href="/posts/" title="">归档</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
-                <i class="fas fa-adjust fa-fw" aria-hidden="true"></i>
-            </a></div>
-    </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              Cancel
+            </a>
+          </li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/"
+                  
+                  
+                ><i class="fa-solid fa-microchip fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 主页</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                ><i class="fa-solid fa-archive fa-fw fa-sm" aria-hidden="true"></i> 归档</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                ><i class="fa-solid fa-tags fa-fw fa-sm" aria-hidden="true"></i> 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                ><i class="fa-solid fa-th fa-fw fa-sm" aria-hidden="true"></i> 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/friends/friends"
+                  
+                  
+                ><i class="fa-solid fa-users fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 友链</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about/"
+                  
+                  
+                ><i class="fa-solid fa-info-circle fa-fw fa-sm fa-fw fa-sm" aria-hidden="true"></i> 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="Switch Theme"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
 </header><div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
-    </div>
-    <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
-    </div><main class="main">
-                <div class="container"><div class="toc" id="toc-auto">
-            <h2 class="toc-title">Contents</h2>
-            <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Redis高级篇之分布式缓存</h1><div class="post-meta">
-            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>阿冰</a></span>&nbsp;<span class="post-category">included in <a href="/categories/redis/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>redis</a>&nbsp;<a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"><i class="far fa-folder fa-fw" aria-hidden="true"></i>分布式系统</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-01-15">2023-01-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;10201 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;21 minutes&nbsp;</div>
-        </div><div class="details toc" id="toc-static"  data-kept="">
-                <div class="details-summary toc-title">
-                    <span>Contents</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><nav aria-label="breadcrumb" class="breadcrumb-container sticky">
+    <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/" title="阿冰的小屋">Home</a></li><li class="breadcrumb-item"><a href="/posts/" title="Posts">Posts</a></li><li class="breadcrumb-item active" aria-current="page">Redis高级篇之分布式缓存</li>
+    </ol>
+  </nav><main class="container"><aside class="toc" id="toc-auto"><h2 class="toc-title">Contents&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside>
+
+  <aside class="aside-custom">
+    </aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span>Redis高级篇之分布式缓存</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://github.com/cold-bin" title="Author"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="https://www.gravatar.com/avatar/bbeb236273ce7a8cc349e66deaa25959?s=32&amp;d=" data-title="阿冰" data-alt="阿冰" class="avatar" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;阿冰</a></span>
+          <span class="post-category">included in <a href="/categories/redis/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> redis</a>&ensp;<a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 分布式系统</a></span></div>
+      <div class="post-meta-line"><span title="published on 2023-01-15 17:26:41"><i class="fa-regular fa-calendar-alt fa-fw me-1" aria-hidden="true"></i><time datetime="2023-01-15">2023-01-15</time></span>&nbsp;<span title="Updated on 2023-01-15 17:26:41"><i class="fa-regular fa-edit fa-fw me-1" aria-hidden="true"></i><time datetime="2023-01-15">2023-01-15</time></span>&nbsp;<span title="10201 words"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>About 10300 words</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>21 minutes</span>&nbsp;<span id="busuanzi_container_page_pv" class="busuanzi_visitors comment-visitors" data-flag-title="Redis高级篇之分布式缓存">
+              <i class="fa-regular fa-eye fa-fw me-1" aria-hidden="true"></i><span id="busuanzi_value_page_pv">-</span>&nbsp;views
+            </span>&nbsp;</div>
+    </div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>Contents</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
     <li><a href="#基于redis集群解决单机redis存在的问题">基于Redis集群解决单机Redis存在的问题</a></li>
     <li><a href="#分布式缓存">分布式缓存</a></li>
@@ -214,17 +299,10 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>[toc]</p>
+      </div><div class="content" id="content"><p>[toc]</p>
 <h1 id="基于redis集群解决单机redis存在的问题">基于Redis集群解决单机Redis存在的问题</h1>
 <p>单机的Redis存在四大问题：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png"
-        title="image-20210725144240631" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144240631.png?size=large 2x" sizes="auto" data-title="image-20210725144240631" data-alt="image-20210725144240631" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h1 id="分布式缓存">分布式缓存</h1>
 <h1 id="1redis持久化">1.Redis持久化</h1>
 <p>Redis有两种持久化方案：</p>
@@ -244,31 +322,17 @@
 </ul>
 <p><strong>1）<code>save</code>命令</strong></p>
 <p>执行下面的命令，可以立即执行一次RDB：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png"
-        title="image-20210725144536958" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144536958.png?size=large 2x" sizes="auto" data-title="image-20210725144536958" data-alt="image-20210725144536958" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><code>save</code>命令会导致主进程执行RDB，这个过程中其它所有命令都会被阻塞。只有在数据迁移时可能用到。</p>
 <p><strong>2）<code>bgsave</code>命令</strong></p>
 <p>下面的命令可以异步执行RDB：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png"
-        title="image-20210725144725943" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725144725943.png?size=large 2x" sizes="auto" data-title="image-20210725144725943" data-alt="image-20210725144725943" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>这个命令执行后会开启独立进程完成RDB，主进程可以持续处理用户请求，不受影响。</p>
 <p><strong>3）停机时</strong></p>
 <p>Redis停机时会执行一次<code>save</code>命令，实现RDB持久化。</p>
 <p><strong>4）触发RDB条件</strong></p>
 <p>Redis内部有触发RDB的机制，可以在<code>redis.conf</code>文件中找到，格式如下：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-1"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -281,11 +345,10 @@
 </span></span><span class="line"><span class="cl"><span class="na">save</span> <span class="s">900 1 </span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 依次类推</span>
 </span></span><span class="line"><span class="cl"><span class="na">save</span> <span class="s">300 10  </span>
-</span></span><span class="line"><span class="cl"><span class="na">save</span> <span class="s">60 10000 </span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="na">save</span> <span class="s">60 10000 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>RDB的其它配置也可以在<code>redis.conf</code>文件中设置：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-2"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -304,8 +367,7 @@
 </span></span><span class="line"><span class="cl"><span class="na">dbfilename</span> <span class="s">dump.rdb  </span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 文件保存的路径目录</span>
-</span></span><span class="line"><span class="cl"><span class="na">dir</span> <span class="s">./ </span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="na">dir</span> <span class="s">./ </span></span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p>SAVE  保存是阻塞主进程，客户端无法连接redis，等SAVE完成后，主进程才开始工作，客户端可以连接</p>
@@ -313,27 +375,13 @@
 </blockquote>
 <h3 id="112rdb原理">1.1.2.RDB原理</h3>
 <p>RDB持久化是指在指定的时间间隔内将redis内存中的数据集快照写入磁盘，实现原理是redis服务在指定的时间间隔内先<code>fork</code>一个子进程，由子进程将数据集写入临时文件，写入成功后，再替换之前的文件，用二进制压缩存储，生成<code>dump.rdb</code>文件存放在磁盘中。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png"
-        title="image.png" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/6w4x54kwa7p4m_e0896752f4e84346a9e44d56612a4896.png?size=large 2x" sizes="auto" data-title="image.png" data-alt="image.png" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p><code>fork</code>采用的是copy-on-write技术：</p>
 <ul>
 <li>当主进程执行读操作时，访问共享内存；</li>
 <li>当主进程执行写操作时，则会拷贝一份数据，执行写操作。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png"
-        title="image-20210725151319695" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151319695.png?size=large 2x" sizes="auto" data-title="image-20210725151319695" data-alt="image-20210725151319695" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="113小结">1.1.3.小结</h3>
 <p><strong>RDB方式<code>bgsave</code>的基本流程？</strong></p>
 <ul>
@@ -361,17 +409,10 @@
 <h2 id="12aof持久化">1.2.AOF持久化</h2>
 <h3 id="121aof原理">1.2.1.AOF原理</h3>
 <p>AOF全称为Append Only File（追加文件）。Redis处理的每一个写命令都会记录在AOF文件，可以看做是命令日志文件。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png"
-        title="image-20210725151543640" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151543640.png?size=large 2x" sizes="auto" data-title="image-20210725151543640" data-alt="image-20210725151543640" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="122aof配置">1.2.2.AOF配置</h3>
 <p>AOF默认是关闭的，需要修改<code>redis.conf</code>配置文件来开启AOF：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-3"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -382,11 +423,10 @@
 <pre tabindex="0" class="chroma"><code class="language-properties" data-lang="properties"><span class="line"><span class="cl"><span class="c1"># 是否开启AOF功能，默认是no</span>
 </span></span><span class="line"><span class="cl"><span class="na">appendonly</span> <span class="s">yes</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># AOF文件的名称</span>
-</span></span><span class="line"><span class="cl"><span class="na">appendfilename</span> <span class="s">&#34;appendonly.aof&#34;</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="na">appendfilename</span> <span class="s">&#34;appendonly.aof&#34;</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>AOF的命令记录的频率也可以通过<code>redis.conf</code>文件来配：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-4"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -401,32 +441,17 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 写命令执行完先放入AOF缓冲区，然后表示每隔1秒将缓冲区数据写到AOF文件，是默认方案</span>
 </span></span><span class="line"><span class="cl"><span class="na">appendfsync</span> <span class="s">everysec</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># 写命令执行完先放入AOF缓冲区，由操作系统决定何时将缓冲区内容写回磁盘</span>
-</span></span><span class="line"><span class="cl"><span class="na">appendfsync</span> <span class="s">no</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="na">appendfsync</span> <span class="s">no</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>三种策略对比：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png"
-        title="image-20210725151654046" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151654046.png?size=large 2x" sizes="auto" data-title="image-20210725151654046" data-alt="image-20210725151654046" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="123aof文件重写">1.2.3.AOF文件重写</h3>
 <p>因为是记录命令，AOF文件会比RDB文件大的多。而且AOF会记录对同一个key的多次写操作，但只有最后一次写操作才有意义。通过执行<code>bgrewriteaof</code>命令，可以让AOF文件执行重写功能，用最少的命令达到相同效果。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png"
-        title="image-20210725151729118" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151729118.png?size=large 2x" sizes="auto" data-title="image-20210725151729118" data-alt="image-20210725151729118" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>如图，AOF原本有三个命令，但是<code>set num 123</code> 和 <code>set num 666</code>都是对<code>num</code>的操作，第二次会覆盖第一次的值，因此第一个命令记录下来没有意义。</p>
 <p>所以重写命令后，AOF文件内容就是：<code>mset name jack num 666</code></p>
 <p>Redis也会在触发阈值时自动去重写AOF文件。阈值也可以在redis.conf中配置：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-5"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -437,42 +462,20 @@
 <pre tabindex="0" class="chroma"><code class="language-properties" data-lang="properties"><span class="line"><span class="cl"><span class="c1"># AOF文件比上次文件增长超过多少百分比，则触发重写</span>
 </span></span><span class="line"><span class="cl"><span class="na">auto-aof-rewrite-percentage</span> <span class="s">100</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># AOF文件体积最小多大以上才触发重写</span>
-</span></span><span class="line"><span class="cl"><span class="na">auto-aof-rewrite-min-size</span> <span class="s">64mb</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="na">auto-aof-rewrite-min-size</span> <span class="s">64mb</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="13rdb与aof对比">1.3.RDB与AOF对比</h2>
 <p>RDB和AOF各有自己的优缺点，如果对数据安全性要求较高，在实际开发中往往会<strong>结合</strong>两者来使用。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png"
-        title="image-20210725151940515" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725151940515.png?size=large 2x" sizes="auto" data-title="image-20210725151940515" data-alt="image-20210725151940515" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h1 id="2redis主从">2.Redis主从</h1>
 <h2 id="21搭建主从架构">2.1.搭建主从架构</h2>
 <p>单节点Redis的并发能力是有上限的，要进一步提高Redis的并发能力，就需要搭建主从集群，实现读写分离。</p>
 <p>像MySQL一样，redis是支持主从同步的，而且也支持一主多从以及多级从结构。 主从结构，一是为了纯粹的冗余备份，二是为了提升读性能，比如很消耗性能的SORT就可以由从服务器来承担。 redis的主从同步是异步进行的，这意味着主从同步不会影响主逻辑，也不会降低redis的处理性能。 主从架构中，可以考虑关闭主服务器的数据持久化功能，只让从服务器进行持久化，这样可以提高主服务器的处理性能。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png"
-        title="image-20210725152037611" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152037611.png?size=large 2x" sizes="auto" data-title="image-20210725152037611" data-alt="image-20210725152037611" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h2 id="22主从数据同步原理">2.2.主从数据同步原理</h2>
 <h3 id="221全量同步">2.2.1.全量同步</h3>
 <p>主从第一次建立连接时，会执行<strong>全量同步</strong>，将master节点的所有数据都拷贝给slave节点，流程：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png"
-        title="image-20210725152222497" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152222497.png?size=large 2x" sizes="auto" data-title="image-20210725152222497" data-alt="image-20210725152222497" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>这里有一个问题，master如何得知salve是第一次来连接呢？？</p>
 <p>有几个概念，可以作为判断依据：</p>
 <ul>
@@ -485,14 +488,7 @@
 <p>master会将自己的replid和offset都发送给这个slave，slave保存这些信息。以后slave的replid就与master一致了。</p>
 <p>因此，<strong>master判断一个节点是否是第一次同步的依据，就是看replid是否一致</strong>。</p>
 <p>如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png"
-        title="image-20210725152700914" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725152700914.png?size=large 2x" sizes="auto" data-title="image-20210725152700914" data-alt="image-20210725152700914" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>完整流程描述：</p>
 <ul>
 <li>slave节点请求增量同步</li>
@@ -505,75 +501,26 @@
 <h3 id="222增量同步">2.2.2.增量同步</h3>
 <p>全量同步需要先做RDB，然后将RDB文件通过网络传输个slave，成本太高了。因此除了第一次做全量同步，其它大多数时候slave与master都是做<strong>增量同步</strong>。</p>
 <p>什么是增量同步？就是只更新slave与master存在差异的部分数据。如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png"
-        title="image-20210725153201086" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153201086.png?size=large 2x" sizes="auto" data-title="image-20210725153201086" data-alt="image-20210725153201086" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>那么master怎么知道slave与自己的数据差异在哪里呢?</p>
 <h3 id="223repl_backlog原理">2.2.3.repl_backlog原理</h3>
 <p>master怎么知道slave与自己的数据差异在哪里呢?</p>
 <p>这就要说到全量同步时的repl_baklog文件了。</p>
 <p>这个文件是一个固定大小的数组，只不过数组是环形，也就是说<strong>角标到达数组末尾后，会再次从0开始读写</strong>，这样数组头部的数据就会被覆盖。</p>
 <p>repl_baklog中会记录Redis处理过的命令日志及offset，包括master当前的offset，和slave已经拷贝到的offset：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png"
-        title="image-20210725153359022" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153359022.png?size=large 2x" sizes="auto" data-title="image-20210725153359022" data-alt="image-20210725153359022" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>slave与master的offset之间的差异，就是salve需要增量拷贝的数据了。</p>
 <p>随着不断有数据写入，master的offset逐渐变大，slave也不断的拷贝，追赶master的offset：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png"
-        title="image-20210725153524190" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153524190.png?size=large 2x" sizes="auto" data-title="image-20210725153524190" data-alt="image-20210725153524190" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>直到数组被填满：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png"
-        title="image-20210725153715910" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153715910.png?size=large 2x" sizes="auto" data-title="image-20210725153715910" data-alt="image-20210725153715910" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>此时，如果有新的数据写入，就会覆盖数组中的旧数据。不过，旧的数据只要是绿色的，说明是已经被同步到slave的数据，即便被覆盖了也没什么影响。因为未同步的仅仅是红色部分。</p>
 <p>但是，如果slave出现网络阻塞，导致master的offset远远超过了slave的offset：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png"
-        title="image-20210725153937031" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725153937031.png?size=large 2x" sizes="auto" data-title="image-20210725153937031" data-alt="image-20210725153937031" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>如果master继续写入新数据，其offset就会覆盖旧的数据，直到将slave现在的offset也覆盖：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png"
-        title="image-20210725154155984" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154155984.png?size=large 2x" sizes="auto" data-title="image-20210725154155984" data-alt="image-20210725154155984" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>棕色框中的红色部分，就是尚未同步，但是却已经被覆盖的数据。此时如果slave恢复，需要同步，却发现自己的offset都没有了，无法完成增量同步了。只能做全量同步。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png"
-        title="image-20210725154216392" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154216392.png?size=large 2x" sizes="auto" data-title="image-20210725154216392" data-alt="image-20210725154216392" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h2 id="23主从同步优化">2.3.主从同步优化</h2>
 <p>主从同步可以保证主从数据的一致性，非常重要</p>
 <p>可以从以下几个方面来优化Redis主从就集群：</p>
@@ -584,14 +531,7 @@
 <li>限制一个master上的slave节点数量，如果实在是太多slave，则可以采用主-从-从链式结构，减少master压力</li>
 </ul>
 <p>主从从架构图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png"
-        title="image-20210725154405899" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154405899.png?size=large 2x" sizes="auto" data-title="image-20210725154405899" data-alt="image-20210725154405899" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h2 id="24小结">2.4.小结</h2>
 <p>简述全量同步和增量同步区别？</p>
 <ul>
@@ -612,14 +552,7 @@
 <h2 id="31哨兵原理">3.1.哨兵原理</h2>
 <h3 id="311集群结构和作用">3.1.1.集群结构和作用</h3>
 <p>哨兵的结构如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png"
-        title="image-20210725154528072" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154528072.png?size=large 2x" sizes="auto" data-title="image-20210725154528072" data-alt="image-20210725154528072" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>哨兵的作用如下：</p>
 <ul>
 <li><strong>监控</strong>：Sentinel 会不断检查您的master和slave是否按预期工作</li>
@@ -632,14 +565,7 @@
 <li>主观下线：如果某sentinel节点发现某实例未在规定时间响应，则认为该实例<strong>主观下线</strong>。</li>
 <li>客观下线：若超过指定数量（quorum）的sentinel都认为该实例主观下线，则该实例<strong>客观下线</strong>。quorum值最好超过Sentinel实例数量的一半。</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png"
-        title="image-20210725154632354" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154632354.png?size=large 2x" sizes="auto" data-title="image-20210725154632354" data-alt="image-20210725154632354" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="313集群故障恢复原理">3.1.3.集群故障恢复原理</h3>
 <p>一旦发现master故障，sentinel需要在salve中选择一个作为新的master，选择依据是这样的：</p>
 <ul>
@@ -655,14 +581,7 @@
 <li>sentinel给所有其它slave发送<code>slaveof 192.168.150.101 7002</code>命令，让这些slave成为新master的从节点，开始从新的master上同步数据。</li>
 <li>最后，sentinel将故障节点标记为slave，当故障节点恢复后会自动成为新的master的slave节点</li>
 </ul>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png"
-        title="image-20210725154816841" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725154816841.png?size=large 2x" sizes="auto" data-title="image-20210725154816841" data-alt="image-20210725154816841" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="314小结">3.1.4.小结</h3>
 <p>Sentinel的三个作用是什么？</p>
 <ul>
@@ -687,17 +606,10 @@
 <p>下面，我们通过一个测试来实现RedisTemplate集成哨兵机制。</p>
 <h3 id="331导入demo工程">3.3.1.导入Demo工程</h3>
 <p>首先，我们引入课前资料提供的Demo工程：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png"
-        title="image-20210725155124958" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155124958.png?size=large 2x" sizes="auto" data-title="image-20210725155124958" data-alt="image-20210725155124958" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="332引入依赖">3.3.2.引入依赖</h3>
 <p>在项目的pom文件中引入依赖：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-6"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -708,12 +620,11 @@
 <pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-data-redis<span class="nt">&lt;/artifactId&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
-</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="333配置redis地址">3.3.3.配置Redis地址</h3>
 <p>然后在配置文件application.yml中指定redis的sentinel相关信息：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-7"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -732,12 +643,11 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">nodes</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="n">192</span><span class="p">.</span><span class="na">168</span><span class="p">.</span><span class="na">150</span><span class="p">.</span><span class="na">101</span><span class="p">:</span><span class="n">27001</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="n">192</span><span class="p">.</span><span class="na">168</span><span class="p">.</span><span class="na">150</span><span class="p">.</span><span class="na">101</span><span class="p">:</span><span class="n">27002</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="n">192</span><span class="p">.</span><span class="na">168</span><span class="p">.</span><span class="na">150</span><span class="p">.</span><span class="na">101</span><span class="p">:</span><span class="n">27003</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="o">-</span><span class="w"> </span><span class="n">192</span><span class="p">.</span><span class="na">168</span><span class="p">.</span><span class="na">150</span><span class="p">.</span><span class="na">101</span><span class="p">:</span><span class="n">27003</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="334配置读写分离">3.3.4.配置读写分离</h3>
 <p>在项目的启动类中，添加一个新的bean：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-8"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -748,8 +658,7 @@
 <pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="nd">@Bean</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">public</span><span class="w"> </span><span class="n">LettuceClientConfigurationBuilderCustomizer</span><span class="w"> </span><span class="nf">clientConfigurationBuilderCustomizer</span><span class="p">(){</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">clientConfigurationBuilder</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">clientConfigurationBuilder</span><span class="p">.</span><span class="na">readFrom</span><span class="p">(</span><span class="n">ReadFrom</span><span class="p">.</span><span class="na">REPLICA_PREFERRED</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>这个bean中配置的就是读写策略，包括四种：</p>
 <ul>
@@ -766,14 +675,7 @@
 <li>高并发写的问题：虽然主从架构可以提高并发读的性能，但是对于高并发写性能提升意义不大。因为在主从集群下，master只要一个，也就是redis的写只能写在一个master节点上（虽然我们利用主从集群抽离master上的读命令执行，但依然提升有限）。问题主要出现在master只有一个，而且redis执行命令都是单线程的，只能一条一条的执行。那么解决方案显而易见：我们可以多选几个master出来执行写命令。而且这几个master的数据是不一致的，这样可以减轻主从集群模式下，单节点master数据存储的压力。</li>
 </ul>
 <p>使用分片集群可以解决上述问题（分片感觉就是多个集群有机结合），如图:</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png"
-        title="image-20210725155747294" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155747294.png?size=large 2x" sizes="auto" data-title="image-20210725155747294" data-alt="image-20210725155747294" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>分片集群特征：</p>
 <ul>
 <li>
@@ -793,28 +695,14 @@
 <h2 id="42散列插槽">4.2.散列插槽</h2>
 <h3 id="421插槽原理">4.2.1.插槽原理</h3>
 <p>Redis会把每一个master节点映射到<code>0~16383</code>共<code>16384</code>个插槽（hash slot）上，查看集群信息时就能看到：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png"
-        title="image-20210725155820320" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155820320.png?size=large 2x" sizes="auto" data-title="image-20210725155820320" data-alt="image-20210725155820320" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>数据key不是与节点绑定，而是与插槽绑定。redis会根据key的有效部分计算插槽值，分两种情况：</p>
 <ul>
 <li>key中包含&quot;{}&quot;，且“{}”中至少包含1个字符，“{}”中的部分是有效部分</li>
 <li>key中不包含“{}”，整个key都是有效部分</li>
 </ul>
 <p>例如：key是num，那么就根据num计算，如果是<code>{itcast}num</code>，则根据itcast计算。计算方式是利用CRC16算法得到一个hash值，然后对<code>16384</code>取余，得到的结果就是slot值。</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png"
-        title="image-20210725155850200" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725155850200.png?size=large 2x" sizes="auto" data-title="image-20210725155850200" data-alt="image-20210725155850200" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>如图，在7001这个节点执行<code>set a 1</code>时，对a做hash运算，对16384取余，得到的结果是15495，因此要存储到7003节点。</p>
 <p>到了7003后，执行<code>get num</code>时，对num做hash运算，对16384取余，得到的结果是2765，因此需要切换到7001节点</p>
 <p><strong>散列过程里存在一个巨严重的问题：</strong></p>
@@ -869,26 +757,12 @@
 <ul>
 <li>这一类数据使用相同的有效部分，例如key都以{typeId}为前缀</li>
 </ul>
-<p><a href="https://zhuanlan.zhihu.com/p/367227866" target="_blank" rel="noopener noreffer ">redis分片机制详解</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/367227866"target="_blank" rel="external nofollow noopener noreferrer">redis分片机制详解<i class="fa-solid fa-external-link-alt fa-fw fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <h2 id="43集群伸缩">4.3.集群伸缩</h2>
 <p>redis-cli &ndash;cluster提供了很多操作集群的命令，可以通过下面方式查看：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png"
-        title="image-20210725160138290" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160138290.png?size=large 2x" sizes="auto" data-title="image-20210725160138290" data-alt="image-20210725160138290" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>比如，添加节点的命令：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png"
-        title="image-20210725160448139" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725160448139.png?size=large 2x" sizes="auto" data-title="image-20210725160448139" data-alt="image-20210725160448139" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="431需求分析">4.3.1.需求分析</h3>
 <p>需求：向集群中添加一个新的master节点，并向其中存储 num = 10</p>
 <ul>
@@ -903,147 +777,78 @@
 </ul>
 <h3 id="432创建新的redis实例">4.3.2.创建新的redis实例</h3>
 <p>创建一个文件夹：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-9"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir <span class="m">7004</span>
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">mkdir <span class="m">7004</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>拷贝配置文件：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-10"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cp redis.conf /7004
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cp redis.conf /7004</span></span></code></pre></td></tr></table>
 </div>
 </div><p>修改配置文件：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-11"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sed /s/6379/7004/g 7004/redis.conf
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sed /s/6379/7004/g 7004/redis.conf</span></span></code></pre></td></tr></table>
 </div>
 </div><p>启动</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-12"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-server 7004/redis.conf
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-server 7004/redis.conf</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="433添加新节点到redis">4.3.3.添加新节点到redis</h3>
 <p>添加节点的语法如下：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png"
-        title="image-20230115171427313" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171427313.png?size=large 2x" sizes="auto" data-title="image-20230115171427313" data-alt="image-20230115171427313" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>执行命令：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-13"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-cli --cluster add-node  192.168.150.101:7004 192.168.150.101:7001
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-cli --cluster add-node  192.168.150.101:7004 192.168.150.101:7001</span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过命令查看集群状态：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-14"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-cli -p <span class="m">7001</span> cluster nodes
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-cli -p <span class="m">7001</span> cluster nodes</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如图，7004加入了集群，并且默认是一个master节点：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png"
-        title="image-20210725161007099" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161007099.png?size=large 2x" sizes="auto" data-title="image-20210725161007099" data-alt="image-20210725161007099" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>但是，可以看到7004节点的插槽数量为0，因此没有任何数据可以存储到7004上</p>
 <h3 id="434转移插槽">4.3.4.转移插槽</h3>
 <p>我们要将num存储到7004节点，因此需要先看看num的插槽是多少：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png"
-        title="image-20210725161241793" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161241793.png?size=large 2x" sizes="auto" data-title="image-20210725161241793" data-alt="image-20210725161241793" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>如上图所示，num的插槽为2765.</p>
 <p>我们可以将0~3000的插槽从7001转移到7004，命令格式如下：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png"
-        title="image-20210725161401925" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161401925.png?size=large 2x" sizes="auto" data-title="image-20210725161401925" data-alt="image-20210725161401925" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>具体命令如下：</p>
 <p>建立连接：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png"
-        title="image-20210725161506241" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161506241.png?size=large 2x" sizes="auto" data-title="image-20210725161506241" data-alt="image-20210725161506241" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>得到下面的反馈：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png"
-        title="image-20210725161540841" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161540841.png?size=large 2x" sizes="auto" data-title="image-20210725161540841" data-alt="image-20210725161540841" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>询问要移动多少个插槽，我们计划是3000个：</p>
 <p>新的问题来了：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png"
-        title="image-20210725161637152" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161637152.png?size=large 2x" sizes="auto" data-title="image-20210725161637152" data-alt="image-20210725161637152" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>那个node来接收这些插槽？？</p>
 <p>显然是7004，那么7004节点的id是多少呢？</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png"
-        title="image-20210725161731738" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161731738.png?size=large 2x" sizes="auto" data-title="image-20210725161731738" data-alt="image-20210725161731738" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>复制这个id，然后拷贝到刚才的控制台后：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png"
-        title="image-20210725161817642" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725161817642.png?size=large 2x" sizes="auto" data-title="image-20210725161817642" data-alt="image-20210725161817642" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>这里询问，你的插槽是从哪里移动过来的？</p>
 <ul>
 <li>all：代表全部，也就是三个节点各转移一部分</li>
@@ -1051,103 +856,39 @@
 <li>done：没有了</li>
 </ul>
 <p>这里我们要从7001获取，因此填写7001的id：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png"
-        title="image-20210725162030478" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162030478.png?size=large 2x" sizes="auto" data-title="image-20210725162030478" data-alt="image-20210725162030478" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>填完后，点击done，这样插槽转移就准备好了：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png"
-        title="image-20210725162101228" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162101228.png?size=large 2x" sizes="auto" data-title="image-20210725162101228" data-alt="image-20210725162101228" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>确认要转移吗？输入yes：</p>
 <p>然后，通过命令查看结果：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png"
-        title="image-20210725162145497" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162145497.png?size=large 2x" sizes="auto" data-title="image-20210725162145497" data-alt="image-20210725162145497" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>可以看到：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png"
-        title="image-20210725162224058" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162224058.png?size=large 2x" sizes="auto" data-title="image-20210725162224058" data-alt="image-20210725162224058" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>目的达成。</p>
 <h2 id="44故障转移">4.4.故障转移</h2>
 <p>集群初识状态是这样的：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png"
-        title="image-20210727161152065" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727161152065.png?size=large 2x" sizes="auto" data-title="image-20210727161152065" data-alt="image-20210727161152065" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>其中7001、7002、7003都是master，我们计划让7002宕机。</p>
 <h3 id="441自动故障转移">4.4.1.自动故障转移</h3>
 <p>当集群中有一个master宕机会发生什么呢？</p>
 <p>直接停止一个redis实例，例如7002：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-15"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-cli -p <span class="m">7002</span> shutdown
-</span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">redis-cli -p <span class="m">7002</span> shutdown</span></span></code></pre></td></tr></table>
 </div>
 </div><p>1）首先是该实例与其它实例失去连接</p>
 <p>2）然后是疑似宕机：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png"
-        title="image-20210725162319490" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162319490.png?size=large 2x" sizes="auto" data-title="image-20210725162319490" data-alt="image-20210725162319490" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>3）最后是确定下线，自动提升一个slave为新的master：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png"
-        title="image-20210725162408979" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162408979.png?size=large 2x" sizes="auto" data-title="image-20210725162408979" data-alt="image-20210725162408979" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>4）当7002再次启动，就会变为一个slave节点了：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png"
-        title="image-20210727160803386" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160803386.png?size=large 2x" sizes="auto" data-title="image-20210727160803386" data-alt="image-20210727160803386" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="442手动故障转移">4.4.2.手动故障转移</h3>
 <p>利用cluster failover命令可以手动让集群中的某个master宕机，切换到执行cluster failover命令的这个slave节点，实现无感知的数据迁移。其流程如下：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png"
-        title="image-20210725162441407" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210725162441407.png?size=large 2x" sizes="auto" data-title="image-20210725162441407" data-alt="image-20210725162441407" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>这种failover命令可以指定三种模式：</p>
 <ul>
 <li>缺省：默认的流程，如图1~6歩</li>
@@ -1159,30 +900,16 @@
 <p>1）利用redis-cli连接7002这个节点</p>
 <p>2）执行cluster failover命令</p>
 <p>如图：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png"
-        title="image-20210727160037766" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20210727160037766.png?size=large 2x" sizes="auto" data-title="image-20210727160037766" data-alt="image-20210727160037766" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>效果：</p>
-<p><img
-        class="lazyload"
-        src="/svg/loading.min.svg"
-        data-src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png"
-        data-srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png 2x"
-        data-sizes="auto"
-        alt="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png"
-        title="image-20230115171831415" /></p>
+<p><img loading="lazy" src="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png" srcset="https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png?size=small, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png?size=medium 1.5x, https://raw.githubusercontent.com/cold-bin/img-for-cold-bin-blog/master/img/image-20230115171831415.png?size=large 2x" sizes="auto" data-title="image-20230115171831415" data-alt="image-20230115171831415" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h2 id="45redistemplate访问分片集群">4.5.RedisTemplate访问分片集群</h2>
 <p>RedisTemplate底层同样基于lettuce实现了分片集群的支持，而使用的步骤与哨兵模式基本一致：</p>
 <p>1）引入redis的starter依赖</p>
 <p>2）配置分片集群地址</p>
 <p>3）配置读写分离</p>
 <p>与哨兵模式相比，其中只有分片集群的配置方式略有差异，如下：</p>
-<div class="highlight"><div class="chroma">
+<div class="highlight" id="id-16"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1205,47 +932,58 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="m">192.168.150.101</span><span class="p">:</span><span class="m">7003</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="m">192.168.150.101</span><span class="p">:</span><span class="m">8001</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="m">192.168.150.101</span><span class="p">:</span><span class="m">8002</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="m">192.168.150.101</span><span class="p">:</span><span class="m">8003</span><span class="w">
-</span></span></span></code></pre></td></tr></table>
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="m">192.168.150.101</span><span class="p">:</span><span class="m">8003</span></span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
-    <div class="post-info">
-        <div class="post-info-line">
-            <div class="post-info-mod">
-                <span>Updated on 2023-01-15</span>
-            </div></div>
-        <div class="post-info-line">
-            <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/index.md" target="_blank">Read Markdown</a>
-                        </span></div>
-            <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" data-title="Redis高级篇之分布式缓存"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" data-title="Redis高级篇之分布式缓存"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a></span>
-            </div>
-        </div>
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="Updated on 2023-01-15 17:26:41">Updated on 2023-01-15&nbsp;</span>
+      </div><div class="post-info-license">
+          <span><a rel="license external nofollow noopener noreferrer" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a></span>
+        </div></div>
+    <div class="post-info-line">
+      <div class="post-info-md"><span><a href="/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/index.md" title="Read Markdown" class="link-to-markdown">Read Markdown</a></span><span><a href="https://github.com/cold-bin/blog/edit/main/content/posts/Redis%e9%ab%98%e7%ba%a7%e7%af%87%e4%b9%8b%e5%88%86%e5%b8%83%e5%bc%8f%e7%bc%93%e5%ad%98.md" title="Edit this page"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-edit">Edit this page</a></span></div>
+      <div class="post-info-share">
+        <span><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" data-title="Redis高级篇之分布式缓存"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="Share on 百度" data-sharer="baidu" data-url="https://blog.coldbin.top/redis%E9%AB%98%E7%BA%A7%E7%AF%87%E4%B9%8B%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/" data-title="Redis高级篇之分布式缓存"><i data-svg-src="/lib/simple-icons/icons/baidu.min.svg" aria-hidden="true"></i></a>
+  </span>
+      </div>
     </div>
+  </div>
 
-    <div class="post-info-more">
-        <section class="post-tags"></section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
-        </section>
-    </div>
+  <div class="post-info-more">
+    <section class="post-tags"></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+    </section>
+  </div>
 
-    <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E4%B9%8Bcall%E5%92%8Cret%E6%8C%87%E4%BB%A4/" class="prev" rel="prev" title="汇编之call和ret指令"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>汇编之call和ret指令</a>
-            <a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" class="next" rel="next" title="汇编之标志寄存器">汇编之标志寄存器<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/%E6%B1%87%E7%BC%96%E4%B9%8Bcall%E5%92%8Cret%E6%8C%87%E4%BB%A4/" class="post-nav-item" rel="prev" title="汇编之call和ret指令"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>汇编之call和ret指令</a>
+      <a href="/%E6%B1%87%E7%BC%96%E4%B9%8B%E6%A0%87%E5%BF%97%E5%AF%84%E5%AD%98%E5%99%A8/" class="post-nav-item" rel="next" title="汇编之标志寄存器">汇编之标志寄存器<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
-<div id="comments"><div id="gitalk" class="comment"></div><noscript>
-                Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk"></a>Gitalk</a>.
-            </noscript></div></article></div>
-            </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">阿冰</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
-        </div>
-    </footer></div>
-
-        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
-                <i class="fas fa-arrow-up fa-fw" aria-hidden="true"></i>
-            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
-                <i class="fas fa-comment fa-fw" aria-hidden="true"></i>
-            </a>
-        </div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.cb289e50cc9ac33906b9be77654f1340844150a9150a1b4be88cab7b044c4e95.css" integrity="sha256-yyieUMyawzkGub53ZU8TQIRBUKkVChtL6IyrewRMTpU="><link rel="stylesheet" href="/lib/katex/katex.min.76e39bd605d45b2d1944123c66608b0c8bb9baeb70720b212571531c7cf9bc2a.css" integrity="sha256-duOb1gXUWy0ZRBI8ZmCLDIu5uutwcgshJXFTHHz5vCo="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><script type="text/javascript" src="/lib/gitalk/gitalk.min.3e68fce688cb68f396c11b65309c267b307f420f01cef269e5e4f3bd769801f0.js" integrity="sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.dea2f4729cf4238b0f10574de00c14c580228238317ce61f8af3a410026c552b.js" integrity="sha256-3qL0cpz0I4sPEFdN4AwUxYAigjgxfOYfivOkEAJsVSs="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.3d9120fa621da6d613c1698b7014ec6bdf4620366e8f2b7b547059f4b6f6272b.js" integrity="sha256-PZEg+mIdptYTwWmLcBTsa99GIDZujyt7VHBZ9Lb2Jys="></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.e5bbc2bd6af379f5364d70b9056559385d8bb68526742b48db807bfb684863c7.js" integrity="sha256-5bvCvWrzefU2TXC5BWVZOF2LtoUmdCtI24B7+2hIY8c="></script><script type="text/javascript" src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4c2c08058d5f9aae4340d57c7ea9ab541c03f941689335bc411d9c3c7f0d6bcd.js" integrity="sha256-TCwIBY1fmq5DQNV8fqmrVBwD+UFokzW8QR2cPH8Na80="></script><script type="text/javascript" src="/lib/lightgallery/plugins/zoom/lg-zoom.min.d746e47387fb55e63bcbc5742a62978949f74e1c5e814e75397cdee131b97cc1.js" integrity="sha256-10bkc4f7VeY7y8V0KmKXiUn3ThxegU51OXze4TG5fME="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.e17a1d816e13c0826e0ed7febfabc3277f45571234bde0bf9120829a7169edc9.js" integrity="sha256-4XodgW4TwIJuDtf+v6vDJ39FVxI0veC/kSCCmnFp7ck="></script><script type="text/javascript" src="/lib/sharer/sharer.min.cc31d902aa4f3fcc8bb8c81aa534a4e2103e9b11f65b9fbd5b7156e089889ceb.js" integrity="sha256-zDHZAqpPP8yLuMgapTSk4hA+mxH2W5+9W3FW4ImInOs="></script><script type="text/javascript" src="/lib/katex/katex.min.eb18207487161674e717087c317db14ac1a62dadaecccb802499ce173bfeb739.js" integrity="sha256-6xggdIcWFnTnFwh8MX2xSsGmLa2uzMuAJJnOFzv+tzk="></script><script type="text/javascript" src="/lib/katex/contrib/auto-render.min.cb7f4ca60ed5dc3e258415f8c7a3b46d4a93578a52adf83011f18a7f190e7602.js" integrity="sha256-y39Mpg7V3D4lhBX4x6O0bUqTV4pSrfgwEfGKfxkOdgI="></script><script type="text/javascript" src="/lib/katex/contrib/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs="></script><script type="text/javascript" src="/lib/katex/contrib/mhchem.min.5c0a121a8b490afc85860a522347aeb34fb508c6b23044e5d29f6b2194227b51.js" integrity="sha256-XAoSGotJCvyFhgpSI0eus0+1CMayMETl0p9rIZQie1E="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-15T17:26:41+08:00","owner":"cold-bin","repo":"blog-comment","title":"Redis高级篇之分布式缓存"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.e8d2be21e46b332dc48b46049b0c07b11a65970524ed512fac5d352f19eea7a5.js" integrity="sha256-6NK+IeRrMy3Ei0YEmwwHsRpllwUk7VEvrF01Lxnup6U="></script></body>
+<div class="post-reward">
+    <div class="comment">Buy me a coffee</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">Donate</label>
+    <div class="reward-ways" data-mode="fixed"><div><img loading="lazy" src="/images/alipay.jpg" data-title="阿冰 Alipay" data-alt="阿冰 Alipay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>Alipay</span>
+          </div><div><img loading="lazy" src="/images/wechatpay.png" data-title="阿冰 WeChat Pay" data-alt="阿冰 WeChat Pay" style="background: url(/svg/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;this.alt=this.dataset.alt;for(const i of ['style', 'data-title','data-alt','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>WeChat Pay</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line copyright order-5" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2023</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://github.com/cold-bin"target="_blank" rel="external nofollow noopener noreferrer">阿冰</a></span><span class="license footer-divider"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div><div class="footer-line statistics order-4"><span class="site-time" title='Website running ...'><i class="fa-solid fa-heartbeat fa-fw animate-icon" aria-hidden="true"></i><span class="ms-1 d-none">运行</span><span class="run-times ms-1">Website running ...</span></span></div><div class="footer-line visitor order-2">
+          <span id="busuanzi_container_site_uv" title='Total visitors'><i class="fa-regular fa-user fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span><span id="busuanzi_container_site_pv" class="footer-divider" title='Total visits'><i class="fa-regular fa-eye fa-fw" aria-hidden="true"></i>&nbsp;<span id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span></span>
+        </div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="Back to Top"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="View Comments"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">Theme FixIt works best with JavaScript enabled.</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.e1f973627089fc121272c24d146e7c52e316a203fcb362eb2f648d803fc0d327.css" integrity="sha256-4flzYnCJ/BIScsJNFG58UuMWogP8s2LrL2SNgD/A0yc="><link rel="stylesheet" href="/lib/lightgallery/css/lightgallery-bundle.min.120f067ebd6f322339e2ccccd7e87e334d7c7ea5b2bd553f325f2ae3c3ae6fe8.css" integrity="sha256-Eg8Gfr1vMiM54szM1+h+M018fqWyvVU/Ml8q48Oub+g="><link rel="preload" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM=" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/katex/katex.min.505d5f829022bb7b4f24dfee0aa1141cd7bba67afe411d1240335f820960b5c3.css" integrity="sha256-UF1fgpAiu3tPJN/uCqEUHNe7pnr+QR0SQDNfgglgtcM="></noscript><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.cd0d0b6e50ff01ff2f3a9a70d7cfb66a7c6cb9acf7a566325568be6d3bd31fc4.css" integrity="sha256-zQ0LblD/Af8vOppw18+2anxsuaz3pWYyVWi+bTvTH8Q="><link rel="stylesheet" href="/lib/pace/themes/silver/pace-theme-minimal.1aefeadd689806308301fe332322fc3cec76f1d28a8e516afd37d31600e1e964.css" integrity="sha256-Gu/q3WiYBjCDAf4zIyL8POx28dKKjlFq/TfTFgDh6WQ="><script src="/lib/gitalk/gitalk.min.f4f9407ea35ccf4be5019cc41d70eab1eb273941bca01b3a93c91201f195a76f.js" integrity="sha256-9PlAfqNcz0vlAZzEHXDqsesnOUG8oBs6k8kSAfGVp28="></script><script src="/lib/autocomplete/autocomplete.min.ae2da1bd62c6469ee27770ad1cddf2e8296d8a7f6d85b091463e5200c5e320af.js" integrity="sha256-ri2hvWLGRp7id3CtHN3y6Cltin9thbCRRj5SAMXjIK8=" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.804e26c45f81a02b98b05bc1e378c1ff6c5d2339e0c6550aadf1419adf3a8c81.js" integrity="sha256-gE4mxF+BoCuYsFvB43jB/2xdIzngxlUKrfFBmt86jIE=" defer></script><script src="/lib/lightgallery/lightgallery.min.7de2854e7954105f2b91ff5983749c4e3c7af51e05aae279f8a5d66994a85777.js" integrity="sha256-feKFTnlUEF8rkf9Zg3ScTjx69R4FquJ5+KXWaZSoV3c=" defer></script><script src="/lib/lightgallery/plugins/thumbnail/lg-thumbnail.min.4fbc3ec1878e90348b71b3594d8ef27c4f10a1a4c6d5e74948d0ee59018fd87c.js" integrity="sha256-T7w+wYeOkDSLcbNZTY7yfE8QoaTG1edJSNDuWQGP2Hw=" defer></script><script src="/lib/lightgallery/plugins/zoom/lg-zoom.min.821a2adb8005511c0ad9ef6f395c1b74beacc2da194cd13a4ac43d341246e085.js" integrity="sha256-ghoq24AFURwK2e9vOVwbdL6swtoZTNE6SsQ9NBJG4IU=" defer></script><script src="/lib/sharer/sharer.min.ba5171a78670b031914e623431a33a3d73c1ea9897e552ba73bc2c2da7c777b9.js" integrity="sha256-ulFxp4ZwsDGRTmI0MaM6PXPB6piX5VK6c7wsLafHd7k=" async defer></script><script src="/lib/typeit/index.umd.16f3fa3374a7eea31f19672293edc98326413002dea74b8c413a74f1b7e4f1cf.js" integrity="sha256-FvP6M3Sn7qMfGWcik+3JgyZBMALep0uMQTp08bfk8c8=" defer></script><script src="/lib/katex/katex.min.dc84b296ec3e884de093158f760fd9d45b6c7abe58b5381557f4e138f46a58ae.js" integrity="sha256-3ISyluw+iE3gkxWPdg/Z1Ftser5YtTgVV/ThOPRqWK4=" defer></script><script src="/lib/katex/auto-render.min.9cb8dacfc086c2966c9ec4ba54f4a2dc43b7cbe2b33cec1a2743d886c7fb47a7.js" integrity="sha256-nLjaz8CGwpZsnsS6VPSi3EO3y+KzPOwaJ0PYhsf7R6c=" defer></script><script src="/lib/katex/copy-tex.min.52ce78fab4860d24ef22128a52ce24ca01368a9034457a565a1d3fccbab0ddbb.js" integrity="sha256-Us54+rSGDSTvIhKKUs4kygE2ipA0RXpWWh0/zLqw3bs=" defer></script><script src="/lib/katex/mhchem.min.f0ca03df194b8c3d6017ff455db6a0ef98857905663fa311a6cded788b15340b.js" integrity="sha256-8MoD3xlLjD1gF/9FXbag75iFeQVmP6MRps3teIsVNAs=" defer></script><script src="/lib/cookieconsent/cookieconsent.min.e55842a856a6d829feca3c3ad736c136b6c7549e9247274f78aa296259e06e24.js" integrity="sha256-5VhCqFam2Cn+yjw61zbBNrbHVJ6SRydPeKopYlngbiQ=" defer></script><script src="/lib/pangu/pangu.min.8feca3e7a71d118d82c2456d1b2cf5f1f3726c51a930627c2711b7192c8edbe2.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" defer></script><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async defer></script><script src="/lib/pace/pace.min.82a77b6138e0fc1b5fa964b0b093af9dd97407173c8052262c4917413f3eaa3d.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" async defer></script><script>window.config={"code":{"copyTitle":"Copy to clipboard","editLockTitle":"Lock editable code block","editUnLockTitle":"Unlock editable code block","editable":true,"maxShownLines":50},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["cold-bin"],"clientID":"a19ac21c453d44aaaa57","clientSecret":"6b740fcf1281b868b86bb30a974a5ed8db33dbf1","id":"2023-01-15T17:26:41+08:00","owner":"cold-bin","repo":"blog-comment","title":"Redis高级篇之分布式缓存"}},"cookieconsent":{"content":{"dismiss":"同意","link":"\u003ca href=\"https://en.wikipedia.org/wiki/HTTP_cookie\" target=\"_blank\"\u003e了解更多\u003c/a\u003e","message":"该站点需要使用cookie提升您的体验"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"typeit-header-subtitle-desktop":"life and code.","typeit-header-subtitle-mobile":"life and code."},"enablePWA":true,"lightgallery":true,"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":true,"left":"\\begin{equation}","right":"\\end{equation}"},{"display":true,"left":"\\begin{equation*}","right":"\\end{equation*}"},{"display":true,"left":"\\begin{align}","right":"\\end{align}"},{"display":true,"left":"\\begin{align*}","right":"\\end{align*}"},{"display":true,"left":"\\begin{alignat}","right":"\\end{alignat}"},{"display":true,"left":"\\begin{alignat*}","right":"\\end{alignat*}"},{"display":true,"left":"\\begin{gather}","right":"\\end{gather}"},{"display":true,"left":"\\begin{CD}","right":"\\end{CD}"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"pangu":{"enable":true,"selector":"article"},"search":{"algoliaAppID":"NKWXQ2C8I2","algoliaIndex":"blog","algoliaSearchKey":"8636c4f19c414b50013a26f4f11adeac","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"siteTime":"2023-12-28T12:00:00+00:00","typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"typeit-header-subtitle-desktop":["typeit-header-subtitle-desktop"],"typeit-header-subtitle-mobile":["typeit-header-subtitle-mobile"]},"duration":-1,"loop":false,"speed":100}};</script><script src="/js/theme.min.58f9858983f2742da374c22058a1768784a6955aa9a3f3b3b179c080fa0fa468.js" integrity="sha256-WPmFiYPydC2jdMIgWKF2h4SmlVqpo/OzsXnAgPoPpGg=" defer></script><script>
+      window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+      gtag('config', 'UA-75123653-1');
+    </script><script src="https://www.googletagmanager.com/gtag/js?id=UA-75123653-1" async></script></body>
 </html>
